@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/Create.png</file>
+        <file>images/Hierarchy.png</file>
+        <file>images/Closed_folder.png</file>
+        <file>images/2D.png</file>
+        <file>images/3D.png</file>
+        <file>images/Delete_panel.png</file>
+        <file>images/points.png</file>
+        <file>images/add_points.png</file>
+        <file>images/add_folder.png</file>
+        <file>images/Delete.png</file>
+        <file>images/add_surface.png</file>
+        <file>images/surface.png</file>
+    </qresource>
+</RCC>
