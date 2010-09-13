@@ -20,28 +20,24 @@
 //------------------------------------------------------------------------
 
 
-
 #ifndef COLOR_SLIDER_H
 #define COLOR_SLIDER_H
 
 #include <QFrame>
 #include <QPainter>
+#include <QMouseEvent>
+#include <QColorDialog>
 
 #include "color_palette.h"
 
-struct gxColorTick
-{
-    int position;
-
-};
 
 class gxColorSlider : public QFrame
 {
+    Q_OBJECT
 public:
     gxColorSlider(QWidget* parent)
         : QFrame(parent)
     {
-        palette = new gxColorPalette();
         moving = false;
     }
     ~gxColorSlider()
@@ -50,24 +46,83 @@ public:
     }
 
 protected:
+
+//    void mouseDoubleClickEvent(QMouseEvent *)
+//    {
+//        QPoint p = event->pos();
+//
+//        int hit = testHit(p);
+//
+//
+//        if (hit >= 0)
+//        {
+//            moving = false;
+//            QColorDialog dialog;
+//            dialog.exec();
+//
+//            colorTicks[hit].color = dialog.getColor();
+//        }
+//    }
+
     void mousePressEvent(QMouseEvent *event)
     {
+        QPoint p = event->pos();
+
+        int hit = testHit(p);
+
+        if (hit >= 0)
+        {
+            activeColorPosition = hit;
+            moving = true;            
+        }
+
+        draw();
 
     }
 
-    void mouseMoveEvent(QMouseEvent *)
+    void mouseMoveEvent(QMouseEvent *event)
     {
+        if ((moving) &&
+            (event->buttons() & Qt::LeftButton))
+        {
+            if (activeColorPosition >= 0)
+            {
+                palette->colors[activeColorPosition].first = event->pos().x()/(double)width();
+            }
+        }
+
+        draw();
 
     }
 
-    void mouseReleaseEvent(QMouseEvent *)
+    void mouseReleaseEvent(QMouseEvent *event)
     {
-
+        moving = false;
     }
+
+
 
 private:
-    gxColorPalette* palette;
+    gxContinuesColorPalette* palette;
     bool moving;
+
+    int activeColorPosition;
+
+    int testHit(QPoint p)
+    {
+        int val;
+        for(int i = 0; i < this->palette->colors.count(); ++i)
+        {
+            val = int(width() * palette->colors[i].first);
+
+            if (qAbs(val - p.x()) <= 3)
+            {
+                return i;
+            }
+        }
+
+        return -1; // no such tick
+    }
 
 
     void draw()
@@ -75,16 +130,24 @@ private:
         QPainter painter(this);
 
         // black background
-        painter.fillRect(this->receivers(), Qt::black);
+        painter.fillRect(this->rect(), Qt::black);
 
         double d;
-        for(int i = 0; i < this->width(); +i)
+        for(int i = 0; i < this->width(); ++i)
         {
             d = i/(double)width();
             painter.setPen(palette->getColor(d));
             painter.drawLine(i, 0, i, height());
         }
+
+
+        int x;
+        for(int i = 0; i < palette->colors.count(); ++i)
+        {
+            x = int (palette->colors[i].first * width());
+            painter.drawEllipse(QPoint(x, height()/2), 2, 2);
+        }
     }
-}
+};
 
 #endif // COLOR_SLIDER_H

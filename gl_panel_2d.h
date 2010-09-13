@@ -51,7 +51,7 @@ protected:
     /// initialize OpenGL
     void initializeGL();
 
-    /// Is called after widget resizing
+    /// Is called after widget's resizing
     void resizeGL(int width, int height);
 
     /// All rendering functions are here

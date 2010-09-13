@@ -74,21 +74,6 @@
      <property name="margin">
       <number>2</number>
      </property>
-     <item>
-      <widget class="QTreeWidget" name="projectTree">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <column>
-        <property name="text">
-         <string notr="true">1</string>
-        </property>
-       </column>
-      </widget>
-     </item>
     </layout>
    </widget>
   </widget>

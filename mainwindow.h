@@ -35,6 +35,8 @@ namespace Ui {
 }
 
 
+class gxProjectTree;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -52,10 +54,9 @@ protected:
     void createGUIObjects();
     void createActions();
 
-    void changeEvent(QEvent *e);
-
+    void changeEvent(QEvent *event);
 private:
-    QTreeWidget* projectTree;
+    gxProjectTree* projectTree;
     QWidget* mainPanel;
 
     Ui::MainWindow *ui;
@@ -64,10 +65,6 @@ private slots:
     void new2DPanel();
     void new3DPanel();
     void closePanel();
-
-public slots:
-    void treeContextMenu(const QPoint& aPosition);
-    void treeItemChanged(QTreeWidgetItem *item, int column);
 };
 
 #endif // MAINWINDOW_H

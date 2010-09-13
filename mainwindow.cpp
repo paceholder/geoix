@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -26,22 +26,21 @@
 #include <QSplitter>
 #include <QScreen>
 #include <QDesktopWidget>
+#include <QVBoxLayout>
 
 // this is for actions for processing menu and toolbar events
 #include <QActionGroup>
-
-
 #include <QMessageBox>
 
 #include "tree_object.h"
 #include "tree_menu_fabric.h"
 #include "render_panel.h"
+#include "project_tree.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
     ui->setupUi(this);
 
     createGUIObjects();
@@ -57,25 +56,15 @@ MainWindow::~MainWindow()
 void MainWindow::createGUIObjects()
 {
     // center window
-    QRect frect = frameGeometry();
-    frect.moveCenter(QDesktopWidget().availableGeometry().center());
-    move(frect.topLeft());
+//    QRect frect = frameGeometry();
+//    frect.moveCenter(QDesktopWidget().availableGeometry().center());
+//    move(frect.topLeft());
 
-    ui->projectTree->setContextMenuPolicy(Qt::CustomContextMenu);
-    ui->projectTree->header()->hide();
+    projectTree = new gxProjectTree(ui->leftDock);
+    projectTree->setContextMenuPolicy(Qt::CustomContextMenu);
+    projectTree->header()->hide();
 
-    ui->leftDock->setLayout(ui->verticalLayout);
-
-    connect(ui->projectTree, SIGNAL(customContextMenuRequested(const QPoint&)),
-        this, SLOT(treeContextMenu(const QPoint&)));
-
-    connect(ui->projectTree, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
-        this, SLOT(treeItemDoubleClicked(QTreeWidgetItem*,int)));
-
-    connect(ui->projectTree, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
-        this, SLOT(treeItemChanged(QTreeWidgetItem*,int)));
-
-
+    ui->leftDock->setWidget(projectTree);
 }
 
 
@@ -131,12 +120,12 @@ void MainWindow::changeEvent(QEvent *e)
 
 QTreeWidget* MainWindow::getProjectTree()
 {
-    return ui->projectTree;
+    return (QTreeWidget*)projectTree;
 }
 
 QWidget* MainWindow::getMainPanel()
 {
-   return ui->mainPanel;
+    return ui->mainPanel;
 }
 
 QListWidget* MainWindow::getListLog()
@@ -172,72 +161,6 @@ void MainWindow::closePanel()
 }
 
 
-void MainWindow::treeContextMenu(const QPoint& point)
-{
-    QTreeWidgetItem* item =  ui->projectTree->itemAt(point);
-
-    QPoint p = ui->projectTree->mapToGlobal(point);
-
-    // little offset to prevent clickin' menu by right mouse button
-    p.setX( p.x()+ 5); p.setY( p.y() + 5);
-
-    if (item)
-    {
-        QVariant data = item->data(0, Qt::UserRole);
-
-
-        gxTreeObject* object = data.value<gxTreeObject*>();
-
-        QMenu* menu = object->getMenu();
-        if (menu)
-            menu->popup(p);
-    }
-    else
-    {
-        gxTreeMenuFabric::instance()->getTreeGeneralMenu()->popup(p);
-    }
-}
-
-
-
-void MainWindow::treeItemChanged(QTreeWidgetItem *item, int column)
-{
-    if (!item) return;
-
-    // change name of object
-
-    QVariant data = item->data(column, Qt::UserRole);
-    gxTreeObject* object = data.value<gxTreeObject*>();
-
-    if (!object) return;
-
-    QString s = item->text(0);
-    object->setName(s);
-
-
-
-    // set visibility/invisibility
-
-    if (!object->isFolder())
-    {
-        gxVisualObject* vo = (gxVisualObject*)object;
-
-        gxRenderPanel* panel = gxEngine::instance()->getTopLevelPanel();
-
-        if (!panel) return;
-
-        switch (item->checkState(0))
-        {
-        case Qt::Checked:
-            panel->registerObject(vo);
-            break;
-        case Qt::Unchecked:
-            panel->unregisterObject(vo);
-            break;
-        case Qt::PartiallyChecked: break;
-        }
-    }
-}
 
 
 

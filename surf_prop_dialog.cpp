@@ -24,6 +24,10 @@
 #include "ui_surf_prop_dialog.h"
 
 #include <QRegExpValidator>
+#include <QPainter>
+
+#include "surface.h"
+#include "color_slider.h"
 
 gxSurfaceOptionsDialog::gxSurfaceOptionsDialog(QWidget *parent) :
     QDialog(parent),
@@ -31,17 +35,44 @@ gxSurfaceOptionsDialog::gxSurfaceOptionsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //QRegExp re("[0-9]+\.+[0-9]+");
-    QRegExp re("[0-9]+([\.,][0-9]+)?");
+    QRegExp re("[0-9]+([\.,][0-9]+)?"); // только числа, целые или float
     QRegExpValidator* v = new QRegExpValidator(re, this);
 
     ui->lineStep->setValidator(v);
+
+    ui->groupBoxColor->layout()->addWidget(new gxColorSlider(ui->groupBoxColor));
+
+
 }
+
 
 gxSurfaceOptionsDialog::~gxSurfaceOptionsDialog()
 {
     delete ui;
 }
+
+
+void gxSurfaceOptionsDialog::updateUI()
+{
+    ui->lineName->setText(surface->getName());
+
+    QPainter p(ui->frameBackground);
+
+    p.setBrush(this->surface->getColor());
+
+}
+
+
+
+void gxSurfaceOptionsDialog::setData(gxSurface *surface)
+{
+    this->surface = surface;
+
+    ui->lineName->setText(surface->getName());
+
+}
+
+
 
 void gxSurfaceOptionsDialog::changeEvent(QEvent *e)
 {

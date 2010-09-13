@@ -38,12 +38,10 @@ public:
     gxSurfaceOptionsDialog(QWidget *parent = 0);
     ~gxSurfaceOptionsDialog();
 
-    void setData(gxSurface* surface) { this->surface = surface; }
-
-
+    void setData(gxSurface* surface);
 protected:
     void changeEvent(QEvent *e);
-
+    void updateUI();
 private:
     Ui::surf_prop_dialog *ui;
     gxSurface* surface;

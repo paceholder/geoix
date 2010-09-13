@@ -30,6 +30,16 @@
 #include <QtAlgorithms>
 
 
+
+/// Functions which is used in sorting
+static bool colorPairLessThan(const QPair<double, QColor>& c1, const QPair<double, QColor>& c2)
+{
+    return (c1.first < c2.first);
+}
+
+class gxColorSlider;
+
+
 /// Class for flexible work with color interpolation
 /*! Class can contain several QColor objects and
   return interpolated color on demand.
@@ -37,6 +47,7 @@
 class gxColorPalette : public QObject
 {
     Q_OBJECT
+    friend class gxColorSlider;
 public:
     /// Constructor
     gxColorPalette()
@@ -49,18 +60,27 @@ public:
     /// Returns interpolated color.
     /// \param d must be in range 0..1
     virtual QColor getColor(double d) = 0;
+    void changeColorPosition(int colNum, double newValue)
+    {
+        if ((colors.count() < colNum) ||
+            (colNum < 0) ||
+            (newValue < 0) ||
+            (newValue > 1))
+        return;
 
+        colors[colNum].first = newValue;
+
+        sortColors();
+    }
 protected:
     /// Sorted by _double_ argument vector of QColor's
     QVector<QPair<double, QColor> > colors;
+
+    /// Method sorts colors in set by their double tag
+    void sortColors() { qSort(colors.begin(), colors.end(), colorPairLessThan); }
 };
 
 
-/// Functions which is used in sorting
-static bool colorPairLessThan(const QPair<double, QColor>& c1, const QPair<double, QColor>& c2)
-{
-    return (c1.first < c2.first);
-}
 
 /// Class implement continues color interpolation for gradient fill
 class gxContinuesColorPalette : public gxColorPalette
@@ -99,9 +119,6 @@ signals:
 private:
     /// Contains type of color interpolation
     gxColorInterpolationMode colorInterpolationMode;
-
-    /// Method sorts colors in set by their double tag
-    void sortColors() { qSort(colors.begin(), colors.end(), colorPairLessThan); }
 };
 
 #endif // COLOR_PALETTE_H

@@ -54,7 +54,6 @@ public slots:
     void createPoints();
     void createLines();
     void createSurface();
-
 protected:
     QVector<gxTreeObject*> childs;
 };

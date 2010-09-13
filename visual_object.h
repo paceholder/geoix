@@ -69,6 +69,8 @@ public:
         gl_list_2d= 0;
     }
 
+    QColor getColor() { return this->color; }
+
 
     /// Gets and sets size of the object
     const gxSize3D& getSize() { return size3d; }
