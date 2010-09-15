@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -29,8 +29,9 @@ gxLines::gxLines(gxTreeObjectFolder* parent)
     : gxVisualObject(parent)
 {
     name = tr("New Lines");
-    widgetItem->setIcon(0, QIcon(":/images/surface.png"));
     widgetItem->setText(0, name);
+    widgetItem->setIcon(0, QIcon(":/images/surface.png"));
+
 
     parent->getTreeWidgetItem()->addChild(widgetItem);
     parent->getTreeWidgetItem()->setExpanded(true);

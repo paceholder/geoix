@@ -59,6 +59,15 @@ gxTreeObject::~gxTreeObject()
     delete widgetItem;
 }
 
+
+void gxTreeObject::changeParent(gxTreeObject *newParent)
+{
+    if (!newParent) return;
+
+    this->parent = (gxTreeObjectFolder*)newParent;
+}
+
+
 void gxTreeObject::deleteThis()
 {
     // bla bla

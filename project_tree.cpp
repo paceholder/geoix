@@ -40,10 +40,8 @@ void gxProjectTree::dragMoveEvent(QDragMoveEvent *event)
                 event->setDropAction(Qt::IgnoreAction);
             }
         }
-
-
-
-    } else
+    }
+    else
     {
         event->setDropAction(Qt::IgnoreAction);
         event->ignore();
@@ -61,18 +59,30 @@ void gxProjectTree::dropEvent(QDropEvent *event)
         qint64 pointer = 0;
         stream >> pointer;
 
-        gxTreeObject* object = (gxTreeObject*)pointer;
+
+        gxTreeObject* object = (gxTreeObject*)pointer; // this object is moved
         if (object)
         {
+            /// gettin index within the childs of previous parent
             QTreeWidgetItem* oldItem =  object->getTreeWidgetItem();
             int index = oldItem->parent()->indexOfChild(oldItem);
 
+
+            /// getting new parent's WidgetItem
             QTreeWidgetItem* newParentItem = itemAt(event->pos());
             if (newParentItem)
             {
+                /// Set new parent WidgetItem
                 oldItem = oldItem->parent()->takeChild(index);
                 newParentItem->addChild(oldItem);
                 newParentItem->setExpanded(true);
+
+                QVariant data = newParentItem->data(0, Qt::UserRole);
+                gxTreeObject* newParentObject = data.value<gxTreeObject*>();
+
+                object->changeParent(newParentObject);
+
+
             }
 
             dragging = false;

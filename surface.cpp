@@ -306,8 +306,9 @@ void gxSurface::recalcSize()
 
 void gxSurface::importFromFile()
 {
+    this->clearData();
     gxDataLoader::instance()->loadSurfaceData(this->data);
-    this->recalcSize();
+    this->recalcSize();    
 
     gxContourer contourer(2);
     contourer.run(this->data, this->contours);
@@ -322,7 +323,7 @@ void gxSurface::clearData()
 
     foreach(gxFlatContour* contour, *contours)
     {
-        delete contour;
+       // delete contour; todo
     }
 
     updateWidgetItemState();

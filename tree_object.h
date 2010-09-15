@@ -59,7 +59,8 @@ public:
     void setName(QString& name) { this->name = name; }
     QString  getName() { return this->name; }
 
-    void updateTreeWidgetItemState();
+    //void updateTreeWidgetItemState();
+    void changeParent(gxTreeObject* newParent);
 
 public slots:
     void deleteThis();
