@@ -12,5 +12,6 @@
         <file>images/Delete.png</file>
         <file>images/add_surface.png</file>
         <file>images/surface.png</file>
+        <file>images/Screenshot.png</file>
     </qresource>
 </RCC>

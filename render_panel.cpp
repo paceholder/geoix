@@ -19,7 +19,7 @@
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
 
-
+#include <QPixmap>
 #include <limits>
 
 #include "render_panel.h"
@@ -184,6 +184,12 @@ void gxRenderPanel::recalcSize()
         // default size
        //size3d->setSize(-50, -50, -50, 50, 50, 50);
     }
+}
+
+
+QPixmap gxRenderPanel::renderPixmap()
+{
+    return this->gl_panel->renderPixmap(0,0, true);
 }
 
 

@@ -35,14 +35,12 @@ gxSurfaceOptionsDialog::gxSurfaceOptionsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QRegExp re("[0-9]+([\.,][0-9]+)?"); // только числа, целые или float
-    QRegExpValidator* v = new QRegExpValidator(re, this);
+//    QRegExp re("[0-9]+([\.,][0-9]+)?"); // только числа, целые или float
+    QDoubleValidator* v = new QDoubleValidator(this);
 
     ui->lineStep->setValidator(v);
 
     ui->groupBoxColor->layout()->addWidget(new gxColorSlider(ui->groupBoxColor));
-
-
 }
 
 
@@ -59,7 +57,6 @@ void gxSurfaceOptionsDialog::updateUI()
     QPainter p(ui->frameBackground);
 
     p.setBrush(this->surface->getColor());
-
 }
 
 
@@ -68,8 +65,7 @@ void gxSurfaceOptionsDialog::setData(gxSurface *surface)
 {
     this->surface = surface;
 
-    ui->lineName->setText(surface->getName());
-
+    updateUI();
 }
 
 

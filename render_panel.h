@@ -97,6 +97,9 @@ public:
     virtual void gldraw() = 0;
 
 
+    QPixmap renderPixmap();
+
+
 public slots:
     /// Executes when some of object is deleted
     /*!

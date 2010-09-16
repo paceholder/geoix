@@ -66,6 +66,9 @@ void gxGLPanel3D::initializeGL()
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
@@ -217,7 +220,7 @@ void gxGLPanel3D::timerEvent(QTimerEvent *event)
         lastRotX = 0;
     else
     {
-        lastRotX /= 1.05;
+        lastRotX /= 1.1; // reduce rotation angle
         scene->rotX += lastRotX;
     }
 
@@ -225,7 +228,7 @@ void gxGLPanel3D::timerEvent(QTimerEvent *event)
         lastRotZ = 0;
     else
     {
-        lastRotZ /= 1.05;
+        lastRotZ /= 1.1;// reduce rotation angle
         scene->rotZ += lastRotZ;
     }
 

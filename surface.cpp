@@ -47,6 +47,7 @@ gxSurface::gxSurface(gxTreeObjectFolder* parent)
     widgetItem->setIcon(0, QIcon(":/images/surface.png")); // todo
 
     setRandomColor();
+    setTransparancy(1.0);
 
     // Here we create class containing surface data
     data = new gxSurfaceData(&(this->size3d));
@@ -130,24 +131,24 @@ void gxSurface::draw2D()
                         glBegin(GL_QUADS);
                             d = (d1 - data->size3d->getMinZ()) / height;
                             c = palette->getColor(d);
-                            glColor3d(c.redF(), c.greenF(), c.blueF());
+                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
                             glVertex2d(data->getX(i),   data->getY(j));
 
 
                             d = (d2 - data->size3d->getMinZ()) / height;
                             c = palette->getColor(d);
-                            glColor3d(c.redF(), c.greenF(), c.blueF());
+                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
                             glVertex2d(data->getX(i+1), data->getY(j));
 
 
                             d = (d3 - data->size3d->getMinZ()) / height;
                             c = palette->getColor(d);
-                            glColor3d(c.redF(), c.greenF(), c.blueF());
+                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
                             glVertex2d(data->getX(i+1), data->getY(j+1));
 
                             d = (d4 - data->size3d->getMinZ()) / height;
                             c = palette->getColor(d);
-                            glColor3d(c.redF(), c.greenF(), c.blueF());
+                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
                             glVertex2d(data->getX(i),   data->getY(j+1));
                         glEnd();
 
@@ -157,7 +158,7 @@ void gxSurface::draw2D()
 
 
             // contours
-            glColor3f(0.0, 0.0, 0.0);
+            glColor4f(0.0, 0.0, 0.0, transparency);
 
             QVectorIterator<gxFlatContour*> it(*contours);
             while (it.hasNext())
@@ -184,7 +185,9 @@ void gxSurface::draw3D()
 {
     glLineWidth(1);
 
-    glColor3f(color.redF(), color.greenF(), color.blueF());
+    if (transparency < 1)
+        glDisable(GL_DEPTH_TEST);
+    glColor4f(color.redF(), color.greenF(), color.blueF(), transparency);
     if (!gl_list_3d)
     {
         gl_list_3d = glGenLists(1);
@@ -217,7 +220,7 @@ void gxSurface::draw3D()
 
                             d = (d1 - data->size3d->getMinZ()) / height;
                             c = palette->getColor(d);
-                            glColor3d(c.redF(), c.greenF(), c.blueF());
+                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
 
                             setNormal(data->getX(i+1) - data->getX(i), 0, d2 - d1, 0, data->getY(j+1) - data->getY(j), d4 - d1);
@@ -226,7 +229,7 @@ void gxSurface::draw3D()
 
                             d = (d2 - data->size3d->getMinZ()) / height;
                             c = palette->getColor(d);
-                            glColor3d(c.redF(), c.greenF(), c.blueF());
+                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
                             setNormal(0, data->getY(j+1) - data->getY(j), d3 - d2, data->getX(i) - data->getX(i+1), 0, d1 - d2);
                             glVertex3d(data->getX(i+1), data->getY(j),   d2);
@@ -234,14 +237,14 @@ void gxSurface::draw3D()
 
                             d = (d3 - data->size3d->getMinZ()) / height;
                             c = palette->getColor(d);
-                            glColor3d(c.redF(), c.greenF(), c.blueF());
+                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
                             setNormal(data->getX(i) - data->getX(i+1), 0, d4 - d3, 0, data->getY(j) - data->getY(j+1), d2 - d3);
                             glVertex3d(data->getX(i+1), data->getY(j+1), d3);
 
                             d = (d4 - data->size3d->getMinZ()) / height;
                             c = palette->getColor(d);
-                            glColor3d(c.redF(), c.greenF(), c.blueF());
+                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
                             setNormal(0, data->getY(j) - data->getY(j+1), d1 - d4, data->getX(i+1) - data->getX(i), 0, d3 - d4);
                             glVertex3d(data->getX(i),   data->getY(j+1), d4);
@@ -272,6 +275,8 @@ void gxSurface::draw3D()
     }
 
     glCallList(gl_list_3d);
+
+    glEnable(GL_DEPTH_TEST);
 }
 
 
@@ -332,6 +337,7 @@ void gxSurface::clearData()
 void gxSurface::options()
 {
     gxSurfaceOptionsDialog dialog(NULL);
+    dialog.setData(this);
 
     dialog.exec();
 }

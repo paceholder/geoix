@@ -36,6 +36,8 @@ struct gxMainWindowActions
     QAction* new2DPanelAct;
     QAction* new3DPanelAct;
     QAction* closePanelAct;
+
+    QAction* screenShotAct;
 };
 
 

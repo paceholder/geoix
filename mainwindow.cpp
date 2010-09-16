@@ -27,7 +27,8 @@
 #include <QScreen>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
-
+#include <QPixmap>
+#include <QFileDialog>
 // this is for actions for processing menu and toolbar events
 #include <QActionGroup>
 #include <QMessageBox>
@@ -36,6 +37,7 @@
 #include "tree_menu_fabric.h"
 #include "render_panel.h"
 #include "project_tree.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -77,11 +79,14 @@ void MainWindow::createActions()
     actions.new3DPanelAct = new QAction(QIcon(":/images/3D.png"), tr("New 3D Panel"), this);
     actions.closePanelAct = new QAction(QIcon(":/images/Delete_panel.png"), tr("Close Panel"), this);
 
+    actions.screenShotAct = new QAction(QIcon(":/images/Screenshot.png"), tr("Make screenshot"), this);
 
     connect(actions.newProjectAct, SIGNAL(triggered()), this, SLOT(newProject()));
     connect(actions.new2DPanelAct, SIGNAL(triggered()), this, SLOT(new2DPanel()));
     connect(actions.new3DPanelAct, SIGNAL(triggered()), this, SLOT(new3DPanel()));
     connect(actions.closePanelAct, SIGNAL(triggered()), this, SLOT(closePanel()));
+
+    connect(actions.screenShotAct, SIGNAL(triggered()), this, SLOT(screenShot()));
 
     //
     // construct menu
@@ -103,6 +108,8 @@ void MainWindow::createActions()
     ui->mainToolBar->addAction(actions.new2DPanelAct);
     ui->mainToolBar->addAction(actions.new3DPanelAct);
     ui->mainToolBar->addAction(actions.closePanelAct);
+    ui->mainToolBar->addSeparator();
+    ui->mainToolBar->addAction(actions.screenShotAct);
 }
 
 void MainWindow::changeEvent(QEvent *e)
@@ -161,9 +168,20 @@ void MainWindow::closePanel()
 }
 
 
+void MainWindow::screenShot()
+{
+    gxRenderPanel* panel = gxEngine::instance()->getTopLevelPanel();
+    if (panel)
+    {
+       //QPixmap p = panel->renderPixmap();
+
+        QPixmap p = QPixmap::grabWindow(panel->getGLPanel()->winId());
 
 
+        QString fileName = QFileDialog::getSaveFileName(this,
+                                                tr("Save Screenshot"), QDir::homePath(),
+                                                tr("PGN files (*.png)"));
 
-
-
-
+        p.save(fileName);
+    }
+}

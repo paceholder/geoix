@@ -65,6 +65,7 @@ private slots:
     void new2DPanel();
     void new3DPanel();
     void closePanel();
+    void screenShot();
 };
 
 #endif // MAINWINDOW_H

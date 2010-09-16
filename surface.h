@@ -73,6 +73,17 @@ public:
     void setNormal(double x1, double y1, double z1,
                    double x2, double y2, double z2);
 
+    double getTransparency()
+    {
+        return this->transparency;
+    }
+
+    void setTransparancy(double value)
+    {
+        if ((value >=0) && (value <= 1))
+            this->transparency = value;
+    }
+
     inline bool hasData() { return (data->values.count() > 0); }
 
 
@@ -87,6 +98,8 @@ private:
     gxContinuesColorPalette* palette;
 
     gxFlatContours* contours;
+
+    double transparency;
 };
 
 
