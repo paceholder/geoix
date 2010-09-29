@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     coord_system_2d.cpp \
     coord_system_3d.cpp \
     logger.cpp \
-    project_tree.cpp
+    project_tree.cpp \
+    subtree.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -63,7 +64,8 @@ HEADERS += mainwindow.h \
     surface_data_iterator.h \
     logger.h \
     color_slider.h \
-    project_tree.h
+    project_tree.h \
+    subtree.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui

@@ -75,6 +75,7 @@ void gxCoordSystem3D::draw()
 
 
     QString s;
+    glColor3f(0.0, 0.0, 0.0);
     for(int i = 1; i < 10; ++i)
     {
         s = QString::number(size3d->getMinX() + dx * i, 'f', 1);

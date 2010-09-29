@@ -60,8 +60,8 @@ public:
             val = data->values[pos];
         }
 
-        Q_ASSERT(pos >= 0);
         Q_ASSERT(pos < data->nx * data->ny);
+
 
         return true;
     }

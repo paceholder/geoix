@@ -36,6 +36,7 @@ namespace Ui {
 
 
 class gxProjectTree;
+class gxSubTree;
 
 class MainWindow : public QMainWindow
 {
@@ -45,6 +46,7 @@ public:
     ~MainWindow();
 
     QTreeWidget* getProjectTree();
+    QTreeWidget* getSubTree();
     QWidget* getMainPanel();
     QListWidget* getListLog();
 
@@ -53,10 +55,13 @@ public:
 protected:
     void createGUIObjects();
     void createActions();
+    void createMenus();
+    void createToolBars();
 
     void changeEvent(QEvent *event);
 private:
     gxProjectTree* projectTree;
+    gxSubTree* subTree;
     QWidget* mainPanel;
 
     Ui::MainWindow *ui;

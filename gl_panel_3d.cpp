@@ -28,8 +28,8 @@
 #include "engine.h"
 
 
-gxGLPanel3D::gxGLPanel3D(gxRenderPanel3D* parent, gxSize3D* size3d)
-    : QGLWidget(parent/*, ((gxRenderPanel3D*)(gxEngine::instance()->getTopLevelPanel()))->getglPanel3d()*/)
+gxGLPanel3D::gxGLPanel3D(gxRenderPanel3D* parent, QGLWidget* shareWidget, gxSize3D* size3d)
+    : QGLWidget(parent, shareWidget)
 {
     this->size3d = size3d;
     scene = new gx3dScene(size3d);
@@ -40,7 +40,7 @@ gxGLPanel3D::gxGLPanel3D(gxRenderPanel3D* parent, gxSize3D* size3d)
 
     this->setGeometry(b, b*2, sz.width() - b*2, sz.height() - b*3);
 
-    startTimer(20);
+    //startTimer(20);
 
     lastRotX = 0;
     lastRotZ = 0;
@@ -62,7 +62,7 @@ gx3dScene* gxGLPanel3D::getScene() const
 
 void gxGLPanel3D::initializeGL()
 {
-    qglClearColor(Qt::black);
+    qglClearColor(Qt::white);
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
 

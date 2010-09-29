@@ -64,7 +64,7 @@ void gxRenderPanel::registerObject(gxVisualObject* object)
     if (objects.indexOf(object) < 0)
     {
         connect(object, SIGNAL(objectDelete()), this, SLOT(objectDeleted()));
-        object->recreateDisplayList();
+        //object->recreateDisplayList();
         objects.append(object);
         recalcSize();
     }
@@ -292,7 +292,6 @@ void gxRenderPanel::resizingHandler(int x, int y, QPoint &p)
 void gxRenderPanel::mousePressEvent(QMouseEvent* event)
 {
     this->raise();
-
     gxEngine::instance()->raisePanel(this);
 
 

@@ -65,10 +65,7 @@ public:
 
     /// Returns pointer to the main window
     /// \return MainWindow*
-    MainWindow* getMainWindow()
-    {
-        return mainWindow;
-    }
+    inline MainWindow* getMainWindow() { return mainWindow; }
 
     void createProject();
     void deleteProject(gxProject* project);

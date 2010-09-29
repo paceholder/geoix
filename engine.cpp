@@ -30,8 +30,6 @@
 gxEngine* gxEngine::inst = NULL;
 
 
-
-
 void gxEngine::createProject()
 {
     projects.append(new gxProject());
@@ -103,8 +101,8 @@ void gxEngine::raisePanel(gxRenderPanel* panel)
 
     recheckTreeItems();
 
-    if (i != panels.count()-1)
-        panel->recreateDisplayLists();
+ //   if (i != panels.count()-1)
+     //   panel->recreateDisplayLists();
 }
 
 gxRenderPanel* gxEngine::getTopLevelPanel()

@@ -1,15 +1,9 @@
-#include "project_tree.h"
+#include "subtree.h"
 
-#include <QMenu>
-#include <QMouseEvent>
 #include "tree_object.h"
-#include "visual_object.h"
-#include "engine.h"
-#include "render_panel.h"
-#include "tree_menu_fabric.h"
+#include <QMouseEvent>
 
-
-gxProjectTree::gxProjectTree(QWidget* parent)
+gxSubTree::gxSubTree(QWidget* parent)
     : QTreeWidget(parent)
 {
     connect(this, SIGNAL(customContextMenuRequested(const QPoint&)),
@@ -23,7 +17,9 @@ gxProjectTree::gxProjectTree(QWidget* parent)
     dragging = false;
 }
 
-void gxProjectTree::dragEnterEvent(QDragEnterEvent *event)
+
+
+void gxSubTree::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasFormat("geoix/tree-object"))
     {
@@ -34,23 +30,20 @@ void gxProjectTree::dragEnterEvent(QDragEnterEvent *event)
 }
 
 
-void gxProjectTree::dragMoveEvent(QDragMoveEvent *event)
+void gxSubTree::dragMoveEvent(QDragMoveEvent *event)
 {
     if (event->mimeData()->hasFormat("geoix/tree-object"))
     {
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+
         QTreeWidgetItem* item = this->itemAt(event->pos());
         if (item)
         {
             QVariant data = item->data(0, Qt::UserRole);
             gxTreeObject* object = data.value<gxTreeObject*>();
 
-            if ((object) &&
-                (object->isFolder()))
-            {
-                event->setDropAction(Qt::MoveAction);
-                event->accept();
-            }
-            else
+            if ((object) && (! object->isFolder()))
             {
                 event->setDropAction(Qt::IgnoreAction);
             }
@@ -64,7 +57,7 @@ void gxProjectTree::dragMoveEvent(QDragMoveEvent *event)
 }
 
 
-void gxProjectTree::dropEvent(QDropEvent *event)
+void gxSubTree::dropEvent(QDropEvent *event)
 {
     if (event->mimeData()->hasFormat("geoix/tree-object"))
     {
@@ -72,7 +65,7 @@ void gxProjectTree::dropEvent(QDropEvent *event)
         QDataStream stream(&output, QIODevice::ReadOnly);
 
         qint64 pointer = 0;
-        stream >> pointer;
+        stream >> pointer; /// get pointer out of data stream
 
 
         gxTreeObject* object = (gxTreeObject*)pointer; // this object is moved
@@ -96,8 +89,11 @@ void gxProjectTree::dropEvent(QDropEvent *event)
                 gxTreeObject* newParentObject = data.value<gxTreeObject*>();
 
                 object->changeParent(newParentObject);
-
-
+            }
+            else
+            {
+                oldItem = oldItem->parent()->takeChild(index);
+                this->addTopLevelItem(oldItem);
             }
 
             dragging = false;
@@ -106,7 +102,7 @@ void gxProjectTree::dropEvent(QDropEvent *event)
 }
 
 
-void gxProjectTree::mouseMoveEvent(QMouseEvent *event)
+void gxSubTree::mouseMoveEvent(QMouseEvent *event)
 {
     if( !(event->buttons() & Qt::LeftButton) && !dragging )
     {
@@ -133,70 +129,17 @@ void gxProjectTree::mouseMoveEvent(QMouseEvent *event)
     drag->setMimeData( mimeData );
     drag->exec( Qt::CopyAction | Qt::MoveAction );
 
-    dragging = true;
+    dragging = false;
 }
 
 
-void gxProjectTree::treeContextMenu(const QPoint& point)
+void gxSubTree::treeContextMenu(const QPoint &point)
 {
-    QTreeWidgetItem* item =  this->itemAt(point);
+    //
 
-    QPoint p = this->mapToGlobal(point);
-
-    // little offset to prevent clickin' menu by right mouse button
-    p.setX( p.x()+ 5); p.setY( p.y() + 5);
-
-    if (item)
-    {
-        QVariant data = item->data(0, Qt::UserRole);
-
-        gxTreeObject* object = data.value<gxTreeObject*>();
-
-        QMenu* menu = object->getMenu();
-        if (menu)
-            menu->popup(p);
-    }
-    else
-    {
-        gxTreeMenuFabric::instance()->getTreeGeneralMenu()->popup(p);
-    }
 }
 
-
-
-void gxProjectTree::treeItemChanged(QTreeWidgetItem *item, int column)
+void gxSubTree::treeItemChanged(QTreeWidgetItem *item, int column)
 {
-    if (!item) return;
-
-    // change name of object
-    QVariant data = item->data(column, Qt::UserRole);
-    gxTreeObject* object = data.value<gxTreeObject*>();
-
-    if (!object) return;
-
-    QString s = item->text(0);
-    object->setName(s);
-
-
-    // set visibility/invisibility
-    if (!object->isFolder())
-    {
-        gxVisualObject* vo = (gxVisualObject*)object;
-
-        gxRenderPanel* panel = gxEngine::instance()->getTopLevelPanel();
-
-        if (!panel) return;
-
-        switch (item->checkState(0))
-        {
-        case Qt::Checked:
-            panel->registerObject(vo);
-            break;
-        case Qt::Unchecked:
-            panel->unregisterObject(vo);
-            break;
-        case Qt::PartiallyChecked: break;
-        }
-    }
+    //
 }
-

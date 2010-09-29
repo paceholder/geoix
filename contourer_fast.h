@@ -26,12 +26,14 @@
 #endif // CONTOURER_FAST_H
 
 #include <QQueue>
-
+#include <QMap>
+#include <QPair>
 #include "flat_contour.h"
 
 
-class gxSurfaceData;
+typedef QMap<int,QPair<int, int> > gxMap;
 
+class gxSurfaceData;
 
 /// This is edge if triangle
 /*!
@@ -40,6 +42,7 @@ class gxSurfaceData;
 */
 struct gxEdge
 {
+    gxEdge(){}
     gxEdge(int aknot1, int aknot2, int adirection)
         :   knot1(aknot1),
             knot2(aknot2),

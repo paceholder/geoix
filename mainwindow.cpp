@@ -37,6 +37,7 @@
 #include "tree_menu_fabric.h"
 #include "render_panel.h"
 #include "project_tree.h"
+#include "subtree.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -47,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     createGUIObjects();
     createActions();
+    createMenus();
+    createToolBars();
 }
 
 MainWindow::~MainWindow()
@@ -66,7 +69,20 @@ void MainWindow::createGUIObjects()
     projectTree->setContextMenuPolicy(Qt::CustomContextMenu);
     projectTree->header()->hide();
 
-    ui->leftDock->setWidget(projectTree);
+    subTree = new gxSubTree(ui->leftDock);
+    subTree->setContextMenuPolicy(Qt::CustomContextMenu);
+    subTree->header()->hide();
+
+
+    QWidget* dockWidget = new QWidget(ui->leftDock);
+    QVBoxLayout* dockWidgetLayout = new QVBoxLayout(dockWidget);
+    dockWidgetLayout->addWidget(projectTree);
+    dockWidgetLayout->addWidget(subTree);
+    dockWidgetLayout->setStretchFactor(projectTree, 3);
+    dockWidgetLayout->setStretchFactor(subTree, 1);
+    dockWidget->setLayout(dockWidgetLayout);
+
+    ui->leftDock->setWidget(dockWidget);
 }
 
 
@@ -87,8 +103,11 @@ void MainWindow::createActions()
     connect(actions.closePanelAct, SIGNAL(triggered()), this, SLOT(closePanel()));
 
     connect(actions.screenShotAct, SIGNAL(triggered()), this, SLOT(screenShot()));
+}
 
-    //
+
+void MainWindow::createMenus()
+{
     // construct menu
     QMenu* menu;
 
@@ -102,7 +121,11 @@ void MainWindow::createActions()
     menu->addAction(actions.new2DPanelAct);
     menu->addAction(actions.new3DPanelAct);
     menu->addAction(actions.closePanelAct);
+}
 
+
+void MainWindow::createToolBars()
+{
     ui->mainToolBar->addAction(actions.newProjectAct);
     ui->mainToolBar->addSeparator();
     ui->mainToolBar->addAction(actions.new2DPanelAct);
@@ -128,6 +151,11 @@ void MainWindow::changeEvent(QEvent *e)
 QTreeWidget* MainWindow::getProjectTree()
 {
     return (QTreeWidget*)projectTree;
+}
+
+QTreeWidget* MainWindow::getSubTree()
+{
+    return (QTreeWidget*)subTree;
 }
 
 QWidget* MainWindow::getMainPanel()

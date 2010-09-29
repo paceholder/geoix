@@ -19,7 +19,6 @@
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
 
-
 #include "contourer_fast.h"
 
 #include "surface_data.h"
@@ -41,8 +40,11 @@ void gxContourer::run(gxSurfaceData* data, gxFlatContours* contours)
     this->data = data;
     this->contours = contours;
 
-    this->edges.resize(data->values.size());
+    QVectorIterator<gxFlatContour*> it(*contours);
+    while (it.hasNext()) delete it.next();
+    contours->clear();
 
+    this->edges.resize(data->values.size());
 
     double minz = data->getSize()->getMinZ();
     double maxz = data->getSize()->getMaxZ();
@@ -124,6 +126,7 @@ void gxContourer::runEdges()
    {
        gxSurfaceDataIterator it(this->data);
 
+       QQueue<gxEdge> runedges;
        int pos;
        while(it.goNext())
        {
@@ -132,13 +135,9 @@ void gxContourer::runEdges()
            // no marked edges
            if (edges[pos] == 0) continue;
 
-           QQueue<gxEdge> runedges;
-
            // horizontal edge
            if (edges[pos] & 1)
            {
-               //edges[pos] &= ~1; // delete mark;
-
                runedges.clear();
                runedges.append(gxEdge(pos, pos + 1, +1));
                runedges.append(gxEdge(pos + 1, pos, -1));
@@ -235,10 +234,16 @@ void gxContourer::walkEdge(QQueue<gxEdge>& runedges)
     // creating of new contour
     curcont = new gxFlatContour(curz);
 
+//    gxMap map;
+
+    //map[+1] = QPair(1, 1);
+    //map[-1] = QPair()
+
+
+    gxEdge edge;
     while ( runedges.count() > 0 )
     {
-        gxEdge edge = runedges.takeFirst();
-
+        edge = runedges.takeFirst();
 
         Q_ASSERT(edge.knot1 >=0 );
         Q_ASSERT(edge.knot1 < data->values.count() );
@@ -252,38 +257,26 @@ void gxContourer::walkEdge(QQueue<gxEdge>& runedges)
         {
             if (d > 0)
             {
-                // building upper triangle
+                // building upper triangle /_|
                 if (edge.knot1 / data->nx < data->ny - 1) // not last row
                 {
-                    //     /_|
-                    if (edges[edge.knot1] & 4) // diaglonal
-                    {
-                        runedges.append(gxEdge(edge.knot1, edge.knot1 + data->nx + 1, edge.direction));
-                    }
-
                     if (edges[edge.knot2] & 2) // vertical
-                    {
                         runedges.append(gxEdge(edge.knot2 + data->nx , edge.knot2, edge.direction));
-                    }
+
+                    if (edges[edge.knot1] & 4) // diaglonal
+                        runedges.append(gxEdge(edge.knot1, edge.knot1 + data->nx + 1, edge.direction));
                 }
             }
             else
             {
                 if (edge.knot1 / data->nx > 0)
                 {
-                    //     _
                     //    |/
-
                     if (edges[edge.knot2 - data->nx]  & 2) // vertical
-                    {
                         runedges.append(gxEdge(edge.knot2 - data->nx, edge.knot2, edge.direction));
-                    }
 
                     if (edges[edge.knot2 - data->nx]  & 4) // diagonal
-                    {
                         runedges.append(gxEdge(edge.knot1, edge.knot2 - data->nx, edge.direction));
-                    }
-
                 }
             }
 

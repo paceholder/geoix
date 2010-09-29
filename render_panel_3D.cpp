@@ -23,6 +23,7 @@
 #include "render_panel_3D.h"
 
 #include "gl_panel_3d.h"
+#include "engine.h"
 
 gxRenderPanel3D::gxRenderPanel3D(QWidget* parent)
     : gxRenderPanel(parent)
@@ -32,7 +33,11 @@ gxRenderPanel3D::gxRenderPanel3D(QWidget* parent)
 
     move(40,40); // todo
 
-    gl_panel = new gxGLPanel3D(this, size3d);
+    gxRenderPanel* topLevelPanel = gxEngine::instance()->getTopLevelPanel();
+    QGLWidget* glw = 0;
+    if (topLevelPanel) glw =  topLevelPanel->getGLPanel();
+
+    gl_panel = new gxGLPanel3D(this, glw, size3d);
     gl_panel->setMouseTracking(true);
     gl_panel->makeCurrent();
     gl_panel->setFocusPolicy(Qt::ClickFocus);

@@ -1,14 +1,16 @@
-#ifndef PROJECT_TREE_H
-#define PROJECT_TREE_H
+#ifndef SUBTREE_H
+#define SUBTREE_H
+
 
 #include <QTreeWidget>
 
-class gxProjectTree : public QTreeWidget
+class gxSubTree : public QTreeWidget
 {
     Q_OBJECT
 public:
-    gxProjectTree(QWidget* parent);
-    virtual ~gxProjectTree() {}
+    gxSubTree(QWidget* parent);
+
+    virtual ~gxSubTree() {}
 
 protected:
     bool dragging;
@@ -23,4 +25,6 @@ public slots:
     void treeItemChanged(QTreeWidgetItem *item, int column);
 };
 
-#endif // PROJECT_TREE_H
+
+
+#endif // SUBTREE_H
