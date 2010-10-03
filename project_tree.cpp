@@ -1,3 +1,25 @@
+//------------------------------------------------------------------------
+//    This file is part of Geoix.
+//
+//    Copyright (C) 2010 Dmitriy Pinaev
+//
+//    Geoix is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Geoix is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
+//
+//    e-mail: prof-x@inbox.ru
+//------------------------------------------------------------------------
+
+
 #include "project_tree.h"
 
 #include <QMenu>
@@ -80,7 +102,12 @@ void gxProjectTree::dropEvent(QDropEvent *event)
         {
             /// gettin index within the childs of previous parent
             QTreeWidgetItem* oldItem =  object->getTreeWidgetItem();
-            int index = oldItem->parent()->indexOfChild(oldItem);
+
+            int index = -1;
+            if (oldItem->parent())
+                index = oldItem->parent()->indexOfChild(oldItem);
+            else
+                index = oldItem->treeWidget()->indexOfTopLevelItem(oldItem);
 
 
             /// getting new parent's WidgetItem
@@ -88,7 +115,11 @@ void gxProjectTree::dropEvent(QDropEvent *event)
             if (newParentItem)
             {
                 /// Set new parent WidgetItem
-                oldItem = oldItem->parent()->takeChild(index);
+                if (oldItem->parent())
+                    oldItem = oldItem->parent()->takeChild(index);
+                else
+                    oldItem = oldItem->treeWidget()->takeTopLevelItem(index);
+
                 newParentItem->addChild(oldItem);
                 newParentItem->setExpanded(true);
 
@@ -153,8 +184,7 @@ void gxProjectTree::treeContextMenu(const QPoint& point)
         gxTreeObject* object = data.value<gxTreeObject*>();
 
         QMenu* menu = object->getMenu();
-        if (menu)
-            menu->popup(p);
+        if (menu) menu->popup(p);
     }
     else
     {
@@ -187,7 +217,7 @@ void gxProjectTree::treeItemChanged(QTreeWidgetItem *item, int column)
 
         if (!panel) return;
 
-        switch (item->checkState(0))
+        switch (item->checkState(column))
         {
         case Qt::Checked:
             panel->registerObject(vo);
@@ -199,4 +229,3 @@ void gxProjectTree::treeItemChanged(QTreeWidgetItem *item, int column)
         }
     }
 }
-

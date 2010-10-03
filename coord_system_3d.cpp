@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -32,7 +32,7 @@ gxCoordSystem3D::gxCoordSystem3D(QGLWidget *gl_panel, gxSize3D *size3d)
 
 void gxCoordSystem3D::draw()
 {
-    glColor3f(1.0, 1.0, 1.0);
+    glColor3f(1, 1, 1);
 
     glBegin(GL_LINE_LOOP);
         glVertex3d(size3d->getMinX(), size3d->getMinY(), size3d->getMinZ());
@@ -75,7 +75,7 @@ void gxCoordSystem3D::draw()
 
 
     QString s;
-    glColor3f(0.0, 0.0, 0.0);
+    glColor3f(1.0, 1.0, 1.0);
     for(int i = 1; i < 10; ++i)
     {
         s = QString::number(size3d->getMinX() + dx * i, 'f', 1);

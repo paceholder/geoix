@@ -68,6 +68,13 @@ protected:
     inline void mouseDoubleClickEvent(QMouseEvent *event) { event->ignore(); }
     void keyPressEvent(QKeyEvent* event);
     void timerEvent ( QTimerEvent * event );
+
+
+//    void dragEnterEvent(QDragEnterEvent * event)
+//    {
+//        event->ignore();
+//    }
+
 private:
     /// Contains all variables for moving, rotating and scaling
     gx3dScene* scene;

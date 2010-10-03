@@ -3,6 +3,11 @@
 
 #include <QTreeWidget>
 
+/// Tree contains all projects
+/*!
+    Provides interface for interacting with
+    projects, objects, menus, dragging.
+*/
 class gxProjectTree : public QTreeWidget
 {
     Q_OBJECT
@@ -11,7 +16,7 @@ public:
     virtual ~gxProjectTree() {}
 
 protected:
-    bool dragging;
+    bool dragging; //< Is dragging active
     void mouseMoveEvent(QMouseEvent *event);
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
@@ -19,7 +24,9 @@ protected:
 
 
 public slots:
+    /// Invoke context menu for project tree
     void treeContextMenu(const QPoint& point);
+    /// Invoked on renaming of checking of the tree item
     void treeItemChanged(QTreeWidgetItem *item, int column);
 };
 

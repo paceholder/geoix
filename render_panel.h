@@ -160,9 +160,13 @@ protected:
     /// Recalculates size of 3d scene after registering of new object
     void recalcSize(); // after adding new objects
 
-
     //--------------------------------
     // override default event handlers
+
+    // dragging
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dropEvent(QDropEvent *event);
 
     /// Paint event handler
     inline virtual void paintEvent(QPaintEvent* event) { draw(); event->accept(); }

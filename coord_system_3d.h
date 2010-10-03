@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -31,7 +31,7 @@
 
 /// Class represents 3d coordinate system.
 /*!
-    This coordinate systep draw itself in
+    This coordinate system draw itself in
     3d rendering panel.
     Probably it's worth to merge 2d and 3d coordinate system in one object.
 */

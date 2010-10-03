@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -81,6 +81,12 @@ public:
     /// Returns top panel from panels' stack
     /// if one exists
     gxRenderPanel* getTopLevelPanel();
+
+
+    /// Function updates check states of all TreeWidgetItems
+    /// \todo Bad solution. Think how to do it in better way
+    /// \todo maybe i should megrge with test on data containing
+    void recheckTreeItems();
 private:
     /// Constructor
     gxEngine() {}
@@ -109,11 +115,6 @@ private:
         both 2d and 3d.
     */
     QVector<gxRenderPanel*> panels;
-
-
-    /// Function updates check states of all TreeWidgetItems
-    /// \todo Bad solytion. Think how to do it in better way
-    void recheckTreeItems();
 };
 
 

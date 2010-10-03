@@ -24,7 +24,7 @@
 
 #include "render_panel.h"
 #include "engine.h"
-
+#include "logger.h"
 
 gxRenderPanel::gxRenderPanel(QWidget* parent)
     : QWidget(parent)
@@ -46,6 +46,9 @@ gxRenderPanel::gxRenderPanel(QWidget* parent)
 
     // make this window active (mover it on the top of stack)
     this->activateWindow();
+
+
+    this->setAcceptDrops(true);
 }
 
 gxRenderPanel::~gxRenderPanel()
@@ -54,6 +57,64 @@ gxRenderPanel::~gxRenderPanel()
     delete size3d;
 }
 
+//------------------------------------------------------------------
+
+
+void gxRenderPanel::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat("geoix/tree-object"))
+    {
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
+    else
+    {
+        event->setDropAction(Qt::IgnoreAction);
+        event->ignore();
+    }
+}
+
+
+void gxRenderPanel::dragMoveEvent(QDragMoveEvent *event)
+{
+    if (event->mimeData()->hasFormat("geoix/tree-object"))
+    {
+        event->setDropAction(Qt::MoveAction);
+        event->accept();
+    }
+    else
+    {
+        event->setDropAction(Qt::IgnoreAction);
+        event->ignore();
+    }
+}
+
+
+void gxRenderPanel::dropEvent(QDropEvent *event)
+{
+    if (event->mimeData()->hasFormat("geoix/tree-object"))
+    {
+        QByteArray output = event->mimeData()->data("geoix/tree-object");
+        QDataStream stream(&output, QIODevice::ReadOnly);
+
+        qint64 pointer = 0;
+        stream >> pointer;
+
+
+        gxTreeObject* object = (gxTreeObject*)pointer; // this object is moved
+        if (object)
+        {
+            if (!object->isFolder())
+            {
+                gxVisualObject* vo = (gxVisualObject*)object;
+                this->registerObject(vo);
+                gxEngine::instance()->recheckTreeItems();
+            }
+        }
+    }
+}
+
+
 
 //------------------------------------------------------------------
 
@@ -61,14 +122,13 @@ gxRenderPanel::~gxRenderPanel()
 
 void gxRenderPanel::registerObject(gxVisualObject* object)
 {
-    if (objects.indexOf(object) < 0)
+    if (! isObjectRegistered(object))
     {
         connect(object, SIGNAL(objectDelete()), this, SLOT(objectDeleted()));
         //object->recreateDisplayList();
         objects.append(object);
         recalcSize();
     }
-
     this->draw();
 }
 
