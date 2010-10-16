@@ -38,6 +38,7 @@ public:
     virtual ~gxSpliner() {}
 
     void virtual calculate(QVector<gxPoint3D>& points, // input
+                           gxSize3D size3d,
                            gxSurfaceData* data) = 0;   // output
 
 signals:

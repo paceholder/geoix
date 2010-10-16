@@ -38,6 +38,7 @@
 #include "render_panel.h"
 #include "project_tree.h"
 #include "subtree.h"
+#include "spliner_dialog.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -90,16 +91,22 @@ void MainWindow::createActions()
 {
     actions.newProjectAct = new QAction(QIcon(":/images/Create.png"), tr("Create project"), this);
     actions.newProjectAct->setShortcuts(QKeySequence::New);
+    actions.newProjectAct->setIconVisibleInMenu(true);
     //
     actions.new2DPanelAct = new QAction(QIcon(":/images/2D.png"), tr("New 2D Panel"), this);
     actions.new3DPanelAct = new QAction(QIcon(":/images/3D.png"), tr("New 3D Panel"), this);
     actions.closePanelAct = new QAction(QIcon(":/images/Delete_panel.png"), tr("Close Panel"), this);
 
+    actions.buildMapAct = new QAction(QIcon(":/images/Create.png"), tr("Build Map"), this);
+
     actions.screenShotAct = new QAction(QIcon(":/images/Screenshot.png"), tr("Make screenshot"), this);
+
+
 
     connect(actions.newProjectAct, SIGNAL(triggered()), this, SLOT(newProject()));
     connect(actions.new2DPanelAct, SIGNAL(triggered()), this, SLOT(new2DPanel()));
     connect(actions.new3DPanelAct, SIGNAL(triggered()), this, SLOT(new3DPanel()));
+    connect(actions.buildMapAct,   SIGNAL(triggered()), this, SLOT(buildMap()));
     connect(actions.closePanelAct, SIGNAL(triggered()), this, SLOT(closePanel()));
 
     connect(actions.screenShotAct, SIGNAL(triggered()), this, SLOT(screenShot()));
@@ -117,10 +124,12 @@ void MainWindow::createMenus()
     menu = this->menuBar()->addMenu(tr("&Objects"));
 
     menu = this->menuBar()->addMenu(tr("&Panels"));
-
     menu->addAction(actions.new2DPanelAct);
     menu->addAction(actions.new3DPanelAct);
     menu->addAction(actions.closePanelAct);
+
+    menu = this->menuBar()->addMenu(tr("&Tools"));
+    menu->addAction(actions.buildMapAct);
 }
 
 
@@ -213,3 +222,11 @@ void MainWindow::screenShot()
         p.save(fileName);
     }
 }
+
+void MainWindow::buildMap()
+{
+    spliner_dialog* dialog = new spliner_dialog(this);
+    dialog->show();
+}
+
+

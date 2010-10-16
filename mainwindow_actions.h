@@ -32,10 +32,11 @@ struct gxMainWindowActions
     QAction* newProjectAct;
     QAction* saveProjectAct;
 
-
     QAction* new2DPanelAct;
     QAction* new3DPanelAct;
     QAction* closePanelAct;
+
+    QAction* buildMapAct;
 
     QAction* screenShotAct;
 };
