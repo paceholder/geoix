@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -23,11 +23,25 @@
 #include "spliner_dialog.h"
 #include "ui_spliner_dialog.h"
 
+#include "drop_widget.h"
+
+
+/// Constructor. Creates Dialog window for spline calculations
 spliner_dialog::spliner_dialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::spliner_dialog)
 {
     ui->setupUi(this);
+
+    /// Widget wich takes drops and create signals on dropping event
+    gxDropWidget* widget = new gxDropWidget(this);
+    widget->setGeometry(0, 0, 40, 20);
+    widget->setMinimumSize(40, 20);
+    widget->show();
+    widget->setLayout(ui->verticalLayout_6);
+
+    ui->verticalLayout_6->insertWidget(0, widget);
+
 }
 
 spliner_dialog::~spliner_dialog()

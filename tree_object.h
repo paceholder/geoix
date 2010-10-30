@@ -63,6 +63,7 @@ public:
     void changeParent(gxTreeObject* newParent);
 
 public slots:
+    /// Can be overrided in child classes
     void deleteThis();
     void renameItem();
 };

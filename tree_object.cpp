@@ -34,6 +34,7 @@ gxTreeObject::gxTreeObject(gxTreeObjectFolder* parent)
 
     QTreeWidget* tree = gxEngine::instance()->getMainWindow()->getProjectTree();
 
+    // creates tree item widget
     if (parent)
         widgetItem = new QTreeWidgetItem(parent->getTreeWidgetItem());
     else
@@ -42,6 +43,7 @@ gxTreeObject::gxTreeObject(gxTreeObjectFolder* parent)
     widgetItem->setText(0, name);
 
     QVariant data = qVariantFromValue((gxTreeObject*)this);
+
     widgetItem->setData(0, Qt::UserRole, data);
 
     widgetItem->setFlags(widgetItem->flags() | Qt::ItemIsEditable);

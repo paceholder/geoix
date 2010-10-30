@@ -65,7 +65,8 @@ HEADERS += mainwindow.h \
     logger.h \
     color_slider.h \
     project_tree.h \
-    subtree.h
+    subtree.h \
+    drop_widget.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui
