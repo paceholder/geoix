@@ -88,6 +88,10 @@ void MainWindow::createGUIObjects()
 }
 
 
+
+//------------------------------------------------------------------------------
+
+
 void MainWindow::createActions()
 {
     actions.newProjectAct = new QAction(QIcon(":/images/Create.png"), tr("Create project"), this);
@@ -113,6 +117,11 @@ void MainWindow::createActions()
 }
 
 
+
+//------------------------------------------------------------------------------
+
+
+
 void MainWindow::createMenus()
 {
     // construct menu
@@ -131,6 +140,11 @@ void MainWindow::createMenus()
     menu = this->menuBar()->addMenu(tr("&Tools"));
     menu->addAction(actions.buildMapAct);
 }
+
+
+
+//------------------------------------------------------------------------------
+
 
 
 void MainWindow::createToolBars()
@@ -175,11 +189,6 @@ QWidget* MainWindow::getMainPanel()
 QListWidget* MainWindow::getListLog()
 {
     return ui->listLog;
-}
-
-QAbstractItemModel* MainWindow::getProjectTreeModel()
-{
-    return this->projectTree->model();
 }
 
 

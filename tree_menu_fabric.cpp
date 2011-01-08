@@ -127,6 +127,7 @@ QMenu* gxTreeMenuFabric::getFolderMenu(gxTreeFolderObject* folder)
 
     disconnect(renameItem, 0, 0, 0);
     connect(renameItem, SIGNAL(triggered()), folder, SLOT(renameItem()));
+
     disconnect(deleteItem, 0, 0, 0);
     connect(deleteItem, SIGNAL(triggered()), folder, SLOT(deleteThis()));
 

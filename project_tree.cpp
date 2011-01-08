@@ -88,6 +88,7 @@ void gxProjectTree::dragMoveEvent(QDragMoveEvent *event)
 
 void gxProjectTree::dropEvent(QDropEvent *event)
 {
+    Q_UNUSED(event);
 //    if (event->mimeData()->hasFormat("geoix/tree-object"))
 //    {
 //        QByteArray output = event->mimeData()->data("geoix/tree-object");

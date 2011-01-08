@@ -26,8 +26,8 @@
 #ifndef TREE_ABSTRACT_OBJECT_H
 #define TREE_ABSTRACT_OBJECT_H
 
-#include <QObject>
-#include <QMenu>
+#include <QtCore>
+#include <QtGui>
 
 
 class gxTreeFolderObject;
@@ -68,23 +68,13 @@ public:
     virtual int getIndex() = 0;
 
     /// todo: should think about it
-    virtual void changeParent(gxTreeAbstractObject* newParent) { this->parent = parent; }
+    virtual void changeParent(gxTreeFolderObject* newParent) { this->parent = newParent; }
 protected:
     gxTreeFolderObject* parent;
-    QString name;
+    QString name;    
 
 public slots:
-    /// Never do it!
-    void deleteThis()
-    {
-        delete this;
-    }
-    void renameItem()
-    {
-        // todo
-        // gxEngine::instance()->getMainWindow()->getProjectTree()->editItem(widgetItem);
-    }
-
+    void deleteThis();
 };
 
 Q_DECLARE_METATYPE(gxTreeAbstractObject*);

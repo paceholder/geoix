@@ -45,6 +45,7 @@ protected:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     bool insertRows(int row, int count, const QModelIndex &parent);
+    bool removeRows(int row, int count, const QModelIndex &parent);
 private:
     gxProjectList* projects;
 };

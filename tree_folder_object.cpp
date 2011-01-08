@@ -42,13 +42,13 @@ gxTreeFolderObject::~gxTreeFolderObject()
 void gxTreeFolderObject::setup()
 {
     gxProjectList* projectList = gxEngine::instance()->getProjectList();
-    QAbstractItemModel* model = gxEngine::instance()->getMainWindow()->getProjectTreeModel();
+    QAbstractItemModel* model = gxEngine::instance()->getMainWindow()->getProjectTree()->model();
 
     QModelIndex index = gxEngine::instance()->getMainWindow()->getProjectTree()->selectionModel()->currentIndex();
 
     model->insertRow(projectList->size(), index);
 
-    Gx::Log("Folder '" + name + "' created");
+    gxLogger::instance()->logEvent("Folder '" + name + "' created");
 }
 
 
@@ -99,16 +99,17 @@ void gxTreeFolderObject::deleteChild(gxTreeAbstractObject* child)
     if ( index >= 0 )
     {
         children.erase(children.begin() + index);
-
-
-        // todo ????????????????????
         delete child;
     }
-
-
-    //widgetItem->setExpanded(childs.count() != 0);
 }
 
+void gxTreeFolderObject::deleteChild(int i)
+{
+    if (i >= 0 && i < this->children.size() )
+    {
+        children.removeAt(i);
+    }
+}
 
 void gxTreeFolderObject::addChild(gxTreeAbstractObject* child)
 {
@@ -125,7 +126,7 @@ gxTreeAbstractObject* gxTreeFolderObject::getChild(int i)
 
 int gxTreeFolderObject::indexOf(gxTreeAbstractObject *child)
 {
-    this->children.indexOf(child);
+    return this->children.indexOf(child);
 }
 
 
@@ -135,5 +136,6 @@ int gxTreeFolderObject::getIndex()
 
     // the only object which could be parent is folder
     gxTreeFolderObject* folder = (gxTreeFolderObject*)parent;
-    folder->indexOf(this);
+
+    return folder->indexOf(this);
 }

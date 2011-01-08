@@ -42,7 +42,7 @@ gxPoints::gxPoints(gxTreeFolderObject* parent)
 
     setRandomColor();
 
-    updateWidgetItemState();
+//    updateWidgetItemState();
 }
 
 
@@ -153,14 +153,14 @@ void gxPoints::importFromFile()
     gxDataLoader::instance()->loadPointsData(&(this->data));
     this->recalcSize();
 
-    updateWidgetItemState();
+//    updateWidgetItemState();
 }
 
 void gxPoints::clearData()
 {
     data.clear();
 
-    updateWidgetItemState();
+//    updateWidgetItemState();
 }
 
 

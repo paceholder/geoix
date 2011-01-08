@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     project_tree.cpp \
     subtree.cpp \
     project_tree_model.cpp \
-    tree_folder_object.cpp
+    tree_folder_object.cpp \
+    tree_abstract_object.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \

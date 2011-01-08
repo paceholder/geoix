@@ -30,35 +30,16 @@
 gxTreeObject::gxTreeObject(gxTreeFolderObject* parent)
     :gxTreeAbstractObject(parent)
 {
-    name = tr("Some Object");
-
-//    QTreeWidget* tree = gxEngine::instance()->getMainWindow()->getProjectTree();
-
-    // creates tree item widget
-//    if (parent)
-//        widgetItem = new QTreeWidgetItem(parent->getTreeWidgetItem());
-//    else
-//        widgetItem = new QTreeWidgetItem(tree);
-
-//    widgetItem->setText(0, name);
+    name = tr("Some Tree Object");
 
     QVariant data = qVariantFromValue((gxTreeObject*)this);
-
-//    widgetItem->setData(0, Qt::UserRole, data);
-//
-//    widgetItem->setFlags(widgetItem->flags() | Qt::ItemIsEditable);
 }
 
 
 
 gxTreeObject::~gxTreeObject()
 {
-//    if (parent)
-//    {
-//        parent->deleteChild(this);
-//    }
-//
-//    delete widgetItem;
+    //
 }
 
 
@@ -68,6 +49,6 @@ int gxTreeObject::getIndex()
     /// And.. gxTreeObject could not be created without parent object
 
     gxTreeFolderObject* folder = (gxTreeFolderObject*) parent;
-    folder->indexOf(this);
+    return folder->indexOf(this);
 }
 

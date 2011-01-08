@@ -41,11 +41,11 @@ gxProject::~gxProject()
 void gxProject::setup()
 {
     gxProjectList* projectList = gxEngine::instance()->getProjectList();
-    QAbstractItemModel* model = gxEngine::instance()->getMainWindow()->getProjectTreeModel();
+    QAbstractItemModel* model = gxEngine::instance()->getMainWindow()->getProjectTree()->model();
 
     model->insertRow(projectList->size() - 1, QModelIndex());
 
-    Gx::Log("Project '" + name + "' created");
+    gxLogger::instance()->logEvent("Project '" + name + "' created");
 }
 
 

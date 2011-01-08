@@ -39,6 +39,7 @@ public:
     void setup();
 
     void deleteChild(gxTreeAbstractObject* child);
+    void deleteChild(int i);
     void addChild(gxTreeAbstractObject* child);
     gxTreeAbstractObject* getChild(int i);
 

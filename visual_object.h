@@ -43,7 +43,6 @@ public:
     {
         gl_list_3d = 0;
         gl_list_2d = 0;
-//        widgetItem->setCheckState(0, Qt::Unchecked);
     }
 
     /// Destructor. Emits signal which make
@@ -112,17 +111,6 @@ protected:
         color.setRgbF(0.3 + r, 0.3 + g, 0.3 + b);
     }
 
-    /// Changes color of text of widgetItem.
-    /// Gray means than object doesn't contain any data.
-    /// Black means than data is loaded.
-    void updateWidgetItemState()
-    {
-
-//        if (hasData())
-//            widgetItem->setData(0, Qt::TextColorRole, Qt::black);
-//        else
-//            widgetItem->setData(0, Qt::TextColorRole, Qt::gray);
-    }
 };
 
 #endif // VISUAL_OBJECT_H

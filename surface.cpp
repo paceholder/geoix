@@ -40,12 +40,6 @@ gxSurface::gxSurface(gxTreeFolderObject* parent)
 {
     name = tr("New Surface");
 
-//    parent->getTreeWidgetItem()->addChild(widgetItem);
-//    parent->getTreeWidgetItem()->setExpanded(true);
-//
-//    widgetItem->setText(0, name);
-//    widgetItem->setIcon(0, QIcon(":/images/surface.png")); // todo
-
     setRandomColor();
     setTransparancy(1.0);
 
@@ -60,9 +54,8 @@ gxSurface::gxSurface(gxTreeFolderObject* parent)
     palette->addColor(0,  Qt::darkBlue);
     palette->addColor(1,  Qt::red);
 
-//    updateWidgetItemState();
 
-    Gx::Log("Surface '" + name + "' created");
+    gxLogger::instance()->logEvent("Surface '" + name + "' created");
 }
 
 gxSurface::~gxSurface()
@@ -79,7 +72,11 @@ gxSurface::~gxSurface()
 }
 
 
-//-------------------------------------------
+
+//------------------------------------------------------------------------------
+
+
+
 
 void gxSurface::setNormal(double x1, double y1, double z1, double x2, double y2, double z2)
 {
@@ -327,10 +324,10 @@ void gxSurface::clearData()
 {
     data->clear();
 
-    foreach(gxFlatContour* contour, *contours)
-    {
-       // delete contour; todo
-    }
+//    foreach(gxFlatContour* contour, *contours)
+//    {
+//       // delete contour; todo
+//    }
 
 //    updateWidgetItemState();
 }

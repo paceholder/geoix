@@ -184,13 +184,12 @@
     <value type="QString">GTK_MODULES=canberra-gtk-module</value>
     <value type="QString">HOME=/home/paceholder</value>
     <value type="QString">LANG=ru_RU.utf8</value>
-    <value type="QString">LANGUAGE=</value>
     <value type="QString">LD_LIBRARY_PATH=/usr/lib/qtcreator</value>
     <value type="QString">LOGNAME=paceholder</value>
     <value type="QString">MANDATORY_PATH=/usr/share/gconf/gnome.mandatory.path</value>
     <value type="QString">ORBIT_SOCKETDIR=/tmp/orbit-paceholder</value>
     <value type="QString">PATH=/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games</value>
-    <value type="QString">PWD=/home/paceholder/Документы</value>
+    <value type="QString">PWD=/home/paceholder</value>
     <value type="QString">QTDIR=/usr/share/qt4</value>
     <value type="QString">SESSION_MANAGER=local/paceholder-laptop:@/tmp/.ICE-unix/2197,unix/paceholder-laptop:/tmp/.ICE-unix/2197</value>
     <value type="QString">SHELL=/bin/bash</value>

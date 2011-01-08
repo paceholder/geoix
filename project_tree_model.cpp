@@ -219,21 +219,52 @@ QVariant gxProjectTreeModel::data(const QModelIndex &index, int role) const
 
     default : return QVariant(); break;
     }
+
+    return QVariant();
 }
 
 
 Qt::ItemFlags gxProjectTreeModel::flags(const QModelIndex &index) const
 {
+    Q_UNUSED(index);
     return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable;
 }
 
 
+//------------------------------------------------------------------------------
+
+
 bool gxProjectTreeModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    bool success;
+    bool success = true;
 
     beginInsertRows(parent, row, row + count - 1);
     endInsertRows();
+
+    return success;
+}
+
+
+//------------------------------------------------------------------------------
+
+bool gxProjectTreeModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    bool success = true;
+
+    beginRemoveRows(parent, row, row + count - 1);
+
+
+    if ( parent.isValid() )
+    {
+        gxTreeFolderObject *folder = static_cast<gxTreeFolderObject*>(parent.internalPointer());
+        folder->deleteChild(row);
+    }
+    else
+    {
+        gxEngine::instance()->getProjectList()->removeAt(row);
+    }
+
+    endRemoveRows();
 
     return success;
 }

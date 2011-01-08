@@ -41,7 +41,7 @@ gxLines::gxLines(gxTreeFolderObject* parent)
 
     contours = new gxContours;
 
-    updateWidgetItemState();
+//    updateWidgetItemState();
 }
 
 gxLines::~gxLines()
@@ -156,7 +156,7 @@ void gxLines::importFromFile()
     gxDataLoader::instance()->loadLinesData(contours);
     this->recalcSize();
 
-    updateWidgetItemState();
+//    updateWidgetItemState();
 }
 
 void gxLines::clearData()
@@ -168,7 +168,7 @@ void gxLines::clearData()
 
     contours->clear();
 
-    updateWidgetItemState();
+//    updateWidgetItemState();
 }
 
 

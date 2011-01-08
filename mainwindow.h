@@ -54,8 +54,6 @@ public:
     QWidget* getMainPanel();
     /// Returns widget with log
     QListWidget* getListLog();
-    /// Returns Project Tree Model
-    QAbstractItemModel* getProjectTreeModel();
 
     /// Group Of Actions of Main Window
     gxMainWindowActions actions;

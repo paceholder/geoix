@@ -84,6 +84,7 @@ void gxSubTree::dragMoveEvent(QDragMoveEvent *event)
 
 void gxSubTree::dropEvent(QDropEvent *event)
 {
+    Q_UNUSED(event);
 //    if (event->mimeData()->hasFormat("geoix/tree-object"))
 //    {
 //        QByteArray output = event->mimeData()->data("geoix/tree-object");
@@ -160,11 +161,11 @@ void gxSubTree::mouseMoveEvent(QMouseEvent *event)
 
 void gxSubTree::treeContextMenu(const QPoint &point)
 {
-    //
-
+    Q_UNUSED(point);
 }
 
 void gxSubTree::treeItemChanged(QTreeWidgetItem *item, int column)
 {
-    //
+    Q_UNUSED(item);
+    Q_UNUSED(column);
 }

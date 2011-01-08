@@ -31,7 +31,7 @@ gxLogger::gxLogger()
 }
 
 
-void gxLogger::logEvent(QString& s)
+void gxLogger::logEvent(QString s)
 {
     gxLogEntry entry;
     entry.time = QTime::currentTime().toString(Qt::TextDate);

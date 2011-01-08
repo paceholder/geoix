@@ -23,9 +23,9 @@
 #ifndef TREE_OBJECT_H
 #define TREE_OBJECT_H
 
-#include <QMenu>
-#include <QTreeWidget>
-#include <QVariant>
+
+#include <QtGui>
+#include <QtCore>
 
 #include "tree_abstract_object.h"
 
@@ -44,7 +44,6 @@ public:
     virtual ~gxTreeObject();
 
     int getIndex();
-
 };
 Q_DECLARE_METATYPE(gxTreeObject* );
 
