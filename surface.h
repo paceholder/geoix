@@ -47,14 +47,15 @@ class gxSurface : public gxVisualObject
     Q_OBJECT
 public:
     /// Constructor
-    gxSurface(gxTreeObjectFolder* parent);
+    gxSurface(gxTreeFolderObject* parent);
 
     /// Destructor
     virtual ~gxSurface();
 
     /// Returns menu for project tree
-    inline QMenu* getMenu() { return gxTreeMenuFabric::instance()->getSurfaceMenu(this); }
+    QMenu* getMenu();
 
+    QIcon getIcon();
 
     virtual void draw2D();
 

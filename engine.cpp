@@ -30,16 +30,46 @@
 gxEngine* gxEngine::inst = NULL;
 
 
+
+gxEngine::gxEngine()
+{
+    projects = new gxProjectList();
+}
+
+gxEngine::~gxEngine()
+{
+    delete projects;
+}
+
+gxEngine* gxEngine::instance()
+{
+    if (!inst)
+    {
+        inst = new gxEngine();
+    }
+    return inst;
+}
+
+void gxEngine::setMainWindow(MainWindow* w)
+{
+    mainWindow = w;
+
+    gxLogger::instance()->setOutputListWidget(w->getListLog());
+
+}
+
 void gxEngine::createProject()
 {
-    projects.append(new gxProject());
+    gxProject* project = new gxProject();
+    projects->append(project);
+    project->setup();
 }
 
 
 
 void gxEngine::deleteProject(gxProject* project)
 {
-    int i = projects.indexOf(project);
+    int i = projects->indexOf(project);
     if (i>=0)
     {
         // NOT NECESSARY to destroy object
@@ -48,7 +78,7 @@ void gxEngine::deleteProject(gxProject* project)
 
         // each class derived from gxTreeObject
         // destroy itself on gettin the signal "delete"
-        projects.erase(projects.begin() + i);
+        projects->erase(projects->begin() + i);
     }
 }
 
@@ -116,34 +146,34 @@ gxRenderPanel* gxEngine::getTopLevelPanel()
 
 void gxEngine::recheckTreeItems()
 {
-    QVariant data;
-    gxTreeObject* object;
-    QTreeWidgetItem *item;
-    gxVisualObject* vo;
-
-
-    gxRenderPanel* panel = this->getTopLevelPanel();
-    if (!panel) return;
-
-    QTreeWidgetItemIterator it(mainWindow->getProjectTree());
-
-    while (*it)
-    {
-        item = (*it);
-        ++it;
-
-        data = item->data(0, Qt::UserRole);
-        object = data.value<gxTreeObject*>();
-
-        if (object->isFolder()) continue;
-
-        vo = (gxVisualObject*)object;
-
-        if (panel->isObjectRegistered(vo))
-            item->setCheckState(0,Qt::Checked);
-        else
-            item->setCheckState(0,Qt::Unchecked);
-
-
-    }
+//    QVariant data;
+//    gxTreeObject* object;
+//    QTreeWidgetItem *item;
+//    gxVisualObject* vo;
+//
+//
+//    gxRenderPanel* panel = this->getTopLevelPanel();
+//    if (!panel) return;
+//
+//    QTreeWidgetItemIterator it(mainWindow->getProjectTree());
+//
+//    while (*it)
+//    {
+//        item = (*it);
+//        ++it;
+//
+//        data = item->data(0, Qt::UserRole);
+//        object = data.value<gxTreeObject*>();
+//
+//        if (object->isFolder()) continue;
+//
+//        vo = (gxVisualObject*)object;
+//
+//        if (panel->isObjectRegistered(vo))
+//            item->setCheckState(0,Qt::Checked);
+//        else
+//            item->setCheckState(0,Qt::Unchecked);
+//
+//
+//    }
 }

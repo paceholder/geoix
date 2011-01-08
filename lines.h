@@ -25,7 +25,7 @@
 
 #include "visual_object.h"
 #include "contour.h"
-#include "tree_object_folder.h"
+#include "tree_folder_object.h"
 
 
 /// Class represents lines in 3d space
@@ -37,13 +37,15 @@ class gxLines : public gxVisualObject
     Q_OBJECT
 public:
     /// Constructor
-    gxLines(gxTreeObjectFolder* parent);
+    gxLines(gxTreeFolderObject* parent);
 
     /// Destructor
     virtual ~gxLines();
 
     /// Returns menu for project tree
-    inline QMenu* getMenu() { return gxTreeMenuFabric::instance()->getLinesMenu(this); }
+    QMenu* getMenu();
+
+    QIcon getIcon();
 
     /// 2d rendering
     virtual void draw2D();

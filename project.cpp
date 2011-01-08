@@ -22,4 +22,40 @@
 
 #include "project.h"
 
+#include "tree_menu_fabric.h"
+#include "project_tree_model.h"
+#include "engine.h"
+
+gxProject::gxProject()
+    : gxTreeFolderObject()
+{
+   name = tr("New Project");
+}
+
+
+gxProject::~gxProject()
+{
+    gxEngine::instance()->deleteProject(this);
+}
+
+void gxProject::setup()
+{
+    gxProjectList* projectList = gxEngine::instance()->getProjectList();
+    QAbstractItemModel* model = gxEngine::instance()->getMainWindow()->getProjectTreeModel();
+
+    model->insertRow(projectList->size() - 1, QModelIndex());
+
+    Gx::Log("Project '" + name + "' created");
+}
+
+
+QMenu* gxProject::getMenu()
+{
+    return gxTreeMenuFabric::instance()->getProjectMenu(this);
+}
+
+QIcon gxProject::getIcon()
+{
+    return QIcon(":/images/Hierarchy.png");
+}
 

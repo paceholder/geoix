@@ -26,7 +26,7 @@
 #include "data_loader.h"
 #include "contourer_fast.h"
 #include "color_palette.h"
-#include "tree_object_folder.h"
+#include "tree_folder_object.h"
 
 #include "surf_prop_dialog.h"
 
@@ -35,16 +35,16 @@
 #include <QMessageBox>
 
 
-gxSurface::gxSurface(gxTreeObjectFolder* parent)
+gxSurface::gxSurface(gxTreeFolderObject* parent)
     : gxVisualObject(parent)
 {
     name = tr("New Surface");
 
-    parent->getTreeWidgetItem()->addChild(widgetItem);
-    parent->getTreeWidgetItem()->setExpanded(true);
-
-    widgetItem->setText(0, name);
-    widgetItem->setIcon(0, QIcon(":/images/surface.png")); // todo
+//    parent->getTreeWidgetItem()->addChild(widgetItem);
+//    parent->getTreeWidgetItem()->setExpanded(true);
+//
+//    widgetItem->setText(0, name);
+//    widgetItem->setIcon(0, QIcon(":/images/surface.png")); // todo
 
     setRandomColor();
     setTransparancy(1.0);
@@ -312,7 +312,8 @@ void gxSurface::recalcSize()
 void gxSurface::importFromFile()
 {
     this->clearData();
-    gxDataLoader::instance()->loadSurfaceData(this->data);
+    if ( ! gxDataLoader::instance()->loadSurfaceData(this->data)) return;
+
     this->recalcSize();    
 
     gxContourer contourer(2);
@@ -340,4 +341,15 @@ void gxSurface::options()
     dialog.setData(this);
 
     dialog.exec();
+}
+
+
+QMenu* gxSurface::getMenu()
+{
+    return gxTreeMenuFabric::instance()->getSurfaceMenu(this);
+}
+
+QIcon gxSurface::getIcon()
+{
+    return QIcon(":/images/surface.png");
 }

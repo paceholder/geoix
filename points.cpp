@@ -29,16 +29,16 @@
 
 
 
-gxPoints::gxPoints(gxTreeObjectFolder* parent)
+gxPoints::gxPoints(gxTreeFolderObject* parent)
     : gxVisualObject(parent)
 {
     name = tr("New Points");
-    widgetItem->setText(0, name);
-    widgetItem->setIcon(0, QIcon(":/images/points.png"));
+//    widgetItem->setText(0, name);
+//    widgetItem->setIcon(0, QIcon(":/images/points.png"));
 
 
-    parent->getTreeWidgetItem()->addChild(widgetItem);
-    parent->getTreeWidgetItem()->setExpanded(true);
+//    parent->getTreeWidgetItem()->addChild(widgetItem);
+//    parent->getTreeWidgetItem()->setExpanded(true);
 
     setRandomColor();
 
@@ -161,4 +161,15 @@ void gxPoints::clearData()
     data.clear();
 
     updateWidgetItemState();
+}
+
+
+QMenu* gxPoints::getMenu()
+{
+    return gxTreeMenuFabric::instance()->getPointsMenu(this);
+}
+
+QIcon gxPoints::getIcon()
+{
+    return QIcon(":/images/points.png");
 }

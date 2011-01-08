@@ -9,7 +9,6 @@ SOURCES += main.cpp \
     engine.cpp \
     project.cpp \
     tree_menu_fabric.cpp \
-    tree_object_folder.cpp \
     tree_object.cpp \
     render_panel.cpp \
     data_loader.cpp \
@@ -28,14 +27,15 @@ SOURCES += main.cpp \
     coord_system_3d.cpp \
     logger.cpp \
     project_tree.cpp \
-    subtree.cpp
+    subtree.cpp \
+    project_tree_model.cpp \
+    tree_folder_object.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
     tree_object.h \
     tree_menu_fabric.h \
     engine.h \
-    tree_object_folder.h \
     render_panel.h \
     render_panel_2D.h \
     visual_object.h \
@@ -67,7 +67,9 @@ HEADERS += mainwindow.h \
     project_tree.h \
     subtree.h \
     drop_widget.h \
-    project_tree_model.h
+    project_tree_model.h \
+    tree_abstract_object.h \
+    tree_folder_object.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui

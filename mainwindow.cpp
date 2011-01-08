@@ -23,22 +23,18 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QSplitter>
-#include <QScreen>
-#include <QDesktopWidget>
-#include <QVBoxLayout>
-#include <QPixmap>
-#include <QFileDialog>
-// this is for actions for processing menu and toolbar events
-#include <QActionGroup>
-#include <QMessageBox>
+
+#include <QtGui>
+#include <QtCore>
 
 #include "tree_object.h"
 #include "tree_menu_fabric.h"
 #include "render_panel.h"
 #include "project_tree.h"
+#include "project_tree_model.h"
 #include "subtree.h"
 #include "spliner_dialog.h"
+#include "tree_abstract_object.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -66,9 +62,14 @@ void MainWindow::createGUIObjects()
 //    frect.moveCenter(QDesktopWidget().availableGeometry().center());
 //    move(frect.topLeft());
 
-    projectTree = new gxProjectTree(ui->leftDock);
-    projectTree->setContextMenuPolicy(Qt::CustomContextMenu);
+    projectTreeModel = new gxProjectTreeModel(gxEngine::instance()->getProjectList(), this);
+    projectTree = new QTreeView(ui->leftDock);
     projectTree->header()->hide();
+    projectTree->setContextMenuPolicy(Qt::CustomContextMenu);
+    projectTree->setModel((QAbstractItemModel*)projectTreeModel);
+
+    connect(projectTree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuProjectTree(QPoint)));
+
 
     subTree = new gxSubTree(ui->leftDock);
     subTree->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -100,7 +101,6 @@ void MainWindow::createActions()
     actions.buildMapAct = new QAction(QIcon(":/images/Create.png"), tr("Build Map"), this);
 
     actions.screenShotAct = new QAction(QIcon(":/images/Screenshot.png"), tr("Make screenshot"), this);
-
 
 
     connect(actions.newProjectAct, SIGNAL(triggered()), this, SLOT(newProject()));
@@ -157,9 +157,9 @@ void MainWindow::changeEvent(QEvent *e)
 }
 
 
-QTreeWidget* MainWindow::getProjectTree()
+QTreeView* MainWindow::getProjectTree()
 {
-    return (QTreeWidget*)projectTree;
+    return projectTree;
 }
 
 QTreeWidget* MainWindow::getSubTree()
@@ -175,6 +175,11 @@ QWidget* MainWindow::getMainPanel()
 QListWidget* MainWindow::getListLog()
 {
     return ui->listLog;
+}
+
+QAbstractItemModel* MainWindow::getProjectTreeModel()
+{
+    return this->projectTree->model();
 }
 
 
@@ -205,12 +210,16 @@ void MainWindow::closePanel()
 }
 
 
+//------------------------------------------------------------------------------
+
+
+
 void MainWindow::screenShot()
 {
     gxRenderPanel* panel = gxEngine::instance()->getTopLevelPanel();
     if (panel)
     {
-       //QPixmap p = panel->renderPixmap();
+        // QPixmap p = panel->renderPixmap();
 
         QPixmap p = QPixmap::grabWindow(panel->getGLPanel()->winId());
 
@@ -223,10 +232,39 @@ void MainWindow::screenShot()
     }
 }
 
+
+//------------------------------------------------------------------------------
+
+
+
 void MainWindow::buildMap()
 {
     spliner_dialog* dialog = new spliner_dialog(this);
     dialog->show();
 }
 
+
+
+//------------------------------------------------------------------------------
+
+
+
+void MainWindow::contextMenuProjectTree(const QPoint& position)
+{
+    QPoint p = projectTree->mapToGlobal(position);
+    // little offset to prevent clickin' menu by right mouse button
+    p.setX( p.x()+ 5); p.setY( p.y() + 5);
+
+    QModelIndex index = projectTree->indexAt(position);
+    if (index.isValid())
+    {
+        gxTreeAbstractObject* object = static_cast<gxTreeAbstractObject*>(index.internalPointer());
+        QMenu* menu = object->getMenu();
+        if (menu) menu->popup(p);
+    }
+    else
+    {
+        gxTreeMenuFabric::instance()->getTreeGeneralMenu()->popup(p);
+    }
+}
 

@@ -38,12 +38,12 @@ class gxVisualObject : public gxTreeObject
 
 public:
     /// Constructor
-    gxVisualObject(gxTreeObjectFolder* parent)
+    gxVisualObject(gxTreeFolderObject* parent)
         : gxTreeObject(parent)
     {
         gl_list_3d = 0;
         gl_list_2d = 0;
-        widgetItem->setCheckState(0, Qt::Unchecked);
+//        widgetItem->setCheckState(0, Qt::Unchecked);
     }
 
     /// Destructor. Emits signal which make
@@ -62,10 +62,10 @@ public:
     /// After various changes gl render lists must be rebuilt.
     virtual void recreateDisplayList()
     {
-        glDeleteLists(gl_list_3d, 1);
+        if ( ! gl_list_3d ) glDeleteLists(gl_list_3d, 1);
         gl_list_3d = 0;
 
-        glDeleteLists(gl_list_2d, 1);
+        if ( ! gl_list_2d ) glDeleteLists(gl_list_2d, 1);
         gl_list_2d= 0;
     }
 
@@ -114,10 +114,10 @@ protected:
     void updateWidgetItemState()
     {
 
-        if (hasData())
-            widgetItem->setData(0, Qt::TextColorRole, Qt::black);
-        else
-            widgetItem->setData(0, Qt::TextColorRole, Qt::gray);
+//        if (hasData())
+//            widgetItem->setData(0, Qt::TextColorRole, Qt::black);
+//        else
+//            widgetItem->setData(0, Qt::TextColorRole, Qt::gray);
     }
 
     /// Reimplemented in subclasses

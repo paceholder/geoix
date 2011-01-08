@@ -30,8 +30,9 @@
 
 #include "mainwindow.h"
 #include "logger.h"
+#include "project.h" // That would be good to delete it
 
-class gxProject;
+
 class gxRenderPanel;
 
 
@@ -44,28 +45,18 @@ class gxEngine
 {
 public:
     /// Returns instance of singletone class
-    static gxEngine* instance()
-    {
-        if (!inst)
-        {
-            inst = new gxEngine();
-        }
-        return inst;
-    }
+    static gxEngine* instance();
 
     /// Set pointer to the MainForm
     /// \return nothing
-    void setMainWindow(MainWindow* w)
-    {
-        mainWindow = w;
-
-        gxLogger::instance()->setOutputListWidget(w->getListLog());
-
-    }
+    void setMainWindow(MainWindow* w);
 
     /// Returns pointer to the main window
     /// \return MainWindow*
-    inline MainWindow* getMainWindow() { return mainWindow; }
+    MainWindow* getMainWindow() { return mainWindow; }
+
+    /// returns list of projects
+    gxProjectList* getProjectList() { return projects; }
 
     void createProject();
     void deleteProject(gxProject* project);
@@ -89,25 +80,17 @@ public:
     void recheckTreeItems();
 private:
     /// Constructor
-    gxEngine() {}
+    gxEngine();
     /// Destructor
+    ~gxEngine();
 
-    // ??????
-    ~gxEngine()
-    {
-//        foreach(gxRenderPanel* panel, panels)
-//        {
-//            delete panel;
-//        }
-
-    }
 
     static gxEngine* inst;
     MainWindow* mainWindow;
 
-    /// Vector of projects
+    /// List of projects
     /// \see gxProject
-    QVector<gxProject*> projects;
+    gxProjectList* projects;
 
     /// Stack of panels
     /*!

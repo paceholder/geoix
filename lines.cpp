@@ -22,19 +22,20 @@
 
 #include "lines.h"
 #include "data_loader.h"
+#include "tree_menu_fabric.h"
 #include <limits> // todo do not use std
 
 
-gxLines::gxLines(gxTreeObjectFolder* parent)
+gxLines::gxLines(gxTreeFolderObject* parent)
     : gxVisualObject(parent)
 {
     name = tr("New Lines");
-    widgetItem->setText(0, name);
-    widgetItem->setIcon(0, QIcon(":/images/surface.png"));
-
-
-    parent->getTreeWidgetItem()->addChild(widgetItem);
-    parent->getTreeWidgetItem()->setExpanded(true);
+//    widgetItem->setText(0, name);
+//    widgetItem->setIcon(0, QIcon(":/images/surface.png"));
+//
+//
+//    parent->getTreeWidgetItem()->addChild(widgetItem);
+//    parent->getTreeWidgetItem()->setExpanded(true);
 
     setRandomColor();
 
@@ -50,6 +51,18 @@ gxLines::~gxLines()
     {
         delete contour;
     }
+}
+
+
+
+QMenu* gxLines::getMenu()
+{
+    return gxTreeMenuFabric::instance()->getLinesMenu(this);
+}
+
+QIcon gxLines::getIcon()
+{
+    return QIcon(":/images/surface.png");
 }
 
 
@@ -157,3 +170,5 @@ void gxLines::clearData()
 
     updateWidgetItemState();
 }
+
+

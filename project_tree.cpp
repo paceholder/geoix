@@ -88,52 +88,52 @@ void gxProjectTree::dragMoveEvent(QDragMoveEvent *event)
 
 void gxProjectTree::dropEvent(QDropEvent *event)
 {
-    if (event->mimeData()->hasFormat("geoix/tree-object"))
-    {
-        QByteArray output = event->mimeData()->data("geoix/tree-object");
-        QDataStream stream(&output, QIODevice::ReadOnly);
-
-        qint64 pointer = 0;
-        stream >> pointer;
-
-
-        gxTreeObject* object = (gxTreeObject*)pointer; // this object is moved
-        if (object)
-        {
-            /// gettin index within the childs of previous parent
-            QTreeWidgetItem* oldItem =  object->getTreeWidgetItem();
-
-            int index = -1;
-            if (oldItem->parent())
-                index = oldItem->parent()->indexOfChild(oldItem);
-            else
-                index = oldItem->treeWidget()->indexOfTopLevelItem(oldItem);
-
-
-            /// getting new parent's WidgetItem
-            QTreeWidgetItem* newParentItem = itemAt(event->pos());
-            if (newParentItem)
-            {
-                /// Set new parent WidgetItem
-                if (oldItem->parent())
-                    oldItem = oldItem->parent()->takeChild(index);
-                else
-                    oldItem = oldItem->treeWidget()->takeTopLevelItem(index);
-
-                newParentItem->addChild(oldItem);
-                newParentItem->setExpanded(true);
-
-                QVariant data = newParentItem->data(0, Qt::UserRole);
-                gxTreeObject* newParentObject = data.value<gxTreeObject*>();
-
-                object->changeParent(newParentObject);
-
-
-            }
-
-            dragging = false;
-        }
-    }
+//    if (event->mimeData()->hasFormat("geoix/tree-object"))
+//    {
+//        QByteArray output = event->mimeData()->data("geoix/tree-object");
+//        QDataStream stream(&output, QIODevice::ReadOnly);
+//
+//        qint64 pointer = 0;
+//        stream >> pointer;
+//
+//
+//        gxTreeObject* object = (gxTreeObject*)pointer; // this object is moved
+//        if (object)
+//        {
+//            /// gettin index within the childs of previous parent
+//            QTreeWidgetItem* oldItem =  object->getTreeWidgetItem();
+//
+//            int index = -1;
+//            if (oldItem->parent())
+//                index = oldItem->parent()->indexOfChild(oldItem);
+//            else
+//                index = oldItem->treeWidget()->indexOfTopLevelItem(oldItem);
+//
+//
+//            /// getting new parent's WidgetItem
+//            QTreeWidgetItem* newParentItem = itemAt(event->pos());
+//            if (newParentItem)
+//            {
+//                /// Set new parent WidgetItem
+//                if (oldItem->parent())
+//                    oldItem = oldItem->parent()->takeChild(index);
+//                else
+//                    oldItem = oldItem->treeWidget()->takeTopLevelItem(index);
+//
+//                newParentItem->addChild(oldItem);
+//                newParentItem->setExpanded(true);
+//
+//                QVariant data = newParentItem->data(0, Qt::UserRole);
+//                gxTreeObject* newParentObject = data.value<gxTreeObject*>();
+//
+//                object->changeParent(newParentObject);
+//
+//
+//            }
+//
+//            dragging = false;
+//        }
+//    }
 }
 
 

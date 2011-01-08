@@ -22,64 +22,52 @@
 
 #include "tree_object.h"
 
-#include "tree_object_folder.h"
+#include "tree_folder_object.h"
+#include "engine.h"
 
 
 
-gxTreeObject::gxTreeObject(gxTreeObjectFolder* parent)
+gxTreeObject::gxTreeObject(gxTreeFolderObject* parent)
+    :gxTreeAbstractObject(parent)
 {
-    this->parent = parent;
-
     name = tr("Some Object");
 
-    QTreeWidget* tree = gxEngine::instance()->getMainWindow()->getProjectTree();
+//    QTreeWidget* tree = gxEngine::instance()->getMainWindow()->getProjectTree();
 
     // creates tree item widget
-    if (parent)
-        widgetItem = new QTreeWidgetItem(parent->getTreeWidgetItem());
-    else
-        widgetItem = new QTreeWidgetItem(tree);
+//    if (parent)
+//        widgetItem = new QTreeWidgetItem(parent->getTreeWidgetItem());
+//    else
+//        widgetItem = new QTreeWidgetItem(tree);
 
-    widgetItem->setText(0, name);
+//    widgetItem->setText(0, name);
 
     QVariant data = qVariantFromValue((gxTreeObject*)this);
 
-    widgetItem->setData(0, Qt::UserRole, data);
-
-    widgetItem->setFlags(widgetItem->flags() | Qt::ItemIsEditable);
+//    widgetItem->setData(0, Qt::UserRole, data);
+//
+//    widgetItem->setFlags(widgetItem->flags() | Qt::ItemIsEditable);
 }
 
 
 
 gxTreeObject::~gxTreeObject()
 {
-    if (parent)
-    {
-        parent->deleteChild(this);
-    }
-
-    delete widgetItem;
+//    if (parent)
+//    {
+//        parent->deleteChild(this);
+//    }
+//
+//    delete widgetItem;
 }
 
 
-void gxTreeObject::changeParent(gxTreeObject *newParent)
+int gxTreeObject::getIndex()
 {
-    if (!newParent) return;
+    /// The only object could be parent is gxTreeFolderObject
+    /// And.. gxTreeObject could not be created without parent object
 
-    this->parent = (gxTreeObjectFolder*)newParent;
+    gxTreeFolderObject* folder = (gxTreeFolderObject*) parent;
+    folder->indexOf(this);
 }
 
-
-void gxTreeObject::deleteThis()
-{
-    // bla bla
-    // ask user whether delete it or not
-
-    delete this; // govnokod
-}
-
-
-void gxTreeObject::renameItem()
-{
-    gxEngine::instance()->getMainWindow()->getProjectTree()->editItem(widgetItem);
-}

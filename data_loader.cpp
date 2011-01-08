@@ -65,6 +65,9 @@ bool gxDataLoader::loadPointsData(gxPointsData* data)
 
 
 
+//------------------------------------------------------------------------------
+
+
 bool gxDataLoader::loadSurfaceData(gxSurfaceData* data)
 {
     data->values.clear();
@@ -169,6 +172,11 @@ bool gxDataLoader::loadSurfaceData(gxSurfaceData* data)
     return true;
 }
 
+
+//------------------------------------------------------------------------------
+
+
+
 bool gxDataLoader::loadLinesData(gxContours *data)
 {
     foreach(gxContour* c, *data)
@@ -221,6 +229,9 @@ bool gxDataLoader::loadLinesData(gxContours *data)
 
     return true;
 }
+
+
+//------------------------------------------------------------------------------
 
 
 void gxDataLoader::openTextFile(QStringList* list)
