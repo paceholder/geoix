@@ -61,7 +61,7 @@ public:
     virtual void draw3D();
 
     /// Checks whether object has data
-    inline bool hasData() { return data.count() > 0; }
+    bool hasData() { return data.count() > 0; }
 
 public slots:
     /// Calls appropriate functions from gxDataLoader to import data from txt file

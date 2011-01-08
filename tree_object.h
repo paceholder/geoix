@@ -33,6 +33,8 @@
 /*!
     Implements methods for showing menu,
     deletion and renaming of object.
+
+    \todo maybe this class is useless. It must be replaced by gxVisualObject
 */
 class gxTreeObject : public gxTreeAbstractObject
 {

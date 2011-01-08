@@ -56,14 +56,13 @@ public:
     /// No comments
     virtual void recalcSize();
 
+    bool hasData() { return contours->count() > 0; }
 public slots:
 /// Calls appropriate functions from gxDataLoader to import data from txt file
     virtual void importFromFile();
     virtual void clearData();
     virtual void options() {}
 
-protected:
-    bool hasData() { return contours->count() > 0; }
 private:
     /// Vector of contours containing data of current gxLines
     gxContours* contours;

@@ -1,4 +1,4 @@
-//------------------------------------------------------------------------
+ //------------------------------------------------------------------------
 //    This file is part of Geoix.
 //
 //    Copyright (C) 2010 Dmitriy Pinaev
@@ -24,6 +24,8 @@
 #include "project_tree_model.h"
 
 #include "tree_object.h"
+#include "render_panel.h"
+#include "engine.h"
 
 gxProjectTreeModel::gxProjectTreeModel(gxProjectList* projects, QObject* parent)
     : QAbstractItemModel(parent)
@@ -94,7 +96,6 @@ QModelIndex gxProjectTreeModel::parent(const QModelIndex &child) const
 {
     if ( !child.isValid() ) return QModelIndex();
 
-
     gxTreeAbstractObject *childObject = static_cast<gxTreeAbstractObject*>(child.internalPointer());
     gxTreeFolderObject *folder = childObject->getParent();
 
@@ -123,14 +124,35 @@ QModelIndex gxProjectTreeModel::parent(const QModelIndex &child) const
 
 bool gxProjectTreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    gxTreeAbstractObject* object = static_cast<gxTreeAbstractObject*>(index.internalPointer());
+    if ( !object ) return false;
+
     switch (role)
     {
     case Qt::EditRole :
-        gxTreeAbstractObject* object = static_cast<gxTreeAbstractObject*>(index.internalPointer());
         object->setName(value.toString());
         break;
-//    case Qt::CheckStateRole:
-//        value.to
+    case Qt::CheckStateRole:
+        // set visibility/invisibility
+        if (!object->isFolder())
+        {
+            gxRenderPanel* panel = gxEngine::instance()->getTopLevelPanel();
+            if (!panel) return false;
+
+            uint checkState = value.toUInt();
+
+            switch ( checkState )
+            {
+            case Qt::Checked:
+                panel->registerObject(static_cast<gxVisualObject *>(object));
+                break;
+            case Qt::Unchecked:
+                panel->unregisterObject(static_cast<gxVisualObject *>(object));
+                break;
+            case Qt::PartiallyChecked:
+                break;
+            }
+        }
     }
 
     emit dataChanged(index, index);
@@ -148,16 +170,52 @@ QVariant gxProjectTreeModel::data(const QModelIndex &index, int role) const
     if ( !index.isValid() ) return QVariant();
 
     gxTreeAbstractObject* object = static_cast<gxTreeAbstractObject*>(index.internalPointer());
-
+    gxRenderPanel* panel = gxEngine::instance()->getTopLevelPanel();
 
     switch (role)
     {
-    case Qt::DisplayRole: return QVariant(object->getName()); break;
+    case Qt::DisplayRole:
+        return QVariant(object->getName()); break;
 
-    // will return icon
-    case Qt::DecorationRole: return QVariant(object->getIcon()); break;
+    // returns icon
+    case Qt::DecorationRole:
+        return QVariant(object->getIcon()); break;
 
-   // case Qt::CheckStateRole: return QVariant(Qt::Checked); break;
+    // returns check state
+    case Qt::CheckStateRole:
+        if (!panel) return QVariant(Qt::Unchecked);
+
+        if ( panel->isObjectRegistered(static_cast<gxVisualObject *>(object)) )
+            return QVariant(Qt::Checked);
+        else
+            return QVariant(Qt::Unchecked);
+
+        break;
+
+    // returns font
+//    case Qt::FontRole:
+//        if ( ! object->isFolder() )
+//        {
+//            gxVisualObject *vo = static_cast<gxVisualObject*>(object);
+//
+//            QFont font;
+////            font.se
+////            font.setBold( vo->hasData() );
+//            return font;
+//        }
+//        break;
+
+    case Qt::ForegroundRole:
+        if ( ! object->isFolder() )
+        {
+            gxVisualObject *vo = static_cast<gxVisualObject*>(object);
+
+            if ( vo->hasData())
+                return Qt::black;
+            else
+                return Qt::gray;
+        }
+        break;
 
     default : return QVariant(); break;
     }

@@ -60,7 +60,7 @@ gxSurface::gxSurface(gxTreeFolderObject* parent)
     palette->addColor(0,  Qt::darkBlue);
     palette->addColor(1,  Qt::red);
 
-    updateWidgetItemState();
+//    updateWidgetItemState();
 
     Gx::Log("Surface '" + name + "' created");
 }
@@ -319,7 +319,7 @@ void gxSurface::importFromFile()
     gxContourer contourer(2);
     contourer.run(this->data, this->contours);
 
-    updateWidgetItemState();
+//    updateWidgetItemState();
 }
 
 
@@ -332,7 +332,7 @@ void gxSurface::clearData()
        // delete contour; todo
     }
 
-    updateWidgetItemState();
+//    updateWidgetItemState();
 }
 
 void gxSurface::options()

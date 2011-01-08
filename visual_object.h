@@ -62,10 +62,10 @@ public:
     /// After various changes gl render lists must be rebuilt.
     virtual void recreateDisplayList()
     {
-        if ( ! gl_list_3d ) glDeleteLists(gl_list_3d, 1);
+        if ( gl_list_3d ) glDeleteLists(gl_list_3d, 1);
         gl_list_3d = 0;
 
-        if ( ! gl_list_2d ) glDeleteLists(gl_list_2d, 1);
+        if ( gl_list_2d ) glDeleteLists(gl_list_2d, 1);
         gl_list_2d= 0;
     }
 
@@ -75,6 +75,10 @@ public:
     /// Gets and sets size of the object
     const gxSize3D& getSize() { return size3d; }
     void setSize(const gxSize3D& size) { this->size3d = size; }
+
+
+    /// Reimplemented in subclasses
+    virtual bool hasData() = 0;
 
 public slots:
     virtual void importFromFile() = 0;
@@ -119,9 +123,6 @@ protected:
 //        else
 //            widgetItem->setData(0, Qt::TextColorRole, Qt::gray);
     }
-
-    /// Reimplemented in subclasses
-    virtual bool hasData() = 0;
 };
 
 #endif // VISUAL_OBJECT_H

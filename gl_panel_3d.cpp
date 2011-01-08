@@ -40,7 +40,7 @@ gxGLPanel3D::gxGLPanel3D(gxRenderPanel3D* parent, QGLWidget* shareWidget, gxSize
 
     this->setGeometry(b, b*2, sz.width() - b*2, sz.height() - b*3);
 
-    startTimer(20);
+   // startTimer(20);
 
     lastRotX = 0;
     lastRotZ = 0;
