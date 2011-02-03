@@ -24,6 +24,11 @@
 
 #include "points.h"
 #include "constants.h"
+#include "surface_data.h"
+
+#include "engine.h"
+
+#include "mainwindow.h"
 
 gxDataLoader* gxDataLoader::inst = NULL;
 

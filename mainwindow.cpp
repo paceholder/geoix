@@ -62,7 +62,7 @@ void MainWindow::createGUIObjects()
 //    frect.moveCenter(QDesktopWidget().availableGeometry().center());
 //    move(frect.topLeft());
 
-    projectTreeModel = new gxProjectTreeModel(gxEngine::instance()->getProjectList(), this);
+    projectTreeModel = new gxProjectTreeModel(gxEngine::instance()->getProjectsRoot(), this);
     projectTree = new QTreeView(ui->leftDock);
     projectTree->header()->hide();
     projectTree->setContextMenuPolicy(Qt::CustomContextMenu);

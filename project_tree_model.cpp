@@ -24,13 +24,14 @@
 #include "project_tree_model.h"
 
 #include "tree_object.h"
+#include "tree_folder_object.h"
 #include "render_panel.h"
 #include "engine.h"
 
-gxProjectTreeModel::gxProjectTreeModel(gxProjectList* projects, QObject* parent)
-    : QAbstractItemModel(parent)
+gxProjectTreeModel::gxProjectTreeModel(gxTreeFolderObject *projectsRootFolder, QObject *parent)
+    : QAbstractItemModel(parent),
+    projectsRoot(projectsRootFolder)
 {
-    this->projects = projects;
     this->reset(); // reset model to show changes
 }
 
@@ -49,13 +50,10 @@ int gxProjectTreeModel::columnCount(const QModelIndex &parent) const
 int gxProjectTreeModel::rowCount(const QModelIndex &parent) const
 {
     if (!parent.isValid()) // we deal with project
-    {
-        return this->projects->size();
-    }
+        return this->projectsRoot->count();
     else
     {
         gxTreeAbstractObject* treeobject = static_cast<gxTreeAbstractObject*>(parent.internalPointer());
-
         return treeobject->count();
     }
 }
@@ -69,10 +67,14 @@ QModelIndex gxProjectTreeModel::index(int row, int column, const QModelIndex &pa
 {
     Q_UNUSED(column);
 
+    if ( !projectsRoot ) return QModelIndex();
+    if ( projectsRoot->count() == 0 ) return QModelIndex();
+
     /// Invalid parent means that we have to return index for project
     if ( !parent.isValid() )
     {
-        return createIndex(row, column, this->projects->at(row));
+        gxProject* project  = static_cast<gxProject*>(projectsRoot->getChild(row).data());
+        return createIndex(row, column, project);
     }
     else
     {
@@ -80,7 +82,7 @@ QModelIndex gxProjectTreeModel::index(int row, int column, const QModelIndex &pa
         gxTreeFolderObject* folder = static_cast<gxTreeFolderObject*>(parent.internalPointer());
 
         if ( folder )
-            return createIndex(row, column, folder->getChild(row));
+            return createIndex(row, column, folder->getChild(row).data());
         else
             return QModelIndex();
     }
@@ -99,20 +101,18 @@ QModelIndex gxProjectTreeModel::parent(const QModelIndex &child) const
     gxTreeAbstractObject *childObject = static_cast<gxTreeAbstractObject*>(child.internalPointer());
     gxTreeFolderObject *folder = childObject->getParent();
 
-    if ( folder )
-    {
-        gxTreeFolderObject *parentFolder = folder->getParent();
-
-        if ( parentFolder )
-            return createIndex(parentFolder->indexOf(folder), 0, folder);
-        else
-            // if folder has no parent, it is definitely gxProgect
-            return createIndex(this->projects->indexOf( (gxProject *)folder), 0, folder);
-    }
+    if (folder == projectsRoot)
+        return QModelIndex();
     else
     {
-        return QModelIndex();
+        // it MUST be root
+        gxTreeFolderObject *parentFolder = folder->getParent();
+        return createIndex(parentFolder->indexOf(folder),
+                           0,
+                           folder);
     }
+
+    return QModelIndex();
 }
 
 
@@ -192,19 +192,6 @@ QVariant gxProjectTreeModel::data(const QModelIndex &index, int role) const
 
         break;
 
-    // returns font
-//    case Qt::FontRole:
-//        if ( ! object->isFolder() )
-//        {
-//            gxVisualObject *vo = static_cast<gxVisualObject*>(object);
-//
-//            QFont font;
-////            font.se
-////            font.setBold( vo->hasData() );
-//            return font;
-//        }
-//        break;
-
     case Qt::ForegroundRole:
         if ( ! object->isFolder() )
         {
@@ -261,7 +248,7 @@ bool gxProjectTreeModel::removeRows(int row, int count, const QModelIndex &paren
     }
     else
     {
-        gxEngine::instance()->getProjectList()->removeAt(row);
+        gxEngine::instance()->deleteProject(row);
     }
 
     endRemoveRows();

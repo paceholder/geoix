@@ -25,9 +25,10 @@
 #include "tree_menu_fabric.h"
 #include "project_tree_model.h"
 #include "engine.h"
+#include "mainwindow.h"
 
-gxProject::gxProject()
-    : gxTreeFolderObject()
+gxProject::gxProject(gxTreeFolderObject *parent)
+    : gxTreeFolderObject(parent)
 {
    name = tr("New Project");
 }
@@ -35,15 +36,17 @@ gxProject::gxProject()
 
 gxProject::~gxProject()
 {
-    gxEngine::instance()->deleteProject(this);
+    // it is removed automatically since we use QSharedPointer
+
+    //gxEngine::instance()->deleteProject(this);
 }
 
 void gxProject::setup()
 {
-    gxProjectList* projectList = gxEngine::instance()->getProjectList();
+    gxTreeFolderObject* rootFolder = gxEngine::instance()->getProjectsRoot();
     QAbstractItemModel* model = gxEngine::instance()->getMainWindow()->getProjectTree()->model();
 
-    model->insertRow(projectList->size() - 1, QModelIndex());
+    model->insertRow(rootFolder->count() - 1, QModelIndex());
 
     gxLogger::instance()->logEvent("Project '" + name + "' created");
 }

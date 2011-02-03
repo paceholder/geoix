@@ -1,5 +1,6 @@
 #include "tree_abstract_object.h"
 
+#include "mainwindow.h"
 #include "engine.h"
 
 #include <QtGui>

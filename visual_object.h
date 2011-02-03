@@ -23,6 +23,8 @@
 #ifndef VISUAL_OBJECT_H
 #define VISUAL_OBJECT_H
 
+#include "time.h"
+
 #include "tree_object.h"
 #include "size.h"
 

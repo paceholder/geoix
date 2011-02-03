@@ -28,7 +28,7 @@
 #include "lines.h"
 #include "surface.h"
 
-
+#include "mainwindow.h"
 #include "engine.h"
 
 gxTreeMenuFabric* gxTreeMenuFabric::inst = NULL;

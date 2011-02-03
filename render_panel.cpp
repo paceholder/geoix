@@ -102,14 +102,11 @@ void gxRenderPanel::dropEvent(QDropEvent *event)
 
 
         gxTreeObject* object = (gxTreeObject*)pointer; // this object is moved
-        if (object)
+        if (object && !object->isFolder())
         {
-            if (!object->isFolder())
-            {
-                gxVisualObject* vo = (gxVisualObject*)object;
-                this->registerObject(vo);
-                gxEngine::instance()->recheckTreeItems();
-            }
+            gxVisualObject* vo = (gxVisualObject*)object;
+            this->registerObject(vo);
+//                gxEngine::instance()->recheckTreeItems();
         }
     }
 }

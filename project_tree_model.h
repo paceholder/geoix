@@ -25,12 +25,11 @@
 #include <QAbstractItemModel>
 #include "project.h"
 
-
 class gxProjectTreeModel : QAbstractItemModel
 {
     Q_OBJECT
 public:
-    gxProjectTreeModel(gxProjectList* projects, QObject* parent);
+    gxProjectTreeModel(gxTreeFolderObject* projectsRootFolder, QObject* parent);
     ~gxProjectTreeModel() {}
 protected:
     int columnCount(const QModelIndex &parent) const;
@@ -47,7 +46,7 @@ protected:
     bool insertRows(int row, int count, const QModelIndex &parent);
     bool removeRows(int row, int count, const QModelIndex &parent);
 private:
-    gxProjectList* projects;
+    gxTreeFolderObject* projectsRoot;
 };
 
 #endif // PROJECT_TREE_MODEL_H

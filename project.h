@@ -34,7 +34,7 @@ class gxProject : public gxTreeFolderObject
 {
     Q_OBJECT
 public:
-    gxProject();
+    gxProject(gxTreeFolderObject* parent = 0);
     virtual ~gxProject();
 
     /// This function adds item to the project list
@@ -44,6 +44,6 @@ public:
     virtual QIcon getIcon();
 };
 
-typedef QList<gxProject*> gxProjectList;
+typedef QList<QSharedPointer<gxProject> > gxProjectList;
 
 #endif // PROJECT_H

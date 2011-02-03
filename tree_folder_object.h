@@ -38,19 +38,34 @@ public:
 
     void setup();
 
+    /// removes object from children list
     void deleteChild(gxTreeAbstractObject* child);
-    void deleteChild(int i);
-    void addChild(gxTreeAbstractObject* child);
-    gxTreeAbstractObject* getChild(int i);
 
+    /// removes i'th object from children list
+    void deleteChild(int i);
+
+    /// adds object to the children list
+    void addChild(gxTreeAbstractObject* child);
+
+    /// adds object to the children list
+    void addChild(QSharedPointer<gxTreeAbstractObject> child);
+
+    /// returns child by index
+    QSharedPointer<gxTreeAbstractObject> getChild(int i);
+
+    /// if the object is folder?
     bool isFolder() { return true; }
 
+    /// returns index of object
     int indexOf(gxTreeAbstractObject* child);
 
-    // will be implemented in derived classes
+    /// returns context menu
     virtual QMenu* getMenu();
+
+    /// returns icon for the tree
     virtual QIcon getIcon();
 
+    /// returns count of children
     int count() { return children.size(); }
 
     /// This functions is used by treemodel
@@ -61,7 +76,7 @@ public slots:
     void createLines();
     void createSurface();
 protected:
-    QList<gxTreeAbstractObject*> children;
+    QList<QSharedPointer<gxTreeAbstractObject> > children;
 };
 
 #endif // TREE_FOLDER_OBJECT_H

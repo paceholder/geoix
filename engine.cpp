@@ -23,6 +23,7 @@
 #include "engine.h"
 
 #include "project.h"
+#include "mainwindow.h"
 
 #include "render_panel_2D.h"
 #include "render_panel_3D.h"
@@ -33,20 +34,19 @@ gxEngine* gxEngine::inst = NULL;
 
 gxEngine::gxEngine()
 {
-    projects = new gxProjectList();
+    projectsRoot = new gxTreeFolderObject();
 }
 
 gxEngine::~gxEngine()
 {
-    delete projects;
+    delete projectsRoot;
 }
 
 gxEngine* gxEngine::instance()
 {
     if (!inst)
-    {
         inst = new gxEngine();
-    }
+
     return inst;
 }
 
@@ -55,13 +55,15 @@ void gxEngine::setMainWindow(MainWindow* w)
     mainWindow = w;
 
     gxLogger::instance()->setOutputListWidget(w->getListLog());
-
 }
 
 void gxEngine::createProject()
 {
-    gxProject* project = new gxProject();
-    projects->append(project);
+    // create shared poinder with project inside
+    QSharedPointer<gxProject> project(new gxProject(projectsRoot));
+    projectsRoot->addChild(project);
+
+    // some stuff for adding to tree
     project->setup();
 }
 
@@ -69,17 +71,12 @@ void gxEngine::createProject()
 
 void gxEngine::deleteProject(gxProject* project)
 {
-    int i = projects->indexOf(project);
-    if (i>=0)
-    {
-        // NOT NECESSARY to destroy object
-        // located by pointer gxProject*
-        // explicitly
+    projectsRoot->deleteChild(project);
+}
 
-        // each class derived from gxTreeObject
-        // destroy itself on gettin the signal "delete"
-        projects->erase(projects->begin() + i);
-    }
+void gxEngine::deleteProject(int i)
+{
+    projectsRoot->deleteChild(i);
 }
 
 
@@ -91,7 +88,7 @@ void gxEngine::create2DPanel()
 
     this->panels.push_back(panel);
 
-    recheckTreeItems();
+//    recheckTreeItems();
 }
 
 void gxEngine::create3DPanel()
@@ -101,7 +98,7 @@ void gxEngine::create3DPanel()
 
     this->panels.push_back(panel);
 
-    recheckTreeItems();
+//    recheckTreeItems();
 }
 
 
@@ -114,7 +111,7 @@ void gxEngine::closePanel()
         panels.pop_back();
     }
 
-    recheckTreeItems();
+//    recheckTreeItems();
 }
 
 
@@ -129,7 +126,7 @@ void gxEngine::raisePanel(gxRenderPanel* panel)
         panels.push_back(panel);
     }
 
-    recheckTreeItems();
+//    recheckTreeItems();
 
  //   if (i != panels.count()-1)
      //   panel->recreateDisplayLists();
@@ -143,9 +140,9 @@ gxRenderPanel* gxEngine::getTopLevelPanel()
         return NULL;
 }
 
-
-void gxEngine::recheckTreeItems()
-{
+//
+//void gxEngine::recheckTreeItems()
+//{
 //    QVariant data;
 //    gxTreeObject* object;
 //    QTreeWidgetItem *item;
@@ -176,4 +173,4 @@ void gxEngine::recheckTreeItems()
 //
 //
 //    }
-}
+//}

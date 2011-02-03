@@ -24,16 +24,11 @@
 #define ENGINE_H
 
 
-#include <QVector>
-#include <QTreeWidgetItemIterator>
-//#include <QStack>
-
-#include "mainwindow.h"
-#include "logger.h"
 #include "project.h" // That would be good to delete it
 
 
 class gxRenderPanel;
+class MainWindow;
 
 
 /// Central class. It's base of whole program
@@ -53,13 +48,14 @@ public:
 
     /// Returns pointer to the main window
     /// \return MainWindow*
-    MainWindow* getMainWindow() { return mainWindow; }
+    MainWindow* getMainWindow() const { return mainWindow; }
 
     /// returns list of projects
-    gxProjectList* getProjectList() { return projects; }
+    gxTreeFolderObject* getProjectsRoot() const { return projectsRoot; }
 
     void createProject();
     void deleteProject(gxProject* project);
+    void deleteProject(const int i);
 
     void create2DPanel();
     void create3DPanel();
@@ -77,20 +73,20 @@ public:
     /// Function updates check states of all TreeWidgetItems
     /// \todo Bad solution. Think how to do it in better way
     /// \todo maybe i should megrge with test on data containing
-    void recheckTreeItems();
+//    void recheckTreeItems();
 private:
     /// Constructor
     gxEngine();
+
     /// Destructor
     ~gxEngine();
-
 
     static gxEngine* inst;
     MainWindow* mainWindow;
 
-    /// List of projects
+    /// Root of projects
     /// \see gxProject
-    gxProjectList* projects;
+    gxTreeFolderObject *projectsRoot;
 
     /// Stack of panels
     /*!

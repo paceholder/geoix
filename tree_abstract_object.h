@@ -67,13 +67,14 @@ public:
     /// If object has parent function returns index of this object among parent's children
     virtual int getIndex() = 0;
 
-    /// todo: should think about it
-    virtual void changeParent(gxTreeFolderObject* newParent) { this->parent = newParent; }
+    /// \todo should think about it
+    virtual void setParent(gxTreeFolderObject* newParent) { this->parent = newParent; }
 protected:
     gxTreeFolderObject* parent;
     QString name;    
 
 public slots:
+    /// delete this object from the project tree and from parent
     void deleteThis();
 };
 
