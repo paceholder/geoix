@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -23,6 +23,7 @@
 #include "render_panel_2D.h"
 
 #include "gl_panel_2d.h"
+#include "engine.h"
 
 gxRenderPanel2D::gxRenderPanel2D(QWidget* parent)
     : gxRenderPanel(parent)
@@ -32,13 +33,21 @@ gxRenderPanel2D::gxRenderPanel2D(QWidget* parent)
 
     // size is passed to gl_panel and to coord_system
 
-    gl_panel = new gxGLPanel2D(this, size3d);
+    gxRenderPanel* topLevelPanel = gxEngine::instance()->getTopLevelPanel();
+    QGLWidget* glw = 0;
+    if (topLevelPanel) glw =  topLevelPanel->getGLPanel();
+
+    gl_panel = new gxGLPanel2D(this, glw, size3d);
     gl_panel->setMouseTracking(true);
     gl_panel->makeCurrent();
     gl_panel->setFocusPolicy(Qt::ClickFocus);
 
-    coord_system = new gxCoordSystem2D(gl_panel, size3d);
+    coord_system = new gxCoordSystem2D(static_cast<gxGLPanel2D*>(gl_panel), size3d);
 }
+
+
+
+//------------------------------------------------------------------------------
 
 
 
@@ -47,8 +56,6 @@ void gxRenderPanel2D::gldraw()
     glClear(GL_COLOR_BUFFER_BIT);
 
     ((gxGLPanel2D*)gl_panel)->getScene()->applyTransformations();
-
-
 
     QVectorIterator<gxVisualObject*> it(objects);
     while (it.hasNext())

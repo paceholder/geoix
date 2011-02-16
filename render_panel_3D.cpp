@@ -37,10 +37,20 @@ gxRenderPanel3D::gxRenderPanel3D(QWidget* parent)
     QGLWidget* glw = 0;
     if (topLevelPanel) glw =  topLevelPanel->getGLPanel();
 
+
+
+//    QGLFormat f;
+//    f.setAlpha(true);
+//    f.setStereo(true);
+//    QGLFormat::setDefaultFormat(f);
+
     gl_panel = new gxGLPanel3D(this, glw, size3d);
     gl_panel->setMouseTracking(true);
     gl_panel->makeCurrent();
     gl_panel->setFocusPolicy(Qt::ClickFocus);
+
+//    if ( !gl_panel->format().stereo() )
+//        QMessageBox::critical(this, "hardware problem","hardware problem");
 
     coord_system = new gxCoordSystem3D(gl_panel, size3d);
 }

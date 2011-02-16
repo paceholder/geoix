@@ -32,7 +32,7 @@
 
 
 class gxProject;
-class gxTreeObjectFolder;
+class gxTreeFolderObject;
 class gxPoints;
 class gxLines;
 class gxSurface;
@@ -88,7 +88,7 @@ public:
 
 
     QMenu* getProjectMenu(gxProject* project);
-    QMenu* getFolderMenu(gxTreeObjectFolder* project);
+    QMenu* getFolderMenu(gxTreeFolderObject* project);
     QMenu* getPointsMenu(gxPoints* points);
     QMenu* getLinesMenu(gxLines* lines);
     QMenu* getSurfaceMenu(gxSurface* surface);

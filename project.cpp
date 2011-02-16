@@ -22,4 +22,43 @@
 
 #include "project.h"
 
+#include "tree_menu_fabric.h"
+#include "project_tree_model.h"
+#include "engine.h"
+#include "mainwindow.h"
+
+gxProject::gxProject(gxTreeFolderObject *parent)
+    : gxTreeFolderObject(parent)
+{
+   name = tr("New Project");
+}
+
+
+gxProject::~gxProject()
+{
+    // it is removed automatically since we use QSharedPointer
+
+    //gxEngine::instance()->deleteProject(this);
+}
+
+void gxProject::setup()
+{
+    gxTreeFolderObject* rootFolder = gxEngine::instance()->getProjectsRoot();
+    QAbstractItemModel* model = gxEngine::instance()->getMainWindow()->getProjectTree()->model();
+
+    model->insertRow(rootFolder->count() - 1, QModelIndex());
+
+    gxLogger::instance()->logEvent("Project '" + name + "' created");
+}
+
+
+QMenu* gxProject::getMenu()
+{
+    return gxTreeMenuFabric::instance()->getProjectMenu(this);
+}
+
+QIcon gxProject::getIcon()
+{
+    return QIcon(":/images/Hierarchy.png");
+}
 

@@ -23,49 +23,27 @@
 #ifndef TREE_OBJECT_H
 #define TREE_OBJECT_H
 
-#include <QMenu>
-#include <QTreeWidget>
-#include <QVariant>
 
+#include <QtGui>
+#include <QtCore>
 
-class gxTreeObjectFolder;
+#include "tree_abstract_object.h"
 
 /// Base class for all objects in project tree
 /*!
     Implements methods for showing menu,
     deletion and renaming of object.
+
+    \todo maybe this class is useless. It must be replaced by gxVisualObject
 */
-class gxTreeObject : public QObject
+class gxTreeObject : public gxTreeAbstractObject
 {
     Q_OBJECT
-protected:
-    QTreeWidgetItem* widgetItem;
-    QString name;
-
-    gxTreeObjectFolder* parent;
 public:
-    gxTreeObject(gxTreeObjectFolder* parent = NULL);
+    gxTreeObject(gxTreeFolderObject* parent);
     virtual ~gxTreeObject();
 
-    virtual QMenu* getMenu() = 0;
-
-    virtual bool isFolder()
-    {
-        return false;
-    }
-
-    QTreeWidgetItem* getTreeWidgetItem() { return widgetItem; }
-
-    void setName(QString& name) { this->name = name; }
-    QString  getName() { return this->name; }
-
-    //void updateTreeWidgetItemState();
-    void changeParent(gxTreeObject* newParent);
-
-public slots:
-    /// Can be overrided in child classes
-    void deleteThis();
-    void renameItem();
+    int getIndex();
 };
 Q_DECLARE_METATYPE(gxTreeObject* );
 

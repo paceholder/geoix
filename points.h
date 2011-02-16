@@ -27,7 +27,7 @@
 
 
 #include "visual_object.h"
-#include "tree_object_folder.h"
+#include "tree_folder_object.h"
 #include "tree_menu_fabric.h"
 
 #include "point3D.h"
@@ -40,7 +40,7 @@ class gxPoints : public gxVisualObject
     Q_OBJECT
 public:
     /// Constructor
-    gxPoints(gxTreeObjectFolder* parent);
+    gxPoints(gxTreeFolderObject* parent);
 
     /// Destructor
     virtual ~gxPoints()    {}
@@ -49,7 +49,10 @@ public:
     virtual void recalcSize();
 
     /// Returns context menu for current object
-    inline QMenu* getMenu() { return gxTreeMenuFabric::instance()->getPointsMenu(this); }
+    QMenu* getMenu();
+
+    /// Returns icon for the points
+    QIcon getIcon();
 
     /// 2d rendering
     virtual void draw2D();
@@ -58,7 +61,7 @@ public:
     virtual void draw3D();
 
     /// Checks whether object has data
-    inline bool hasData() { return data.count() > 0; }
+    bool hasData() { return data.count() > 0; }
 
 public slots:
     /// Calls appropriate functions from gxDataLoader to import data from txt file

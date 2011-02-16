@@ -25,38 +25,25 @@
 
 #include <QVector>
 
-#include "tree_object_folder.h"
-#include "tree_menu_fabric.h"
+#include "tree_folder_object.h"
 #include "logger.h"
 
 
 /// Represents project in project tree in Main Window
-class gxProject : public gxTreeObjectFolder
+class gxProject : public gxTreeFolderObject
 {
     Q_OBJECT
 public:
-    gxProject()
-        : gxTreeObjectFolder()
-    {
-        name = tr("New Project");
+    gxProject(gxTreeFolderObject* parent = 0);
+    virtual ~gxProject();
 
-        /// \todo have side effect
-        widgetItem->setText(0, name);
-        widgetItem->setIcon(0, QIcon(":/images/Hierarchy.png"));
+    /// This function adds item to the project list
+    void setup();
 
-        gxEngine::instance()->getMainWindow()->getProjectTree()->addTopLevelItem(widgetItem);
-
-        Gx::Log("Project '" + name + "' created");
-    }
-
-    virtual ~gxProject()
-    {
-        gxEngine::instance()->deleteProject(this);
-    }
-
-
-    inline QMenu* getMenu() { return gxTreeMenuFabric::instance()->getProjectMenu(this); }
-
+    virtual QMenu* getMenu();
+    virtual QIcon getIcon();
 };
+
+typedef QList<QSharedPointer<gxProject> > gxProjectList;
 
 #endif // PROJECT_H

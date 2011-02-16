@@ -40,12 +40,12 @@ class gxGLPanel2D : public QGLWidget
     Q_OBJECT
 public:
     /// Constructor
-    gxGLPanel2D(gxRenderPanel2D* parent, gxSize3D* size3d);
+    gxGLPanel2D(gxRenderPanel2D* parent, QGLWidget* shareWidget, gxSize3D* size3d);
     ~gxGLPanel2D();
 
     gx2dScene* getScene() const;
-
 public slots:
+    /// \todo WTF?
     void resetPosition();
 protected:
     /// initialize OpenGL

@@ -28,8 +28,8 @@
 #include "engine.h"
 
 
-gxGLPanel2D::gxGLPanel2D(gxRenderPanel2D* parent, gxSize3D* size3d)
-    : QGLWidget(parent)
+gxGLPanel2D::gxGLPanel2D(gxRenderPanel2D* parent, QGLWidget* shareWidget, gxSize3D* size3d)
+    : QGLWidget(parent, shareWidget)
 {
     this->size3d = size3d;
     scene = new gx2dScene(size3d);
@@ -47,7 +47,7 @@ gxGLPanel2D::~gxGLPanel2D()
     delete scene;
 }
 
-//-------------------------------------------
+//------------------------------------------------------------------------------
 
 void gxGLPanel2D::resetPosition()
 {
@@ -83,6 +83,11 @@ void gxGLPanel2D::resizeGL(int width, int height)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
+
+
+
+//------------------------------------------------------------------------------
+
 
 
 void gxGLPanel2D::paintGL()

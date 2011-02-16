@@ -9,7 +9,7 @@
 //    (at your option) any later version.
 //
 //    Geoix is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    //    but WITHOUT ANY WARRANTY; without even the implied warranty of
 //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 //    GNU General Public License for more details.
 //
@@ -24,15 +24,11 @@
 #define ENGINE_H
 
 
-#include <QVector>
-#include <QTreeWidgetItemIterator>
-//#include <QStack>
+#include "project.h" // That would be good to delete it
 
-#include "mainwindow.h"
-#include "logger.h"
 
-class gxProject;
 class gxRenderPanel;
+class MainWindow;
 
 
 /// Central class. It's base of whole program
@@ -44,31 +40,22 @@ class gxEngine
 {
 public:
     /// Returns instance of singletone class
-    static gxEngine* instance()
-    {
-        if (!inst)
-        {
-            inst = new gxEngine();
-        }
-        return inst;
-    }
+    static gxEngine* instance();
 
     /// Set pointer to the MainForm
     /// \return nothing
-    void setMainWindow(MainWindow* w)
-    {
-        mainWindow = w;
-
-        gxLogger::instance()->setOutputListWidget(w->getListLog());
-
-    }
+    void setMainWindow(MainWindow* w);
 
     /// Returns pointer to the main window
     /// \return MainWindow*
-    inline MainWindow* getMainWindow() { return mainWindow; }
+    MainWindow* getMainWindow() const { return mainWindow; }
+
+    /// returns list of projects
+    gxTreeFolderObject* getProjectsRoot() const { return projectsRoot; }
 
     void createProject();
     void deleteProject(gxProject* project);
+    void deleteProject(const int i);
 
     void create2DPanel();
     void create3DPanel();
@@ -86,28 +73,20 @@ public:
     /// Function updates check states of all TreeWidgetItems
     /// \todo Bad solution. Think how to do it in better way
     /// \todo maybe i should megrge with test on data containing
-    void recheckTreeItems();
+//    void recheckTreeItems();
 private:
     /// Constructor
-    gxEngine() {}
+    gxEngine();
+
     /// Destructor
-
-    // ??????
-    ~gxEngine()
-    {
-//        foreach(gxRenderPanel* panel, panels)
-//        {
-//            delete panel;
-//        }
-
-    }
+    ~gxEngine();
 
     static gxEngine* inst;
     MainWindow* mainWindow;
 
-    /// Vector of projects
+    /// Root of projects
     /// \see gxProject
-    QVector<gxProject*> projects;
+    gxTreeFolderObject *projectsRoot;
 
     /// Stack of panels
     /*!

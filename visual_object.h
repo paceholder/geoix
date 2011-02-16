@@ -23,6 +23,8 @@
 #ifndef VISUAL_OBJECT_H
 #define VISUAL_OBJECT_H
 
+#include "time.h"
+
 #include "tree_object.h"
 #include "size.h"
 
@@ -38,12 +40,11 @@ class gxVisualObject : public gxTreeObject
 
 public:
     /// Constructor
-    gxVisualObject(gxTreeObjectFolder* parent)
+    gxVisualObject(gxTreeFolderObject* parent)
         : gxTreeObject(parent)
     {
         gl_list_3d = 0;
         gl_list_2d = 0;
-        widgetItem->setCheckState(0, Qt::Unchecked);
     }
 
     /// Destructor. Emits signal which make
@@ -62,10 +63,10 @@ public:
     /// After various changes gl render lists must be rebuilt.
     virtual void recreateDisplayList()
     {
-        glDeleteLists(gl_list_3d, 1);
+        if ( gl_list_3d ) glDeleteLists(gl_list_3d, 1);
         gl_list_3d = 0;
 
-        glDeleteLists(gl_list_2d, 1);
+        if ( gl_list_2d ) glDeleteLists(gl_list_2d, 1);
         gl_list_2d= 0;
     }
 
@@ -75,6 +76,10 @@ public:
     /// Gets and sets size of the object
     const gxSize3D& getSize() { return size3d; }
     void setSize(const gxSize3D& size) { this->size3d = size; }
+
+
+    /// Reimplemented in subclasses
+    virtual bool hasData() = 0;
 
 public slots:
     virtual void importFromFile() = 0;
@@ -108,20 +113,6 @@ protected:
         color.setRgbF(0.3 + r, 0.3 + g, 0.3 + b);
     }
 
-    /// Changes color of text of widgetItem.
-    /// Gray means than object doesn't contain any data.
-    /// Black means than data is loaded.
-    void updateWidgetItemState()
-    {
-
-        if (hasData())
-            widgetItem->setData(0, Qt::TextColorRole, Qt::black);
-        else
-            widgetItem->setData(0, Qt::TextColorRole, Qt::gray);
-    }
-
-    /// Reimplemented in subclasses
-    virtual bool hasData() = 0;
 };
 
 #endif // VISUAL_OBJECT_H

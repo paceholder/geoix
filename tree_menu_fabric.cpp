@@ -23,12 +23,12 @@
 #include "tree_menu_fabric.h"
 
 #include "project.h"
-#include "tree_object_folder.h"
+#include "tree_folder_object.h"
 #include "points.h"
 #include "lines.h"
 #include "surface.h"
 
-
+#include "mainwindow.h"
 #include "engine.h"
 
 gxTreeMenuFabric* gxTreeMenuFabric::inst = NULL;
@@ -37,7 +37,7 @@ gxTreeMenuFabric::gxTreeMenuFabric()
 {
     menu = new QMenu(NULL);
 
-    QTreeWidget* project_tree = gxEngine::instance()->getMainWindow()->getProjectTree();
+    QTreeView* project_tree = gxEngine::instance()->getMainWindow()->getProjectTree();
     createFolder = new QAction(QIcon(":/images/add_folder.png"), tr("Create Folder"), project_tree);
     createFolder->setIconVisibleInMenu(true);
 
@@ -105,7 +105,7 @@ QMenu* gxTreeMenuFabric::getProjectMenu(gxProject* project)
 }
 
 
-QMenu* gxTreeMenuFabric::getFolderMenu(gxTreeObjectFolder* folder)
+QMenu* gxTreeMenuFabric::getFolderMenu(gxTreeFolderObject* folder)
 {
     menu->clear();
     menu->addAction(createPoints);
@@ -127,6 +127,7 @@ QMenu* gxTreeMenuFabric::getFolderMenu(gxTreeObjectFolder* folder)
 
     disconnect(renameItem, 0, 0, 0);
     connect(renameItem, SIGNAL(triggered()), folder, SLOT(renameItem()));
+
     disconnect(deleteItem, 0, 0, 0);
     connect(deleteItem, SIGNAL(triggered()), folder, SLOT(deleteThis()));
 

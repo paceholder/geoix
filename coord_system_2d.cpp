@@ -23,14 +23,22 @@
 #include "coord_system_2d.h"
 
 
-gxCoordSystem2D::gxCoordSystem2D(QGLWidget *gl_panel, gxSize3D *size3d)
+gxCoordSystem2D::gxCoordSystem2D(gxGLPanel2D *gl_panel, gxSize3D *size3d)
+    : metrics(gl_panel->fontMetrics())
 {
     this->gl_panel = gl_panel;
     this->size3d = size3d;
 
-    panel = (gxGLPanel2D*)gl_panel;
+    //panel = static_cast<gxGLPanel2D*>(gl_panel);
 
-    real_step = (panel->getScene()->dx + panel->width()/2) / 16;
+    this->gl_panel = gl_panel;
+
+    //font metrics
+//    metrics = gl_panel->fontMetrics();
+
+
+    //????
+    real_step = (gl_panel->getScene()->dx + gl_panel->width()/2) / 16;
 }
 
 
@@ -70,6 +78,9 @@ void gxCoordSystem2D::drawSceneRectangle()
 }
 
 
+//------------------------------------------------------------------------------
+
+
 void gxCoordSystem2D::drawSemitrasparentRects()
 {
 
@@ -78,78 +89,115 @@ void gxCoordSystem2D::drawSemitrasparentRects()
 
     glColor4d(1.0, 1.0, 1.0, 0.5);
     glBegin(GL_QUADS);
-        glVertex2i(-panel->width()/2, -panel->height()/2 + 30);
-        glVertex2i(-panel->width()/2, -panel->height()/2 );
-        glVertex2i(+panel->width()/2, -panel->height()/2);
-        glVertex2i(+panel->width()/2, -panel->height()/2 + 30);
+        glVertex2i(-gl_panel->width()/2, -gl_panel->height()/2 + 30);
+        glVertex2i(-gl_panel->width()/2, -gl_panel->height()/2 );
+        glVertex2i(+gl_panel->width()/2, -gl_panel->height()/2);
+        glVertex2i(+gl_panel->width()/2, -gl_panel->height()/2 + 30);
     glEnd();
 
 
     glBegin(GL_QUADS);
-        glVertex2i(-panel->width()/2, +panel->height()/2);
-        glVertex2i(-panel->width()/2, -panel->height()/2 + 30);
-        glVertex2i(-panel->width()/2 + 60, -panel->height()/2 + 30);
-        glVertex2i(-panel->width()/2 + 60, +panel->height()/2);
+        glVertex2i(-gl_panel->width()/2, +gl_panel->height()/2);
+        glVertex2i(-gl_panel->width()/2, -gl_panel->height()/2 + 30);
+        glVertex2i(-gl_panel->width()/2 + 60, -gl_panel->height()/2 + 30);
+        glVertex2i(-gl_panel->width()/2 + 60, +gl_panel->height()/2);
     glEnd();
 
     glDisable(GL_BLEND);
 }
 
+//------------------------------------------------------------------------------
+
+void gxCoordSystem2D::drawHorizontalAxisTick(int xi, bool longTick)
+{
+    // every 5th tick is longer than others
+    int dx = longTick ? 10 : 5;
+
+    glBegin(GL_LINES);
+        glVertex2i(xi , -gl_panel->height()/2);
+        glVertex2i(xi , -gl_panel->height()/2 + dx);
+    glEnd();
+}
+
+
+//------------------------------------------------------------------------------
+
+void gxCoordSystem2D::drawVerticalAxisTick(int yi, bool longTick)
+{
+    // every 5th tick is longer than others
+    int dy = longTick ? 10 : 5;
+
+    glBegin(GL_LINES);
+        glVertex2i(-gl_panel->width()/2, yi);
+        glVertex2i(-gl_panel->width()/2 + dy, yi);
+    glEnd();
+}
+
+
+void gxCoordSystem2D::drawHorizontalAxisNumber(int xi, double x)
+{
+    QString s = QString::number(x, 'f', 1);
+    gl_panel->renderText(double(xi - metrics.width(s)/2),
+                         double(-gl_panel->height()/2 + 15),
+                         0.0, s);
+}
+
+
+void gxCoordSystem2D::drawVerticalAxisNumber(int yi, double y)
+{
+    QString s = QString::number(y, 'f', 1);
+    gl_panel->renderText(double(-gl_panel->width()/2 + 15),
+                         double(yi),
+                         0.0, s);
+}
+
+
 void gxCoordSystem2D::drawScales()
 {
-    panel_step = real_step * panel->getScene()->scale;
+    panel_step = real_step * gl_panel->getScene()->scale;
 
     // New step depends on current scale
     if (panel_step < 16) real_step *= 2;
     if (panel_step > 48) real_step /= 4;
 
-    double scale = panel->getScene()->scale;
+    double scale = gl_panel->getScene()->scale;
 
     // world_x = (window_x - center_of_scene_in_window_coord) / scale + (center_of_scene_in_world_coord)
 
     // center_of_scene_in_world_coord
     double centerX = size3d->getMinX() + size3d->getW()/2;
     double centerY = size3d->getMinY() + size3d->getH()/2;
-    int centerXpanel = panel->getScene()->dx;
-    int centerYpanel = panel->getScene()->dy;
 
-    double minx = ( -panel->width()/2 - centerXpanel) / scale + centerX;
-    double maxx = ( +panel->width()/2 - centerXpanel) / scale + centerX;
+    // center of the scene in panel's coordinate
+    int centerXpanel = gl_panel->getScene()->dx;
+    int centerYpanel = gl_panel->getScene()->dy;
 
-    double miny = ( -panel->height()/2 - centerYpanel) / scale + centerY;
-    double maxy = ( +panel->height()/2 - centerYpanel) / scale + centerY;
+    double minx = ( -gl_panel->width()/2 - centerXpanel) / scale + centerX;
+    double maxx = ( +gl_panel->width()/2 - centerXpanel) / scale + centerX;
+
+    double miny = ( -gl_panel->height()/2 - centerYpanel) / scale + centerY;
+    double maxy = ( +gl_panel->height()/2 - centerYpanel) / scale + centerY;
 
     QString s;
-    QFontMetrics metrics = panel->fontMetrics();
 
     // todo: OMFG REFACTORING!!!!
 
     /// Bottom. From center to the right border
     int xi, counter;
-    double x = size3d->getMinX() + size3d->getW()/2;
-    counter = 0;
+    double x;
+
     glColor3f(0.0, 0.0, 0.0);
+
+    x = size3d->getMinX() + size3d->getW()/2;
+    counter = 0;
     while (x < maxx)
     {
         xi = (x - centerX) * scale + centerXpanel;
 
-        glBegin(GL_LINES);
-            glVertex2i(xi , -panel->height()/2);
-            // every 5th tick is longer than others
-            if (counter % 5 == 0)
-                glVertex2i(xi , -panel->height()/2 + 10);
-            else
-                glVertex2i(xi , -panel->height()/2 + 5);
-        glEnd();
-
+        drawHorizontalAxisTick(xi, counter % 5 == 0);
 
         if (counter % 5 == 0)
-        {
-            s = QString::number(x, 'f', 1);
-            panel->renderText(double(xi - metrics.width(s)/2),
-                              double(-panel->height()/2 + 15),
-                              0.0, s);
-        }
+            drawHorizontalAxisNumber(xi, x);
 
         x += real_step;
         ++counter;
@@ -162,23 +210,10 @@ void gxCoordSystem2D::drawScales()
     {
         xi = (x - centerX) * scale + centerXpanel;
 
-        glBegin(GL_LINES);
-            glVertex2i(xi , -panel->height()/2);
-            // every 5th tick is longer than others
-            if (counter % 5 == 0)
-                glVertex2i(xi , -panel->height()/2 + 10);
-            else
-                glVertex2i(xi , -panel->height()/2 + 5);
-        glEnd();
-
+        drawHorizontalAxisTick(xi, counter % 5 == 0);
 
         if ((counter % 5 == 0) && (counter))
-        {
-            s = QString::number(x, 'f', 1);
-            panel->renderText(double(xi - metrics.width(s)/2),
-                              double(-panel->height()/2 + 15),
-                              0.0, s);
-        }
+            drawHorizontalAxisNumber(xi, x);
 
         x -= real_step;
         ++counter;
@@ -186,32 +221,20 @@ void gxCoordSystem2D::drawScales()
 
 
     int yi;
-    double y = size3d->getMinY() + size3d->getH()/2;
+    double y;
+
+    y = size3d->getMinY() + size3d->getH()/2;
     counter = 0;
     glColor3f(0.0, 0.0, 0.0);
     while (y < maxy)
     {
         yi = (y - centerY) * scale + centerYpanel;
 
-        // tick
-        glBegin(GL_LINES);
-            glVertex2i(-panel->width()/2, yi);
-
-            // every 5th tick is longer than others
-            if (counter % 5 == 0)
-                glVertex2i(-panel->width()/2 + 10, yi);
-            else
-                glVertex2i(-panel->width()/2 + 5, yi);
-        glEnd();
+        drawVerticalAxisTick(yi, counter % 5 == 0);
 
 
         if (counter % 5 == 0)
-        {
-            s = QString::number(y, 'f', 1);
-            panel->renderText(double(-panel->width()/2 + 15),
-                              double(yi),
-                              0.0, s);
-        }
+            drawVerticalAxisNumber(yi, y);
 
         y += real_step;
         ++counter;
@@ -224,25 +247,10 @@ void gxCoordSystem2D::drawScales()
     {
         yi = (y - centerY) * scale + centerYpanel;
 
-        // tick
-        glBegin(GL_LINES);
-            glVertex2i(-panel->width()/2, yi);
-            // every 5th tick is longer than others
-            if (counter % 5 == 0)
-            {
-                glVertex2i(-panel->width()/2 + 10, yi);
-            }
-            else
-                glVertex2i(-panel->width()/2 + 5, yi);
-        glEnd();
+        drawVerticalAxisTick(yi, counter % 5 == 0);
 
         if ((counter % 5 == 0) && (counter))
-        {
-            s = QString::number(y, 'f', 1);
-            panel->renderText(double(-panel->width()/2 + 15),
-                              double(yi),
-                              0.0, s);
-        }
+            drawVerticalAxisNumber(yi, y);
 
         y -= real_step;
         ++counter;

@@ -26,7 +26,7 @@
 #include "data_loader.h"
 #include "contourer_fast.h"
 #include "color_palette.h"
-#include "tree_object_folder.h"
+#include "tree_folder_object.h"
 
 #include "surf_prop_dialog.h"
 
@@ -35,16 +35,10 @@
 #include <QMessageBox>
 
 
-gxSurface::gxSurface(gxTreeObjectFolder* parent)
+gxSurface::gxSurface(gxTreeFolderObject* parent)
     : gxVisualObject(parent)
 {
     name = tr("New Surface");
-
-    parent->getTreeWidgetItem()->addChild(widgetItem);
-    parent->getTreeWidgetItem()->setExpanded(true);
-
-    widgetItem->setText(0, name);
-    widgetItem->setIcon(0, QIcon(":/images/surface.png")); // todo
 
     setRandomColor();
     setTransparancy(1.0);
@@ -60,9 +54,8 @@ gxSurface::gxSurface(gxTreeObjectFolder* parent)
     palette->addColor(0,  Qt::darkBlue);
     palette->addColor(1,  Qt::red);
 
-    updateWidgetItemState();
 
-    Gx::Log("Surface '" + name + "' created");
+    gxLogger::instance()->logEvent("Surface '" + name + "' created");
 }
 
 gxSurface::~gxSurface()
@@ -79,7 +72,11 @@ gxSurface::~gxSurface()
 }
 
 
-//-------------------------------------------
+
+//------------------------------------------------------------------------------
+
+
+
 
 void gxSurface::setNormal(double x1, double y1, double z1, double x2, double y2, double z2)
 {
@@ -312,13 +309,14 @@ void gxSurface::recalcSize()
 void gxSurface::importFromFile()
 {
     this->clearData();
-    gxDataLoader::instance()->loadSurfaceData(this->data);
+    if ( ! gxDataLoader::instance()->loadSurfaceData(this->data)) return;
+
     this->recalcSize();    
 
     gxContourer contourer(2);
     contourer.run(this->data, this->contours);
 
-    updateWidgetItemState();
+//    updateWidgetItemState();
 }
 
 
@@ -326,12 +324,12 @@ void gxSurface::clearData()
 {
     data->clear();
 
-    foreach(gxFlatContour* contour, *contours)
-    {
-       // delete contour; todo
-    }
+//    foreach(gxFlatContour* contour, *contours)
+//    {
+//       // delete contour; todo
+//    }
 
-    updateWidgetItemState();
+//    updateWidgetItemState();
 }
 
 void gxSurface::options()
@@ -340,4 +338,15 @@ void gxSurface::options()
     dialog.setData(this);
 
     dialog.exec();
+}
+
+
+QMenu* gxSurface::getMenu()
+{
+    return gxTreeMenuFabric::instance()->getSurfaceMenu(this);
+}
+
+QIcon gxSurface::getIcon()
+{
+    return QIcon(":/images/surface.png");
 }

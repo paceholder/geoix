@@ -23,7 +23,7 @@
 #include "spliner_dialog.h"
 #include "ui_spliner_dialog.h"
 
-#include "drop_widget.h"
+//#include "drop_widget.h"
 
 
 /// Constructor. Creates Dialog window for spline calculations
@@ -34,13 +34,13 @@ spliner_dialog::spliner_dialog(QWidget *parent) :
     ui->setupUi(this);
 
     /// Widget wich takes drops and create signals on dropping event
-    gxDropWidget* widget = new gxDropWidget(this);
-    widget->setGeometry(0, 0, 40, 20);
-    widget->setMinimumSize(40, 20);
-    widget->show();
-    widget->setLayout(ui->verticalLayout_6);
-
-    ui->verticalLayout_6->insertWidget(0, widget);
+//    gxDropWidget* widget = new gxDropWidget(this);
+//    widget->setGeometry(0, 0, 40, 20);
+//    widget->setMinimumSize(40, 20);
+//    widget->show();
+//    widget->setLayout(ui->verticalLayout_6);
+//
+//    ui->verticalLayout_6->insertWidget(0, widget);
 
 }
 

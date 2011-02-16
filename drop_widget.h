@@ -20,42 +20,55 @@
 //------------------------------------------------------------------------
 
 
-#ifndef TREE_OBJECT_FOLDER_H
-#define TREE_OBJECT_FOLDER_H
+#ifndef DROP_WIDGET_H
+#define DROP_WIDGET_H
 
-#include <QVector>
+#include <QWidget>
+#include <QFrame>
+#include <QPainter>
 
-#include "tree_object.h"
-#include "tree_menu_fabric.h"
-
-
-/// Base class for tree objects which can contain other tree objects
-class gxTreeObjectFolder : public gxTreeObject
+class gxDropWidget : public QFrame
 {
     Q_OBJECT
 public:
-    gxTreeObjectFolder(gxTreeObjectFolder* parent = NULL);
-    virtual ~gxTreeObjectFolder();
-
-    void deleteChild(gxTreeObject* child);
-    void addChild(gxTreeObject* child);
-
-    bool isFolder()
+    gxDropWidget(QWidget* parent)
+        : QFrame(parent)
     {
-        return true;
+        // code here
+    }
+    virtual ~gxDropWidget()
+    {
     }
 
-    QMenu* getMenu()
-    {
-        return gxTreeMenuFabric::instance()->getFolderMenu(this);
-    }
-public slots:
-    void createFolder();
-    void createPoints();
-    void createLines();
-    void createSurface();
 protected:
-    QVector<gxTreeObject*> childs;
+    void dragEnterEvent(QDragEnterEvent *event)
+    {
+        emit dragEnterSignal(event);
+    }
+
+    void dragMoveEvent(QDragMoveEvent *event)
+    {
+        emit dragMoveSignal(event);
+    }
+    void dropEvent(QDropEvent *event)
+    {
+        emit dropEventSignal(event);
+    }
+
+
+    /// Draws rectangle - drop spot
+    void paintEvent(QPaintEvent *)
+    {
+        QPainter p(this);
+
+        p.setBrush(Qt::black);
+        p.drawRoundedRect(3, 3, this->width() - 3, this->height() - 3, 3, 3);
+    }
+
+signals:
+    void dragEnterSignal(QDragEnterEvent* event);
+    void dragMoveSignal(QDragMoveEvent *event);
+    void dropEventSignal(QDropEvent *event);
 };
 
-#endif // TREE_OBJECT_FOLDER_H
+#endif // DROP_WIDGET_H

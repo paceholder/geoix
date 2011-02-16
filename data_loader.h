@@ -23,18 +23,17 @@
 #ifndef DATA_LOADER_H
 #define DATA_LOADER_H
 
-#include <QDir>
-#include <QFileDialog>
-#include <QFile>
-#include <QTextStream>
-#include <QStringListIterator>
+#include <QtCore>
 
 
-#include "engine.h"
+
 
 #include "point3D.h"
-#include "surface_data.h"
 #include "contour.h"
+
+
+class gxSurfaceData;
+
 
 /// Class for importing data of surfaces and points from text files
 class gxDataLoader : public QObject

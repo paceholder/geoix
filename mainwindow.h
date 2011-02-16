@@ -35,8 +35,9 @@ namespace Ui {
 }
 
 
-class gxProjectTree;
+//class gxProjectTree;
 class gxSubTree;
+class gxProjectTreeModel;
 
 class MainWindow : public QMainWindow
 {
@@ -45,23 +46,38 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    QTreeWidget* getProjectTree();
-    QTreeWidget* getSubTree();
+    /// Returns Project Tree
+    QTreeView* getProjectTree();
+    /// Returns Sub Tree
+    QTreeWidget* getSubTree();    
+    /// Returns Main Panel
     QWidget* getMainPanel();
+    /// Returns widget with log
     QListWidget* getListLog();
 
+    /// Group Of Actions of Main Window
     gxMainWindowActions actions;
 
 protected:
+    /// Creates all GUI widgets
     void createGUIObjects();
+    /// Creates actions of Main Window
     void createActions();
+    /// Creates menus of Main Window
     void createMenus();
+    /// Creates toolbars of Main Window
     void createToolBars();
 
+    /// It seem to be necessary for changing of teh language
     void changeEvent(QEvent *event);
 private:
-    gxProjectTree* projectTree;
+    /// Project Tree (view)
+    QTreeView* projectTree;
+    /// Model of Project Tree
+    gxProjectTreeModel* projectTreeModel;
+    /// Subtree. It works as Additional Buffer
     gxSubTree* subTree;
+    /// Main Panel. Contains rendering widgets
     QWidget* mainPanel;
 
     Ui::MainWindow *ui;
@@ -72,6 +88,7 @@ private slots:
     void closePanel();
     void buildMap();
     void screenShot();
+    void contextMenuProjectTree(const QPoint& position);
 };
 
 #endif // MAINWINDOW_H

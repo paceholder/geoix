@@ -97,6 +97,7 @@ protected:
 
     void mouseReleaseEvent(QMouseEvent *event)
     {
+        Q_UNUSED(event);
         moving = false;
     }
 

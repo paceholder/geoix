@@ -59,9 +59,9 @@ public:
 
     void setOutputListWidget(QListWidget* listWidget);
 
-    void logEvent(QString& s);
-    void logWarning(QString& s) { s = "";}
-    void logError(QString& s) { s = "";}
+    void logEvent(QString s);
+    void logWarning(QString s) { s = "";}
+    void logError(QString s) { s = "";}
 
     void writeLogEntryToList(gxLogEntry& en);
 
@@ -75,13 +75,5 @@ private:
     QListWidget* listWidget;
 };
 
-
-namespace Gx
-{
-    static void Log(QString s)
-    {
-        gxLogger::instance()->logEvent(s);
-    }
-}
 
 #endif // LOGGER_H

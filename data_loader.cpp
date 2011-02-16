@@ -24,6 +24,11 @@
 
 #include "points.h"
 #include "constants.h"
+#include "surface_data.h"
+
+#include "engine.h"
+
+#include "mainwindow.h"
 
 gxDataLoader* gxDataLoader::inst = NULL;
 
@@ -63,6 +68,9 @@ bool gxDataLoader::loadPointsData(gxPointsData* data)
     return true;
 }
 
+
+
+//------------------------------------------------------------------------------
 
 
 bool gxDataLoader::loadSurfaceData(gxSurfaceData* data)
@@ -169,6 +177,11 @@ bool gxDataLoader::loadSurfaceData(gxSurfaceData* data)
     return true;
 }
 
+
+//------------------------------------------------------------------------------
+
+
+
 bool gxDataLoader::loadLinesData(gxContours *data)
 {
     foreach(gxContour* c, *data)
@@ -221,6 +234,9 @@ bool gxDataLoader::loadLinesData(gxContours *data)
 
     return true;
 }
+
+
+//------------------------------------------------------------------------------
 
 
 void gxDataLoader::openTextFile(QStringList* list)
