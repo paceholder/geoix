@@ -70,6 +70,10 @@ public:
 
     /// This functions is used by treemodel
     int getIndex();
+
+    /// Returns shared pointer using the real pointer
+    QSharedPointer<gxTreeAbstractObject>
+            getSharedPointer(gxTreeAbstractObject* object);
 public slots:
     void createFolder();
     void createPoints();
@@ -78,5 +82,8 @@ public slots:
 protected:
     QList<QSharedPointer<gxTreeAbstractObject> > children;
 };
+
+
+//typedef gxTreeFolderObjectSharedPointer
 
 #endif // TREE_FOLDER_OBJECT_H

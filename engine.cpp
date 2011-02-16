@@ -42,6 +42,8 @@ gxEngine::~gxEngine()
     delete projectsRoot;
 }
 
+//------------------------------------------------------------------------------
+
 gxEngine* gxEngine::instance()
 {
     if (!inst)

@@ -41,7 +41,7 @@ class gxCoordSystem2D : public QObject
     Q_OBJECT
 public:
     /// Constructor
-    gxCoordSystem2D(QGLWidget* gl_panel, gxSize3D* size3d);
+    explicit gxCoordSystem2D(gxGLPanel2D* gl_panel, gxSize3D* size3d);
     virtual ~gxCoordSystem2D() {}
 
     /// Function render coordinate system to 2d rendering window
@@ -61,12 +61,24 @@ public:
     }
 private:
     gxSize3D* size3d;
-    QGLWidget* gl_panel;
 
-    gxGLPanel2D* panel;
+    gxGLPanel2D* gl_panel;
 
     int panel_step;
-    double real_step;\
+    double real_step;
+
+    QFontMetrics metrics;
+
+    /// Draws ticks at the bottom of the window
+    void drawHorizontalAxisTick(int xi, bool longTick);
+
+    /// Draws ticks at the left side of the window
+    void drawVerticalAxisTick(int yi, bool longTick);
+
+
+    void drawHorizontalAxisNumber(int xi, double x);
+
+    void drawVerticalAxisNumber(int yi, double y);
 
 
     /// Drawing stipped rectangle around scene.

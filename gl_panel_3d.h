@@ -41,7 +41,6 @@ class gxGLPanel3D : public QGLWidget
 public:
     /// Constructor
     gxGLPanel3D(gxRenderPanel3D* parent, QGLWidget* shareWidget, gxSize3D* size3d);
-
     ~gxGLPanel3D();
 
     gx3dScene* getScene() const;
