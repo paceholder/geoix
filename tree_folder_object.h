@@ -32,6 +32,8 @@
 class gxTreeFolderObject: public gxTreeAbstractObject
 {
     Q_OBJECT
+
+    friend class gxTreeAbstractObject;
 public:
     gxTreeFolderObject(gxTreeFolderObject* parent = 0);
     virtual ~gxTreeFolderObject();
@@ -71,9 +73,6 @@ public:
     /// This functions is used by treemodel
     int getIndex();
 
-    /// Returns shared pointer using the real pointer
-    QSharedPointer<gxTreeAbstractObject>
-            getSharedPointer(gxTreeAbstractObject* object);
 public slots:
     void createFolder();
     void createPoints();

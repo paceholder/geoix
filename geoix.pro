@@ -30,7 +30,8 @@ SOURCES += main.cpp \
     subtree.cpp \
     project_tree_model.cpp \
     tree_folder_object.cpp \
-    tree_abstract_object.cpp
+    tree_abstract_object.cpp \
+    rbf_mapper.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -70,8 +71,12 @@ HEADERS += mainwindow.h \
     drop_widget.h \
     project_tree_model.h \
     tree_abstract_object.h \
-    tree_folder_object.h
+    tree_folder_object.h \
+    abstract_mapper.h \
+    rbf_mapper.h \
+    matrix.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
-    surf_prop_dialog.ui
+    surf_prop_dialog.ui \
+    rbf_settings_widget.ui
 RESOURCES += images.qrc

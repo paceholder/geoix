@@ -25,6 +25,8 @@
 
 #include <QDialog>
 
+#include "abstract_mapper.h"
+
 namespace Ui {
     class spliner_dialog;
 }
@@ -41,6 +43,10 @@ protected:
 
 private:
     Ui::spliner_dialog *ui;
+
+    QList<QSharedPointer<gxAbstractMapper> > mapperList;
+
+    void setupMapper();
 };
 
 #endif // SPLINER_DIALOG_H

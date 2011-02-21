@@ -193,18 +193,3 @@ int gxTreeFolderObject::getIndex()
 }
 
 
-//------------------------------------------------------------------------------
-
-QSharedPointer<gxTreeAbstractObject>
-        gxTreeFolderObject::getSharedPointer(gxTreeAbstractObject* object)
-{
-    foreach(QSharedPointer<gxTreeAbstractObject> sharedPointer, children)
-    {
-        if (sharedPointer.data() == object)
-        {
-            return sharedPointer;
-        }
-    }
-
-    /// end of non-void function
-}

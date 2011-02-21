@@ -69,6 +69,9 @@ public:
 
     /// \todo should think about it
     virtual void setParent(gxTreeFolderObject* newParent) { this->parent = newParent; }
+
+    /// Returns shared pointer to this object
+    QSharedPointer<gxTreeAbstractObject> getSharedPointer();
 protected:
     gxTreeFolderObject* parent;
     QString name;    

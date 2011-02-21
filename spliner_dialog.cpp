@@ -19,12 +19,13 @@
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
 
+#include <QtCore>
 
 #include "spliner_dialog.h"
 #include "ui_spliner_dialog.h"
 
 //#include "drop_widget.h"
-
+#include "rbf_mapper.h"
 
 /// Constructor. Creates Dialog window for spline calculations
 spliner_dialog::spliner_dialog(QWidget *parent) :
@@ -32,6 +33,17 @@ spliner_dialog::spliner_dialog(QWidget *parent) :
     ui(new Ui::spliner_dialog)
 {
     ui->setupUi(this);
+
+    // adding mappers
+    mapperList.append(QSharedPointer<gxAbstractMapper>(new gxRBFMapper()));
+
+    // adding mappers' names
+    foreach(QSharedPointer<gxAbstractMapper> mapper, mapperList)
+    {
+        ui->mappersComboBox->addItem(mapper.data()->getName());
+    }
+
+    setupMapper();
 
     /// Widget wich takes drops and create signals on dropping event
 //    gxDropWidget* widget = new gxDropWidget(this);
@@ -58,5 +70,19 @@ void spliner_dialog::changeEvent(QEvent *e)
         break;
     default:
         break;
+    }
+}
+
+void spliner_dialog::setupMapper()
+{
+    int index = ui->mappersComboBox->currentIndex();
+
+    QWidget *settingsWidget = mapperList[index].data()->getSettingsWidget(this);
+    if (settingsWidget)
+    {
+//        // remove previous widget
+        ui->settingsLayout->takeAt(0);
+//        // add new widget
+        ui->settingsLayout->addWidget(settingsWidget);
     }
 }
