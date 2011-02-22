@@ -31,7 +31,9 @@ SOURCES += main.cpp \
     project_tree_model.cpp \
     tree_folder_object.cpp \
     tree_abstract_object.cpp \
-    rbf_mapper.cpp
+    rbf_mapper.cpp \
+    rbf_core.cpp \
+    rbf_domain.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -58,7 +60,6 @@ HEADERS += mainwindow.h \
     scene_2d.h \
     scene_3d.h \
     coord_system_2d.h \
-    spliner.h \
     flat_contour.h \
     lines.h \
     spliner_dialog.h \
@@ -74,7 +75,10 @@ HEADERS += mainwindow.h \
     tree_folder_object.h \
     abstract_mapper.h \
     rbf_mapper.h \
-    matrix.h
+    matrix.h \
+    point2D.h \
+    rbf_core.h \
+    rbf_domain.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui \

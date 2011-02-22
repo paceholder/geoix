@@ -108,6 +108,9 @@ public:
         return sqrt(pow(getW(), 2) + pow(getH(), 2) + pow(getD(), 2));
     }
 
+    /// returns area of field (width * height)
+    inline double area() const { return getW() * getH(); }
+
 private:
     double minx;
     double miny;

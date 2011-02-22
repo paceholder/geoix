@@ -41,7 +41,8 @@ class gxContour : public QObject
 public:
     /// Constructor
     gxContour()
-        : QObject(), closed(false)
+        : QObject(),
+        closed(false)
     { }
 
     /// Destructor

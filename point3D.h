@@ -26,6 +26,7 @@
 #include <QVector>
 
 #include "constants.h"
+#include "math.h"
 
 /// Contains coordinates of 3d pooint
 struct gxPoint3D
@@ -55,46 +56,29 @@ struct gxPoint3D
         return *this;
     }
 
-    bool operator==(gxPoint3D& p)
+    inline bool operator==(gxPoint3D& p)
     {
         return ((qAbs(this->x - p.x) < Gx::Eps) &&
                 (qAbs(this->y - p.y) < Gx::Eps) &&
                 (qAbs(this->z - p.z) < Gx::Eps) );
     }
-};
 
-
-/// Contains coordinates of 2d pooint
-struct gxPoint2D
-{
-    double x;
-    double y;
-
-    gxPoint2D(double x, double y)
+    inline double distance(const gxPoint3D &point) const
     {
-        this->x = x;
-        this->y = y;
+        return sqrt(pow(x - point.x, 2) +
+                    pow(y - point.y, 2) +
+                    pow(z - point.z, 2));
     }
 
-    gxPoint2D()
+    inline double distance(const double x,
+                           const double y) const
     {
-        x = 0; y = 0;
-    }
-
-    inline gxPoint2D& operator=(const gxPoint2D& p)
-    {
-        this->x = p.x;
-        this->y = p.y;
-        return *this;
-    }
-
-    bool operator==(gxPoint2D& p)
-    {
-        return ((qAbs(this->x - p.x) < Gx::Eps) &&
-                (qAbs(this->y - p.y) < Gx::Eps));
+        return sqrt(pow(this->x - x, 2) +
+                    pow(this->y - y, 2) +
+                    pow(this->z - z, 2));
     }
 };
 
 
-typedef QVector<gxPoint3D> gxPointsData;
+typedef QVector<gxPoint3D> gxPoints3DList; //Data;
 #endif // POINT3D_H

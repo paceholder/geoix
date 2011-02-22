@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -25,6 +25,8 @@
 #include <GL/glu.h>
 #include <limits>
 #include "data_loader.h"
+#include "tree_folder_object.h"
+#include "tree_menu_fabric.h"
 
 
 

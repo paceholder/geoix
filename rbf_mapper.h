@@ -3,17 +3,14 @@
 
 #include "abstract_mapper.h"
 
-#include "math.h"
 namespace Ui
 {
     class RBFSettingsWidget;
 }
 
-typedef double(*RBF)(double r);
 
-static double Quadric(double r) { return r; }
-static double Cubic(double r) { return r*r*r; }
-static double ThinPlate(double r) { return r ? r*log(r) : 0; }
+/// !!!! should do it local member ?
+class gxRBFDomain;
 
 class gxRBFMapper : public gxAbstractMapper
 {
@@ -22,11 +19,10 @@ public:
     gxRBFMapper();
     ~gxRBFMapper();
 
-    bool calcSurface(const double *x, const double *y, const double *z,
-                     double minx, double miny,
-                     double maxx, double maxy,
-                     int nx, int ny,
-                     double *result);
+    bool calcSurface(const gxPoints3DList points,
+                     const gxSize3D size,
+                     const int nx, const int ny,
+                     QVector<double> &result);
 
     QWidget *getSettingsWidget(QWidget *parent);
 
@@ -38,9 +34,14 @@ public slots:
 private:
     Ui::RBFSettingsWidget *ui;
 
-    RBF coreFunction;
     int domainCapacity;
     int tolerance;
+
+    void removeEqualPoints(gxPoints3DList &points);
+    void leastSquare(gxPoints3DList &points);
+    void fillResultArray(gxRBFDomain *rootDomain,
+                         const int nx, const int ny,
+                         const gxSize3D &size, QVector<double> &result);
 
 };
 

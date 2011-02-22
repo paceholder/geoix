@@ -27,12 +27,10 @@
 
 
 #include "visual_object.h"
-#include "tree_folder_object.h"
-#include "tree_menu_fabric.h"
-
 #include "point3D.h"
 
 class gx3dScene;
+class gxTreeFolderObject;
 
 /// Class represents visual object points in 3d space
 class gxPoints : public gxVisualObject
@@ -72,7 +70,7 @@ public slots:
     virtual void options() {}
 
 private:
-    gxPointsData data; // todo: pointer of reference?
+    gxPoints3DList data; // todo: pointer of reference?
 
 };
 

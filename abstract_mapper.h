@@ -3,6 +3,9 @@
 
 #include <QtCore>
 
+#include "point3D.h"
+#include "size.h"
+
 class gxAbstractMapper : public QObject
 {
     Q_OBJECT
@@ -12,11 +15,10 @@ public:
     {}
     /// abstract function which is reimplemented in
     /// subclasses
-    virtual bool calcSurface(const double *x, const double *y, const double *z,
-                     const double minx, const double miny,
-                     const double maxx, const double maxy,
-                     const int nx, const int ny,
-                     double *result) = 0;
+    virtual bool calcSurface(const gxPoints3DList points,
+                             const gxSize3D size,
+                             const int nx, const int ny,
+                             QVector<double> &result) = 0;
 
     QString getName() { return name; }
 

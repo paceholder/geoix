@@ -32,7 +32,7 @@
 
 gxDataLoader* gxDataLoader::inst = NULL;
 
-bool gxDataLoader::loadPointsData(gxPointsData* data)
+bool gxDataLoader::loadPointsData(gxPoints3DList* data)
 {
     data->clear();
 

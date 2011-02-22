@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -26,6 +26,9 @@
 #include "contour.h"
 
 
+#include "point2D.h"
+
+
 /// Class represents contour with constant Z-value
 /*!
     Class inherits gxContour but reimplement
@@ -33,7 +36,6 @@
 */
 class gxFlatContour : public gxContour
 {
-    Q_OBJECT
 public:
     /// Consturctor
     gxFlatContour(double z)
