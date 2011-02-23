@@ -70,7 +70,6 @@ void MainWindow::createGUIObjects()
 
     connect(projectTree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuProjectTree(QPoint)));
 
-
     subTree = new gxSubTree(ui->leftDock);
     subTree->setContextMenuPolicy(Qt::CustomContextMenu);
     subTree->header()->hide();

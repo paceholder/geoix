@@ -33,7 +33,8 @@ SOURCES += main.cpp \
     tree_abstract_object.cpp \
     rbf_mapper.cpp \
     rbf_core.cpp \
-    rbf_domain.cpp
+    rbf_domain.cpp \
+    visual_object.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \

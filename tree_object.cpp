@@ -32,6 +32,7 @@ gxTreeObject::gxTreeObject(gxTreeFolderObject* parent)
 {
     name = tr("Some Tree Object");
 
+    /// WTF???
     QVariant data = qVariantFromValue((gxTreeObject*)this);
 }
 

@@ -56,19 +56,14 @@ public:
         emit objectDelete();
     }
 
+    void update();
+
     virtual void draw2D() = 0;
     virtual void draw3D() = 0;
     virtual void recalcSize() = 0;
 
     /// After various changes gl render lists must be rebuilt.
-    virtual void recreateDisplayList()
-    {
-        if ( gl_list_3d ) glDeleteLists(gl_list_3d, 1);
-        gl_list_3d = 0;
-
-        if ( gl_list_2d ) glDeleteLists(gl_list_2d, 1);
-        gl_list_2d= 0;
-    }
+    virtual void recreateDisplayList();
 
     QColor getColor() { return this->color; }
 
@@ -102,16 +97,7 @@ protected:
 
 
     /// Generates random color for each object just after its creation
-    void setRandomColor()
-    {
-        srand((unsigned)time(0));
-        double r = (double)rand()/(double)(RAND_MAX-1);
-        double g = (double)rand()/(double)(RAND_MAX-1);
-        double b = (double)rand()/(double)(RAND_MAX-1);
-        r *= 0.7; g *= 0.7; b *= 0.7;
-
-        color.setRgbF(0.3 + r, 0.3 + g, 0.3 + b);
-    }
+    void setRandomColor();
 
 };
 

@@ -35,16 +35,8 @@ gxPoints::gxPoints(gxTreeFolderObject* parent)
     : gxVisualObject(parent)
 {
     name = tr("New Points");
-//    widgetItem->setText(0, name);
-//    widgetItem->setIcon(0, QIcon(":/images/points.png"));
-
-
-//    parent->getTreeWidgetItem()->addChild(widgetItem);
-//    parent->getTreeWidgetItem()->setExpanded(true);
 
     setRandomColor();
-
-//    updateWidgetItemState();
 }
 
 

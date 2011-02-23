@@ -31,6 +31,8 @@ gxProject::gxProject(gxTreeFolderObject *parent)
     : gxTreeFolderObject(parent)
 {
    name = tr("New Project");
+
+   gxLogger::instance()->logEvent("Project '" + name + "' created");
 }
 
 
@@ -47,8 +49,6 @@ void gxProject::setup()
     QAbstractItemModel* model = gxEngine::instance()->getMainWindow()->getProjectTree()->model();
 
     model->insertRow(rootFolder->count() - 1, QModelIndex());
-
-    gxLogger::instance()->logEvent("Project '" + name + "' created");
 }
 
 

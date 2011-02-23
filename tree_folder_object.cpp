@@ -32,6 +32,8 @@ gxTreeFolderObject::gxTreeFolderObject(gxTreeFolderObject* parent)
     : gxTreeAbstractObject(parent)
 {
     name = tr("New Folder");
+    // log
+    gxLogger::instance()->logEvent("Folder '" + name + "' created");
 }
 
 
@@ -46,14 +48,17 @@ gxTreeFolderObject::~gxTreeFolderObject()
 
 void gxTreeFolderObject::setup()
 {
-    gxTreeFolderObject* rootFolder = gxEngine::instance()->getProjectsRoot();
-    QAbstractItemModel* model = gxEngine::instance()->getMainWindow()->getProjectTree()->model();
+    QTreeView *projectTree = gxEngine::instance()->getMainWindow()->getProjectTree();
+    QAbstractItemModel* model = projectTree->model();
 
     QModelIndex index = gxEngine::instance()->getMainWindow()->getProjectTree()->selectionModel()->currentIndex();
 
-    model->insertRow(rootFolder->count(), index);
+    // parent folder for new object
+    gxTreeFolderObject* parentFolder = static_cast<gxTreeFolderObject*>(index.internalPointer());
 
-    gxLogger::instance()->logEvent("Folder '" + name + "' created");
+    model->insertRow(parentFolder->count() - 1, index);
+
+    projectTree->expand(index);
 }
 
 
@@ -91,6 +96,8 @@ void gxTreeFolderObject::createPoints()
 {
     gxPoints* points = new gxPoints(this);
     this->addChild(points);
+
+    points->update();
 }
 
 
@@ -100,6 +107,8 @@ void gxTreeFolderObject::createLines()
 {
     gxLines* lines = new gxLines(this);
     this->addChild(lines);
+
+    lines->update();
 }
 
 
@@ -109,6 +118,8 @@ void gxTreeFolderObject::createSurface()
 {
     gxSurface* surface = new gxSurface(this);
     this->addChild(surface);
+
+    surface->update();
 }
 
 
@@ -157,6 +168,7 @@ void gxTreeFolderObject::addChild(QSharedPointer<gxTreeAbstractObject> child)
 
 QSharedPointer<gxTreeAbstractObject> gxTreeFolderObject::getChild(int i)
 {
+    Q_ASSERT(i >=0 && i < children.size());
     return children[i];
 }
 

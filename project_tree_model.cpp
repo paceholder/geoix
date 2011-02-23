@@ -73,6 +73,7 @@ QModelIndex gxProjectTreeModel::index(int row, int column, const QModelIndex &pa
     /// Invalid parent means that we have to return index for project
     if ( !parent.isValid() )
     {
+        if ( projectsRoot->count() <= row) return QModelIndex();
         gxProject* project  = static_cast<gxProject*>(projectsRoot->getChild(row).data());
         return createIndex(row, column, project);
     }
@@ -103,16 +104,9 @@ QModelIndex gxProjectTreeModel::parent(const QModelIndex &child) const
 
     if (folder == projectsRoot)
         return QModelIndex();
-    else
-    {
-        // it MUST be root
-        gxTreeFolderObject *parentFolder = folder->getParent();
-        return createIndex(parentFolder->indexOf(folder),
-                           0,
-                           folder);
-    }
 
-    return QModelIndex();
+    gxTreeFolderObject *parentFolder = folder->getParent();
+    return createIndex(parentFolder->indexOf(folder), 0, folder);
 }
 
 
@@ -240,16 +234,13 @@ bool gxProjectTreeModel::removeRows(int row, int count, const QModelIndex &paren
 
     beginRemoveRows(parent, row, row + count - 1);
 
-
-    if ( parent.isValid() )
-    {
-        gxTreeFolderObject *folder = static_cast<gxTreeFolderObject*>(parent.internalPointer());
-        folder->deleteChild(row);
-    }
-    else
-    {
-        gxEngine::instance()->deleteProject(row);
-    }
+        if ( parent.isValid() )
+        {
+            gxTreeFolderObject *folder = static_cast<gxTreeFolderObject*>(parent.internalPointer());
+            folder->deleteChild(row);
+        }
+        else
+            gxEngine::instance()->deleteProject(row);
 
     endRemoveRows();
 
