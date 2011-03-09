@@ -45,6 +45,16 @@ protected:
 
     bool insertRows(int row, int count, const QModelIndex &parent);
     bool removeRows(int row, int count, const QModelIndex &parent);
+
+    Qt::DropActions supportedDropActions() const;
+    Qt::DropActions supportedDragActions() const;
+
+    QStringList mimeTypes() const;
+
+    QMimeData *mimeData(const QModelIndexList &indexes) const;
+
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action,
+                      int row, int column, const QModelIndex &parent);
 private:
     gxTreeFolderObject* projectsRoot;
 };

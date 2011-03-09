@@ -66,6 +66,12 @@ void MainWindow::createGUIObjects()
     projectTree = new QTreeView(ui->leftDock);
     projectTree->header()->hide();
     projectTree->setContextMenuPolicy(Qt::CustomContextMenu);
+    projectTree->setSelectionMode(QAbstractItemView::SingleSelection);
+    projectTree->setDragEnabled(true);
+    projectTree->setAcceptDrops(true);
+    projectTree->setDropIndicatorShown(true);
+    projectTree->setDragDropMode(QAbstractItemView::DragDrop);
+
     projectTree->setModel((QAbstractItemModel*)projectTreeModel);
 
     connect(projectTree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuProjectTree(QPoint)));

@@ -83,7 +83,8 @@ QIcon gxTreeFolderObject::getIcon()
 void gxTreeFolderObject::createFolder()
 {
     gxTreeFolderObject* folder = new gxTreeFolderObject(this);
-    this->addChild(folder);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(folder);
+    this->addChild(sharedPointer);
 
     // append new item to the model
     folder->setup();
@@ -95,7 +96,8 @@ void gxTreeFolderObject::createFolder()
 void gxTreeFolderObject::createPoints()
 {
     gxPoints* points = new gxPoints(this);
-    this->addChild(points);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(points);
+    this->addChild(sharedPointer);
 
     points->update();
 }
@@ -106,7 +108,8 @@ void gxTreeFolderObject::createPoints()
 void gxTreeFolderObject::createLines()
 {
     gxLines* lines = new gxLines(this);
-    this->addChild(lines);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(lines);
+    this->addChild(sharedPointer);
 
     lines->update();
 }
@@ -117,7 +120,8 @@ void gxTreeFolderObject::createLines()
 void gxTreeFolderObject::createSurface()
 {
     gxSurface* surface = new gxSurface(this);
-    this->addChild(surface);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(surface);
+    this->addChild(sharedPointer);
 
     surface->update();
 }
@@ -129,7 +133,7 @@ void gxTreeFolderObject::deleteChild(gxTreeAbstractObject* child)
 {
     for(int i = 0; i < this->children.size(); ++i)
     {
-        if (children[i] == child)
+        if (children[i].data() == child)
             children.removeAt(i);
     }
 }
@@ -146,13 +150,13 @@ void gxTreeFolderObject::deleteChild(int i)
 }
 
 //------------------------------------------------------------------------------
-
-void gxTreeFolderObject::addChild(gxTreeAbstractObject* child)
-{
-    child->setParent(this); // in case
-
-    children.append(QSharedPointer<gxTreeAbstractObject>(child));
-}
+//
+//void gxTreeFolderObject::addChild(gxTreeAbstractObject* child)
+//{
+//    child->setParent(this); // in case
+//
+//    children.append(QSharedPointer<gxTreeAbstractObject>(child));
+//}
 
 
 //------------------------------------------------------------------------------
@@ -160,6 +164,8 @@ void gxTreeFolderObject::addChild(gxTreeAbstractObject* child)
 
 void gxTreeFolderObject::addChild(QSharedPointer<gxTreeAbstractObject> child)
 {
+    child.data()->setParent(this);
+
     children.append( child );
 }
 
@@ -168,7 +174,7 @@ void gxTreeFolderObject::addChild(QSharedPointer<gxTreeAbstractObject> child)
 
 QSharedPointer<gxTreeAbstractObject> gxTreeFolderObject::getChild(int i)
 {
-    Q_ASSERT(i >=0 && i < children.size());
+    Q_ASSERT_X(i >=0 && i < children.size(), "gxTreeFolderObject::getChild", "index is out of range" );
     return children[i];
 }
 

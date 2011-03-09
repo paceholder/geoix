@@ -62,8 +62,9 @@ void gxEngine::setMainWindow(MainWindow* w)
 void gxEngine::createProject()
 {
     // create shared poinder with project inside
-    QSharedPointer<gxProject> project(new gxProject(projectsRoot));
-    projectsRoot->addChild(project);
+    gxProject *project = new gxProject(projectsRoot);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(project);
+    projectsRoot->addChild(sharedPointer);
 
     // some stuff for adding to tree
     project->setup();

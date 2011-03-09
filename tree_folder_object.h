@@ -38,6 +38,8 @@ public:
     gxTreeFolderObject(gxTreeFolderObject* parent = 0);
     virtual ~gxTreeFolderObject();
 
+
+    /// some stuff for insertion this item to the project tree
     void setup();
 
     /// removes object from children list
@@ -47,7 +49,7 @@ public:
     void deleteChild(int i);
 
     /// adds object to the children list
-    void addChild(gxTreeAbstractObject* child);
+//    void addChild(gxTreeAbstractObject* child);
 
     /// adds object to the children list
     void addChild(QSharedPointer<gxTreeAbstractObject> child);
@@ -81,8 +83,5 @@ public slots:
 protected:
     QList<QSharedPointer<gxTreeAbstractObject> > children;
 };
-
-
-//typedef gxTreeFolderObjectSharedPointer
 
 #endif // TREE_FOLDER_OBJECT_H
