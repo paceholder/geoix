@@ -1,80 +1,74 @@
- //------------------------------------------------------------------------
-//    This file is part of Geoix.
-//
-//    Copyright (C) 2010 Dmitriy Pinaev
-//
-//    Geoix is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    Geoix is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
-//
-//    e-mail: prof-x@inbox.ru
-//------------------------------------------------------------------------
+#include "subtree_model.h"
 
 
-
-#include "project_tree_model.h"
-#include "project.h"
-#include "tree_object.h"
 #include "tree_folder_object.h"
-#include "render_panel.h"
 #include "engine.h"
+#include "render_panel.h"
 
-gxProjectTreeModel::gxProjectTreeModel(gxTreeFolderObject *projectsRootFolder/*, QObject *parent*/)
-    : //QAbstractItemModel(parent),
-    projectsRoot(projectsRootFolder)
+gxSubtreeModel::gxSubtreeModel(/*gxTreeFolderObject *projectsRootFolder, QObject *parent*/)
+//    :  QAbstractItemModel(parent),
+//    subtreeRoot(projectsRootFolder)
 {
+    subtreeRoot = new gxTreeFolderObject();
     this->reset(); // reset model to show changes
 }
 
 
-int gxProjectTreeModel::columnCount(const QModelIndex &parent) const
+
+//------------------------------------------------------------------------------
+
+
+gxSubtreeModel::~gxSubtreeModel()
+{
+    delete subtreeRoot;
+}
+
+
+//------------------------------------------------------------------------------
+
+
+int gxSubtreeModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return 1;
 }
 
 
+
 //------------------------------------------------------------------------------
 
 
-
-int gxProjectTreeModel::rowCount(const QModelIndex &parent) const
+int gxSubtreeModel::rowCount(const QModelIndex &parent) const
 {
-    if (!parent.isValid()) // we deal with project
-        return this->projectsRoot->count();
-    else
+    // we deal with project
+    if (parent.isValid())
     {
         gxTreeAbstractObject* treeobject = static_cast<gxTreeAbstractObject*>(parent.internalPointer());
-        return treeobject->count();;
+        return treeobject->count();
     }
+    else
+        return subtreeRoot->count();
 }
 
 
+
+
 //------------------------------------------------------------------------------
 
 
 
-QModelIndex gxProjectTreeModel::index(int row, int column, const QModelIndex &parent) const
+QModelIndex gxSubtreeModel::index(int row, int column, const QModelIndex &parent) const
 {
     Q_UNUSED(column);
 
     /// subtree root is not assigned
-    if ( !projectsRoot) return QModelIndex();
+    if ( !subtreeRoot) return QModelIndex();
 
     /// subtree is empty
-    if ( projectsRoot->count() == 0 ) return QModelIndex();
+    if ( subtreeRoot->count() == 0 ) return QModelIndex();
 
     /// tree where we extract child
-    gxTreeFolderObject* folder = projectsRoot;
+    gxTreeFolderObject* folder = subtreeRoot;
     if ( parent.isValid() )
     {
         gxTreeAbstractObject * object = static_cast<gxTreeAbstractObject*>(parent.internalPointer());
@@ -93,11 +87,12 @@ QModelIndex gxProjectTreeModel::index(int row, int column, const QModelIndex &pa
 
 
 
+
 //------------------------------------------------------------------------------
 
 
 
-QModelIndex gxProjectTreeModel::parent(const QModelIndex &child) const
+QModelIndex gxSubtreeModel::parent(const QModelIndex &child) const
 {
     if ( !child.isValid() ) return QModelIndex();
 
@@ -106,7 +101,8 @@ QModelIndex gxProjectTreeModel::parent(const QModelIndex &child) const
 
     Q_ASSERT_X(childObject || folder, "parent", "parent or child is NULL");
 
-    if (folder == projectsRoot)
+    /// subtree root has empty index and invisible in tree
+    if (folder == subtreeRoot)
         return QModelIndex();
 
     return createIndex(folder->getIndex(), 0, folder);
@@ -119,7 +115,7 @@ QModelIndex gxProjectTreeModel::parent(const QModelIndex &child) const
 
 
 
-bool gxProjectTreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool gxSubtreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!index.isValid()) return false;
 
@@ -164,13 +160,15 @@ bool gxProjectTreeModel::setData(const QModelIndex &index, const QVariant &value
 
 
 
-QVariant gxProjectTreeModel::data(const QModelIndex &index, int role) const
+QVariant gxSubtreeModel::data(const QModelIndex &index, int role) const
 {
     if ( !index.isValid() ) return QVariant();
 
     gxTreeAbstractObject* object = static_cast<gxTreeAbstractObject*>(index.internalPointer());
-    gxRenderPanel* panel = gxEngine::instance()->getTopLevelPanel();
+    if (!object) return QVariant();
 
+
+    gxRenderPanel* panel = gxEngine::instance()->getTopLevelPanel();
     switch (role)
     {
     case Qt::DisplayRole:
@@ -212,23 +210,23 @@ QVariant gxProjectTreeModel::data(const QModelIndex &index, int role) const
 
 
 
-Qt::ItemFlags gxProjectTreeModel::flags(const QModelIndex &index) const
+Qt::ItemFlags gxSubtreeModel::flags(const QModelIndex &index) const
 {
     Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index)
-                                 | Qt::ItemIsEditable;
+                                 | Qt::ItemIsEditable
+                                 | Qt::ItemIsDropEnabled;
 
     if (index.isValid())
     {
         gxTreeAbstractObject *object = static_cast<gxTreeAbstractObject*>(index.internalPointer());
+        Q_ASSERT_X( object, "flags", "objects is NULL" );
 
-        if ( object->isFolder() )
-            defaultFlags |= Qt::ItemIsDropEnabled;
-        else
+        if ( !object->isFolder() )
             defaultFlags |= Qt::ItemIsUserCheckable;
 
 
         // project branch can not be dragged
-        if (object->getParent() != projectsRoot)
+        if (object != subtreeRoot)
             defaultFlags |=  Qt::ItemIsDragEnabled;
     }
 
@@ -236,23 +234,24 @@ Qt::ItemFlags gxProjectTreeModel::flags(const QModelIndex &index) const
 }
 
 
+
 //------------------------------------------------------------------------------
 
 
-bool gxProjectTreeModel::insertRows(int row, int count, const QModelIndex &parent)
+bool gxSubtreeModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     bool success = true;
 
     beginInsertRows(parent, row, row + count - 1);
+    // epic shit
     endInsertRows();
 
     return success;
 }
 
-
 //------------------------------------------------------------------------------
 
-bool gxProjectTreeModel::removeRows(int row, int count, const QModelIndex &parent)
+bool gxSubtreeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     bool success = true;
 
@@ -261,6 +260,8 @@ bool gxProjectTreeModel::removeRows(int row, int count, const QModelIndex &paren
         if ( parent.isValid() )
         {
             gxTreeFolderObject *folder = static_cast<gxTreeFolderObject*>(parent.internalPointer());
+            Q_ASSERT_X(folder->isFolder(), "removeRows", "folder is not folder =)");
+
             folder->deleteChild(row);
         }
         else
@@ -271,9 +272,10 @@ bool gxProjectTreeModel::removeRows(int row, int count, const QModelIndex &paren
     return success;
 }
 
+
 //-----------------------------------------------------------------------------
 
-Qt::DropActions gxProjectTreeModel::supportedDropActions() const
+Qt::DropActions gxSubtreeModel::supportedDropActions() const
 {
     return Qt::MoveAction;
 }
@@ -281,15 +283,17 @@ Qt::DropActions gxProjectTreeModel::supportedDropActions() const
 
 //------------------------------------------------------------------------------
 
-Qt::DropActions gxProjectTreeModel::supportedDragActions() const
+Qt::DropActions gxSubtreeModel::supportedDragActions() const
 {
     return /*Qt::CopyAction | */Qt::MoveAction;
 }
 
+
+
 //------------------------------------------------------------------------------
 
 
-QStringList gxProjectTreeModel::mimeTypes() const
+QStringList gxSubtreeModel::mimeTypes() const
 {
     QStringList types;
     types << "geoix/treeabstractobject";
@@ -302,7 +306,7 @@ QStringList gxProjectTreeModel::mimeTypes() const
 
 
 
-QMimeData *gxProjectTreeModel::mimeData(const QModelIndexList &indexes) const
+QMimeData *gxSubtreeModel::mimeData(const QModelIndexList &indexes) const
  {
      QMimeData *mimeData = new QMimeData();
      QByteArray encodedData;
@@ -326,16 +330,16 @@ QMimeData *gxProjectTreeModel::mimeData(const QModelIndexList &indexes) const
 
 
 
+
+
+
 //------------------------------------------------------------------------------
 
 
-bool gxProjectTreeModel::dropMimeData(const QMimeData *data,
+bool gxSubtreeModel::dropMimeData(const QMimeData *data,
     Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
-    if (action == Qt::IgnoreAction)
-        return true;
-
-    if (action == Qt::CopyAction)
+    if (action == Qt::IgnoreAction || action == Qt::CopyAction)
         return false;
 
     if (!data->hasFormat("geoix/treeabstractobject"))
@@ -343,7 +347,6 @@ bool gxProjectTreeModel::dropMimeData(const QMimeData *data,
 
     QByteArray encodedData = data->data("geoix/treeabstractobject");
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
-
     while (!stream.atEnd())
     {
         quint64 pointer;
@@ -352,7 +355,10 @@ bool gxProjectTreeModel::dropMimeData(const QMimeData *data,
 
         gxTreeAbstractObject *abstractObject = static_cast<gxTreeAbstractObject*>(object);
 
-        gxTreeAbstractObject *parentObject = static_cast<gxTreeAbstractObject*>(parent.internalPointer());
+        gxTreeAbstractObject *parentObject = subtreeRoot;
+        if (parent.isValid())
+            parentObject = static_cast<gxTreeAbstractObject*>(parent.internalPointer());
+
 
         // if this object is moved to the same parent we stop the dragging
         if (abstractObject->getParent() == parentObject )
@@ -360,24 +366,15 @@ bool gxProjectTreeModel::dropMimeData(const QMimeData *data,
 
         QSharedPointer<gxTreeAbstractObject> sharedPointer = abstractObject->getSharedPointer();
 
-        gxTreeFolderObject* newFolder = static_cast<gxTreeFolderObject*>(parent.internalPointer());
 
-
-        gxTreeAbstractObject * obj = (gxTreeAbstractObject*)parent.internalPointer();
+        gxTreeFolderObject* newFolder = static_cast<gxTreeFolderObject*>(parentObject);
 
         beginInsertRows(parent, newFolder->count(), newFolder->count());
         newFolder->addChild(sharedPointer);
         endInsertRows();
-////
-//        QMessageBox::information(0, tr("ololo"), sharedPointer->getParent()->getName());
-//        QMessageBox::information(0, tr("ololo"), QString::number(newFolder->count()));
-//        QMessageBox::information(0, "ololo",  fol->getName());
-//        QMessageBox::information(0, "ololo",  QString::number(fol->count()));
 
-        // NOW I READ JUST ONE ITEM
-        // coz I dont know how I will process multiselection in tree
+
         break; ///  <<<<<======
-        // !!!
     }
 
     return false;

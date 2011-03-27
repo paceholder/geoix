@@ -82,8 +82,14 @@ QIcon gxTreeFolderObject::getIcon()
 
 void gxTreeFolderObject::createFolder()
 {
+    // creation of new object
     gxTreeFolderObject* folder = new gxTreeFolderObject(this);
+
+    // creation of sharedPointer from gxTreeFolderObject*
     QSharedPointer<gxTreeAbstractObject> sharedPointer(folder);
+
+
+    // adding new folder to children
     this->addChild(sharedPointer);
 
     // append new item to the model
@@ -143,10 +149,9 @@ void gxTreeFolderObject::deleteChild(gxTreeAbstractObject* child)
 
 void gxTreeFolderObject::deleteChild(int i)
 {
-    if (i >= 0 && i < this->children.size() )
-    {
-        children.removeAt(i);
-    }
+    Q_ASSERT(i >= 0 && i < this->children.size() );
+
+    children.removeAt(i);
 }
 
 //------------------------------------------------------------------------------
@@ -164,7 +169,7 @@ void gxTreeFolderObject::deleteChild(int i)
 
 void gxTreeFolderObject::addChild(QSharedPointer<gxTreeAbstractObject> child)
 {
-    child.data()->setParent(this);
+    child->setParent(this);
 
     children.append( child );
 }
@@ -193,6 +198,9 @@ int gxTreeFolderObject::indexOf(gxTreeAbstractObject *child)
             break;
         }
     }
+
+    Q_ASSERT(index != -1);
+
     return index;
 }
 
@@ -202,12 +210,13 @@ int gxTreeFolderObject::indexOf(gxTreeAbstractObject *child)
 
 int gxTreeFolderObject::getIndex()
 {
+    Q_ASSERT_X(parent, "getIndex", "parent of NULL object required");
     if ( !parent ) return -1;
 
     // the only object which could be parent is folder
     gxTreeFolderObject* folder = (gxTreeFolderObject*)parent;
 
-    return folder->indexOf(this);
+    return folder->indexOf(this);;
 }
 
 

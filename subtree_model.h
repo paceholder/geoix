@@ -19,22 +19,20 @@
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
 
-#ifndef PROJECT_TREE_MODEL_H
-#define PROJECT_TREE_MODEL_H
+#ifndef SUBTREE_MODEL_H
+#define SUBTREE_MODEL_H
 
 
 #include <QAbstractItemModel>
-//#include "project.h"
-
 
 class gxTreeFolderObject;
 
-class gxProjectTreeModel : QAbstractItemModel
+class gxSubtreeModel : QAbstractItemModel
 {
     Q_OBJECT
 public:
-    gxProjectTreeModel(gxTreeFolderObject* projectsRootFolder/*, QObject* parent*/);
-    ~gxProjectTreeModel() {}
+    gxSubtreeModel(/*gxTreeFolderObject* projectsRootFolder, QObject* parent*/);
+    virtual ~gxSubtreeModel();
 protected:
     int columnCount(const QModelIndex &parent) const;
     int rowCount(const QModelIndex &parent) const;
@@ -60,7 +58,9 @@ protected:
     bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                       int row, int column, const QModelIndex &parent);
 private:
-    gxTreeFolderObject* projectsRoot;
+    /// this folder can only contain other folders and object but not Projects
+    /// Items contained in this folder are not included to any of projects
+    gxTreeFolderObject* subtreeRoot;
 };
 
-#endif // PROJECT_TREE_MODEL_H
+#endif // SUBTREE_MODEL_H

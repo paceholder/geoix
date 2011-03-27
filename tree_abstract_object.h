@@ -68,7 +68,7 @@ public:
     virtual int getIndex() = 0;
 
     /// \todo should think about it
-    virtual void setParent(gxTreeFolderObject* newParent) { this->parent = newParent; }
+    virtual void setParent(gxTreeFolderObject* newParent);
 
     /// Returns shared pointer to this object
     QSharedPointer<gxTreeAbstractObject> getSharedPointer();

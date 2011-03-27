@@ -26,15 +26,14 @@ SOURCES += main.cpp \
     coord_system_2d.cpp \
     coord_system_3d.cpp \
     logger.cpp \
-    project_tree.cpp \
-    subtree.cpp \
     project_tree_model.cpp \
     tree_folder_object.cpp \
     tree_abstract_object.cpp \
     rbf_mapper.cpp \
     rbf_core.cpp \
     rbf_domain.cpp \
-    visual_object.cpp
+    visual_object.cpp \
+    subtree_model.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -68,8 +67,6 @@ HEADERS += mainwindow.h \
     surface_data_iterator.h \
     logger.h \
     color_slider.h \
-    project_tree.h \
-    subtree.h \
     drop_widget.h \
     project_tree_model.h \
     tree_abstract_object.h \
@@ -79,7 +76,8 @@ HEADERS += mainwindow.h \
     matrix.h \
     point2D.h \
     rbf_core.h \
-    rbf_domain.h
+    rbf_domain.h \
+    subtree_model.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui \

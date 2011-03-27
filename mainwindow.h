@@ -38,6 +38,7 @@ namespace Ui {
 //class gxProjectTree;
 class gxSubTree;
 class gxProjectTreeModel;
+class gxSubtreeModel;
 
 class MainWindow : public QMainWindow
 {
@@ -73,10 +74,16 @@ protected:
 private:
     /// Project Tree (view)
     QTreeView* projectTree;
+
     /// Model of Project Tree
-    gxProjectTreeModel* projectTreeModel;
+    gxProjectTreeModel *projectTreeModel;
+
+    /// Subtree model
+    gxSubtreeModel *subtreeModel;
+
     /// Subtree. It works as Additional Buffer
-    gxSubTree* subTree;
+    QTreeView* subTree;
+
     /// Main Panel. Contains rendering widgets
     QWidget* mainPanel;
 

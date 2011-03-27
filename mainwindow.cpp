@@ -30,9 +30,10 @@
 #include "tree_object.h"
 #include "tree_menu_fabric.h"
 #include "render_panel.h"
-#include "project_tree.h"
+
 #include "project_tree_model.h"
-#include "subtree.h"
+#include "subtree_model.h"
+
 #include "spliner_dialog.h"
 #include "tree_abstract_object.h"
 
@@ -62,7 +63,10 @@ void MainWindow::createGUIObjects()
 //    frect.moveCenter(QDesktopWidget().availableGeometry().center());
 //    move(frect.topLeft());
 
-    projectTreeModel = new gxProjectTreeModel(gxEngine::instance()->getProjectsRoot(), this);
+    projectTreeModel = new gxProjectTreeModel(gxEngine::instance()->getProjectsRoot()/*, this*/);
+    subtreeModel = new gxSubtreeModel();
+
+
     projectTree = new QTreeView(ui->leftDock);
     projectTree->header()->hide();
     projectTree->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -72,14 +76,22 @@ void MainWindow::createGUIObjects()
     projectTree->setDropIndicatorShown(true);
     projectTree->setDragDropMode(QAbstractItemView::DragDrop);
 
+
     projectTree->setModel((QAbstractItemModel*)projectTreeModel);
 
     connect(projectTree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuProjectTree(QPoint)));
 
-    subTree = new gxSubTree(ui->leftDock);
-    subTree->setContextMenuPolicy(Qt::CustomContextMenu);
+    subTree = new QTreeView(ui->leftDock);
     subTree->header()->hide();
+    subTree->setContextMenuPolicy(Qt::CustomContextMenu);
+    subTree->setSelectionMode(QAbstractItemView::SingleSelection);
+    subTree->setDragEnabled(true);
+    subTree->setAcceptDrops(true);
+    subTree->setDropIndicatorShown(true);
+    subTree->setDragDropMode(QAbstractItemView::DragDrop);
 
+
+    subTree->setModel((QAbstractItemModel*)subtreeModel);
 
     QWidget* dockWidget = new QWidget(ui->leftDock);
     QVBoxLayout* dockWidgetLayout = new QVBoxLayout(dockWidget);
