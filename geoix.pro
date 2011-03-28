@@ -33,7 +33,8 @@ SOURCES += main.cpp \
     rbf_core.cpp \
     rbf_domain.cpp \
     visual_object.cpp \
-    subtree_model.cpp
+    subtree_model.cpp \
+    custom_tree_model.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -77,7 +78,8 @@ HEADERS += mainwindow.h \
     point2D.h \
     rbf_core.h \
     rbf_domain.h \
-    subtree_model.h
+    subtree_model.h \
+    custom_tree_model.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui \

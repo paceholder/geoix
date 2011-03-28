@@ -25,42 +25,24 @@
 
 #include <QAbstractItemModel>
 
+#include "custom_tree_model.h"
+
 class gxTreeFolderObject;
 
-class gxSubtreeModel : QAbstractItemModel
+class gxSubtreeModel : gxCustomTreeModel
 {
     Q_OBJECT
 public:
-    gxSubtreeModel(/*gxTreeFolderObject* projectsRootFolder, QObject* parent*/);
+    gxSubtreeModel();
     virtual ~gxSubtreeModel();
 protected:
-    int columnCount(const QModelIndex &parent) const;
-    int rowCount(const QModelIndex &parent) const;
-
-    QModelIndex index(int row, int column, const QModelIndex &parent) const;
-    QModelIndex parent(const QModelIndex &child) const;
-
-    bool setData(const QModelIndex &index, const QVariant &value, int role);
-    QVariant data(const QModelIndex &index, int role) const;
-
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     bool insertRows(int row, int count, const QModelIndex &parent);
     bool removeRows(int row, int count, const QModelIndex &parent);
 
-    Qt::DropActions supportedDropActions() const;
-    Qt::DropActions supportedDragActions() const;
-
-    QStringList mimeTypes() const;
-
-    QMimeData *mimeData(const QModelIndexList &indexes) const;
-
     bool dropMimeData(const QMimeData *data, Qt::DropAction action,
                       int row, int column, const QModelIndex &parent);
-private:
-    /// this folder can only contain other folders and object but not Projects
-    /// Items contained in this folder are not included to any of projects
-    gxTreeFolderObject* subtreeRoot;
 };
 
 #endif // SUBTREE_MODEL_H
