@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -29,7 +29,7 @@
 
 class gxTreeFolderObject;
 
-class gxSubtreeModel : gxCustomTreeModel
+class gxSubtreeModel : public gxCustomTreeModel
 {
     Q_OBJECT
 public:

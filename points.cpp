@@ -23,6 +23,8 @@
 #include "points.h"
 
 #include <GL/glu.h>
+#undef min
+#undef max
 #include <limits>
 #include "data_loader.h"
 #include "tree_folder_object.h"

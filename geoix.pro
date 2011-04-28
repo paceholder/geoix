@@ -4,6 +4,10 @@
 QT += opengl
 TARGET = geoix
 TEMPLATE = app
+CONFIG += precompile_header
+
+# PRECOMPILED_HEADER = geoix_pch.h
+# DEFINES += USING_PCH
 SOURCES += main.cpp \
     mainwindow.cpp \
     engine.cpp \
@@ -34,7 +38,11 @@ SOURCES += main.cpp \
     rbf_domain.cpp \
     visual_object.cpp \
     subtree_model.cpp \
-    custom_tree_model.cpp
+    custom_tree_model.cpp \
+    cube.cpp \
+    cubedialog.cpp \
+    kriging_core.cpp \
+    kriging_mapper.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -79,9 +87,18 @@ HEADERS += mainwindow.h \
     rbf_core.h \
     rbf_domain.h \
     subtree_model.h \
-    custom_tree_model.h
+    custom_tree_model.h \
+    cube.h \
+    cubedialog.h \
+    geoix_pch.h \
+    edge.h \
+    kriging_mapper.h \
+    kriging_core.h \
+    point_extractor.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui \
-    rbf_settings_widget.ui
+    rbf_settings_widget.ui \
+    cubedialog.ui \
+    kriging_settings_widget.ui
 RESOURCES += images.qrc

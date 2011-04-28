@@ -155,16 +155,6 @@ void gxTreeFolderObject::deleteChild(int i)
 }
 
 //------------------------------------------------------------------------------
-//
-//void gxTreeFolderObject::addChild(gxTreeAbstractObject* child)
-//{
-//    child->setParent(this); // in case
-//
-//    children.append(QSharedPointer<gxTreeAbstractObject>(child));
-//}
-
-
-//------------------------------------------------------------------------------
 
 
 void gxTreeFolderObject::addChild(QSharedPointer<gxTreeAbstractObject> child)

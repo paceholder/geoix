@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -58,8 +58,16 @@ public:
     /// 3d rendering
     virtual void draw3D();
 
+    /// mime type
+    virtual QString getMimeType() { return QString("geoix/points"); }
+
     /// Checks whether object has data
     bool hasData() { return data.count() > 0; }
+
+    gxPoint3DList getPoint3DList()
+    {
+        return this->data;
+    }
 
 public slots:
     /// Calls appropriate functions from gxDataLoader to import data from txt file
@@ -70,7 +78,7 @@ public slots:
     virtual void options() {}
 
 private:
-    gxPoints3DList data; // todo: pointer of reference?
+    gxPoint3DList data; // todo: pointer of reference?
 
 };
 

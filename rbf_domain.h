@@ -9,18 +9,6 @@
 // some definitions below
 enum gxDomainLongSide {Length, Width};
 
-/// Comparison of x coordinate of points
-static bool pointXLessThan(const gxPoint3D &p1, const gxPoint3D &p2)
-{
-    return p1.x < p2.x;
-}
-
-/// Comparison of y coordinate of points
-static bool pointYLessThan(const gxPoint3D &p1, const gxPoint3D &p2)
-{
-    return p1.y < p2.y;
-}
-
 
 static const int defaulfDomainCapacity = 500;
 
@@ -34,11 +22,11 @@ public:
     /// size of domain, vector of points
     gxRBFDomain(gxDomainLongSide parentLongSide,
                 const gxSize3D &s,
-                gxPoints3DList p);
+                gxPoint3DList p);
     ~gxRBFDomain();
 
     /// points belonging to this domain
-    gxPoints3DList points;
+    gxPoint3DList points;
 
     gxRBFDomain *leftDomain, *rightDomain; // children
 
@@ -67,6 +55,7 @@ public:
     {
         gxRBFDomain::maxLeafCapacity = capacity;
     }
+
 private:
     static int maxLeafCapacity;
 

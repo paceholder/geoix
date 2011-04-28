@@ -14,13 +14,10 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
-
-
-
 
 
 #ifndef TREE_ABSTRACT_OBJECT_H
@@ -57,6 +54,9 @@ public:
 
     /// Abstract function which returns icon for each tree object
     virtual QIcon getIcon() = 0;
+
+    /// returns mime type of object
+    virtual QString getMimeType() = 0;
 
     /// Only Folder can have childrens
     virtual int count() { return 0; }

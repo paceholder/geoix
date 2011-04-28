@@ -23,6 +23,9 @@
 #include "lines.h"
 #include "data_loader.h"
 #include "tree_menu_fabric.h"
+
+#undef min
+#undef max
 #include <limits> // todo do not use std
 
 
@@ -39,7 +42,7 @@ gxLines::gxLines(gxTreeFolderObject* parent)
 
     setRandomColor();
 
-    contours = new gxContours;
+    contours = new gxContourList;
 
 //    updateWidgetItemState();
 }

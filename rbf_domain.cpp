@@ -1,4 +1,4 @@
-#include <algorithm>
+//#include <algorithm>
 
 #include "rbf_domain.h"
 #include "rbf_core.h"
@@ -11,13 +11,14 @@ const double OVERLAP = 0.2f;
 int gxRBFDomain::maxLeafCapacity = defaulfDomainCapacity;
 
 
+
 //------------------------------------------------------------------------------
 
 
 
 gxRBFDomain::gxRBFDomain(gxDomainLongSide parentLongSide,
                          const gxSize3D &s,
-                         gxPoints3DList p)
+                         gxPoint3DList p)
     :
      points(p),
      leftDomain(0),
@@ -50,9 +51,9 @@ void gxRBFDomain::buildTree()
     if ( n > gxRBFDomain::maxLeafCapacity ) // we still can create two branches
     {
         if (longSide == Width )
-            qSort(points.begin(), points.end(), pointXLessThan);
+            qSort(points.begin(), points.end(), gxPoint3D::pointXLessThan);
         else
-            qSort(points.begin(), points.end(), pointYLessThan);
+            qSort(points.begin(), points.end(), gxPoint3D::pointYLessThan);
 
         double overlap = OVERLAP;
 
@@ -69,7 +70,7 @@ void gxRBFDomain::buildTree()
         int n2 = (n - n1 - n0);
 
         // prepare left subdomain
-        gxPoints3DList left_points;
+        gxPoint3DList left_points;
 
         left_points.resize(n1+n0);
         qCopy(points.begin(), points.begin() + n1 + n0, left_points.begin());
@@ -86,7 +87,7 @@ void gxRBFDomain::buildTree()
 
         // prepare right subdomain
 
-        gxPoints3DList right_points;
+        gxPoint3DList right_points;
         right_points.resize(n2 + n0);
         qCopy(points.end() - (n2 + n0), points.end(), right_points.begin());
 

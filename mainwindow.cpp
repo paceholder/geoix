@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -123,6 +123,7 @@ void MainWindow::createActions()
 
     actions.screenShotAct = new QAction(QIcon(":/images/Screenshot.png"), tr("Make screenshot"), this);
 
+    actions.createCube = new QAction(QIcon(":/images/Box.png"), tr("Create Cube"), this);
 
     connect(actions.newProjectAct, SIGNAL(triggered()), this, SLOT(newProject()));
     connect(actions.new2DPanelAct, SIGNAL(triggered()), this, SLOT(new2DPanel()));
@@ -131,6 +132,7 @@ void MainWindow::createActions()
     connect(actions.closePanelAct, SIGNAL(triggered()), this, SLOT(closePanel()));
 
     connect(actions.screenShotAct, SIGNAL(triggered()), this, SLOT(screenShot()));
+    connect(actions.createCube,    SIGNAL(triggered()), this, SLOT(createCube()));
 }
 
 
@@ -156,6 +158,7 @@ void MainWindow::createMenus()
 
     menu = this->menuBar()->addMenu(tr("&Tools"));
     menu->addAction(actions.buildMapAct);
+    menu->addAction(actions.createCube);
 }
 
 
@@ -265,10 +268,19 @@ void MainWindow::screenShot()
 
 void MainWindow::buildMap()
 {
-    spliner_dialog* dialog = new spliner_dialog(this);
+    // todo
+    spliner_dialog *dialog = new spliner_dialog(this);
     dialog->show();
 }
 
+
+//------------------------------------------------------------------------------
+
+
+void MainWindow::createCube()
+{
+
+}
 
 
 //------------------------------------------------------------------------------

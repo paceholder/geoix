@@ -20,6 +20,9 @@
 //------------------------------------------------------------------------
 
 #include <QPixmap>
+
+#undef min
+#undef max
 #include <limits>
 
 #include "render_panel.h"

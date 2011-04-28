@@ -50,11 +50,11 @@ public:
     }
 
     /// Loads points' data from txt file
-    bool loadPointsData(gxPoints3DList* data);
+    bool loadPointsData(gxPoint3DList* data);
     /// Loads surface's data from txt file
     bool  loadSurfaceData(gxSurfaceData* data);
     /// Loads lines' data from txt file
-    bool loadLinesData(gxContours* data);
+    bool loadLinesData(gxContourList* data);
 private:
     /// Constructor
     gxDataLoader() {}

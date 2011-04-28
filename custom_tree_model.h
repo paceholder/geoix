@@ -24,7 +24,6 @@ protected:
     QMimeData *mimeData(const QModelIndexList &indexes) const;
 
     Qt::DropActions supportedDropActions() const;
-    Qt::DropActions supportedDragActions() const;
 
     /// root of tree
     gxTreeFolderObject* treeRoot;

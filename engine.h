@@ -74,6 +74,11 @@ public:
     /// \todo Bad solution. Think how to do it in better way
     /// \todo maybe i should megrge with test on data containing
 //    void recheckTreeItems();
+
+    QSharedPointer<gxTreeAbstractObject> createFolder(gxTreeFolderObject* parent);
+    QSharedPointer<gxTreeAbstractObject> createPoints(gxTreeFolderObject* parent);
+    QSharedPointer<gxTreeAbstractObject> createLines(gxTreeFolderObject* parent);
+    QSharedPointer<gxTreeAbstractObject> createSurface(gxTreeFolderObject* parent);
 private:
     /// Constructor
     gxEngine();

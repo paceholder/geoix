@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -22,6 +22,8 @@
 
 #include "surface.h"
 
+#undef min
+#undef max
 #include <limits>
 #include "data_loader.h"
 #include "contourer_fast.h"
@@ -94,6 +96,10 @@ void gxSurface::setNormal(double x1, double y1, double z1, double x2, double y2,
 
     glNormal3d(x, y, z);
 }
+
+
+
+//------------------------------------------------------------------------------
 
 void gxSurface::draw2D()
 {
@@ -176,6 +182,9 @@ void gxSurface::draw2D()
 
     glCallList(gl_list_2d);
 }
+
+
+//------------------------------------------------------------------------------
 
 
 void gxSurface::draw3D()
@@ -303,7 +312,7 @@ void gxSurface::recalcSize()
 }
 
 
-//--------------------------------
+//------------------------------------------------------------------------------
 
 
 void gxSurface::importFromFile()
@@ -320,6 +329,10 @@ void gxSurface::importFromFile()
 }
 
 
+
+//------------------------------------------------------------------------------
+
+
 void gxSurface::clearData()
 {
     data->clear();
@@ -331,6 +344,9 @@ void gxSurface::clearData()
 
 //    updateWidgetItemState();
 }
+
+
+//------------------------------------------------------------------------------
 
 void gxSurface::options()
 {

@@ -77,8 +77,20 @@ struct gxPoint3D
                     pow(this->y - y, 2) +
                     pow(this->z - z, 2));
     }
+
+    /// Comparison of x coordinate of points
+    static bool pointXLessThan(const gxPoint3D &p1, const gxPoint3D &p2)
+    {
+        return p1.x < p2.x;
+    }
+
+    /// Comparison of y coordinate of points
+    static bool pointYLessThan(const gxPoint3D &p1, const gxPoint3D &p2)
+    {
+        return p1.y < p2.y;
+    }
 };
 
 
-typedef QVector<gxPoint3D> gxPoints3DList; //Data;
+typedef QVector<gxPoint3D> gxPoint3DList; //Data;
 #endif // POINT3D_H

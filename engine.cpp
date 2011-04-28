@@ -21,8 +21,11 @@
 
 
 #include "engine.h"
-
+#include "lines.h"
 #include "project.h"
+#include "points.h"
+#include "surface.h"
+
 #include "mainwindow.h"
 
 #include "render_panel_2D.h"
@@ -35,6 +38,7 @@ gxEngine* gxEngine::inst = NULL;
 gxEngine::gxEngine()
 {
     projectsRoot = new gxTreeFolderObject();
+    projectsRoot->setName("Projects Root");
 }
 
 gxEngine::~gxEngine()
@@ -59,6 +63,8 @@ void gxEngine::setMainWindow(MainWindow* w)
     gxLogger::instance()->setOutputListWidget(w->getListLog());
 }
 
+//------------------------------------------------------------------------------
+
 void gxEngine::createProject()
 {
     // create shared poinder with project inside
@@ -70,19 +76,75 @@ void gxEngine::createProject()
     project->setup();
 }
 
-
+//------------------------------------------------------------------------------
 
 void gxEngine::deleteProject(gxProject* project)
 {
     projectsRoot->deleteChild(project);
 }
 
+
+//------------------------------------------------------------------------------
+
 void gxEngine::deleteProject(int i)
 {
     projectsRoot->deleteChild(i);
 }
 
+//------------------------------------------------------------------------------
 
+
+QSharedPointer<gxTreeAbstractObject> gxEngine::createFolder(gxTreeFolderObject* parent)
+{
+    // creation of new object
+    gxTreeFolderObject* folder = new gxTreeFolderObject(parent);
+
+    // creation of sharedPointer from gxTreeFolderObject*
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(folder);
+
+    // adding new folder to children
+    folder->addChild(sharedPointer);
+
+    // append new item to the model
+    folder->setup();
+
+    return sharedPointer;
+}
+
+QSharedPointer<gxTreeAbstractObject> gxEngine::createPoints(gxTreeFolderObject* parent)
+{
+    gxPoints* points = new gxPoints(parent);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(points);
+    parent->addChild(sharedPointer);
+
+    points->update();
+
+    return sharedPointer;
+}
+
+QSharedPointer<gxTreeAbstractObject> gxEngine::createLines(gxTreeFolderObject* parent)
+{
+    gxLines* lines = new gxLines(parent);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(lines);
+    parent->addChild(sharedPointer);
+
+    lines->update();
+
+    return sharedPointer;
+}
+
+QSharedPointer<gxTreeAbstractObject> gxEngine::createSurface(gxTreeFolderObject* parent)
+{
+    gxSurface* surface = new gxSurface(parent);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(surface);
+    parent->addChild(sharedPointer);
+
+    surface->update();
+
+    return sharedPointer;
+}
+
+//------------------------------------------------------------------------------
 
 void gxEngine::create2DPanel()
 {
@@ -94,6 +156,8 @@ void gxEngine::create2DPanel()
 //    recheckTreeItems();
 }
 
+//------------------------------------------------------------------------------
+
 void gxEngine::create3DPanel()
 {
     gxRenderPanel* panel = new gxRenderPanel3D(mainWindow->getMainPanel());
@@ -103,6 +167,8 @@ void gxEngine::create3DPanel()
 
 //    recheckTreeItems();
 }
+
+//------------------------------------------------------------------------------
 
 
 void gxEngine::closePanel()
@@ -128,12 +194,10 @@ void gxEngine::raisePanel(gxRenderPanel* panel)
         panels.remove(i);
         panels.push_back(panel);
     }
-
-//    recheckTreeItems();
-
- //   if (i != panels.count()-1)
-     //   panel->recreateDisplayLists();
 }
+
+
+//------------------------------------------------------------------------------
 
 gxRenderPanel* gxEngine::getTopLevelPanel()
 {
@@ -142,38 +206,3 @@ gxRenderPanel* gxEngine::getTopLevelPanel()
     else
         return NULL;
 }
-
-//
-//void gxEngine::recheckTreeItems()
-//{
-//    QVariant data;
-//    gxTreeObject* object;
-//    QTreeWidgetItem *item;
-//    gxVisualObject* vo;
-//
-//
-//    gxRenderPanel* panel = this->getTopLevelPanel();
-//    if (!panel) return;
-//
-//    QTreeWidgetItemIterator it(mainWindow->getProjectTree());
-//
-//    while (*it)
-//    {
-//        item = (*it);
-//        ++it;
-//
-//        data = item->data(0, Qt::UserRole);
-//        object = data.value<gxTreeObject*>();
-//
-//        if (object->isFolder()) continue;
-//
-//        vo = (gxVisualObject*)object;
-//
-//        if (panel->isObjectRegistered(vo))
-//            item->setCheckState(0,Qt::Checked);
-//        else
-//            item->setCheckState(0,Qt::Unchecked);
-//
-//
-//    }
-//}

@@ -53,10 +53,25 @@ public:
     /// 3d rendering
     virtual void draw3D();
 
+    // mimetype
+    virtual QString getMimeType() { return QString("geoix/lines"); }
+
     /// No comments
     virtual void recalcSize();
 
     bool hasData() { return contours->count() > 0; }
+
+    gxPoint3DList getPoint3DList()
+    {
+        gxPoint3DList list;
+        foreach(gxContour *contour, *contours)
+        {
+            list += contour->getData();
+        }
+
+        return list;
+    }
+
 public slots:
 /// Calls appropriate functions from gxDataLoader to import data from txt file
     virtual void importFromFile();
@@ -65,7 +80,7 @@ public slots:
 
 private:
     /// Vector of contours containing data of current gxLines
-    gxContours* contours;
+    gxContourList* contours;
 
 };
 

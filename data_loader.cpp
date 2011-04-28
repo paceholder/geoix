@@ -32,7 +32,7 @@
 
 gxDataLoader* gxDataLoader::inst = NULL;
 
-bool gxDataLoader::loadPointsData(gxPoints3DList* data)
+bool gxDataLoader::loadPointsData(gxPoint3DList* data)
 {
     data->clear();
 
@@ -182,7 +182,7 @@ bool gxDataLoader::loadSurfaceData(gxSurfaceData* data)
 
 
 
-bool gxDataLoader::loadLinesData(gxContours *data)
+bool gxDataLoader::loadLinesData(gxContourList *data)
 {
     foreach(gxContour* c, *data)
         delete c;

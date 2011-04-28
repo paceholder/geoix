@@ -19,7 +19,7 @@
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
 
-#include "contourer_fast.h"
+//#include "contourer_fast.h"
 
 #include "surface_data.h"
 #include "surface_data_iterator.h"

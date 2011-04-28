@@ -223,5 +223,59 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>mappersComboBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>spliner_dialog</receiver>
+   <slot>setupMapper(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>180</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>459</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnClose</sender>
+   <signal>clicked()</signal>
+   <receiver>spliner_dialog</receiver>
+   <slot>onClose()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>414</x>
+     <y>544</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>303</x>
+     <y>533</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnCalculate</sender>
+   <signal>clicked()</signal>
+   <receiver>spliner_dialog</receiver>
+   <slot>onCalculate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>59</x>
+     <y>543</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>181</x>
+     <y>533</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>setupMapper(int)</slot>
+  <slot>onClose()</slot>
+  <slot>onCalculate()</slot>
+ </slots>
 </ui>

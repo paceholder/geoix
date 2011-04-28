@@ -83,9 +83,11 @@ public:
     /// In other words gxContour could be simple line or loop.
     bool isClosed() { return closed; }
 
+    gxPoint3DList getData() { return data; }
+
 protected:
     /// Vector of 3d points
-    QVector<gxPoint3D> data;
+    gxPoint3DList data;
 
     /// Whether contour closed or not
     bool closed;
@@ -105,6 +107,6 @@ protected:
 };
 
 /// Vector of gxContour
-typedef QVector<gxContour*> gxContours;
+typedef QVector<gxContour*> gxContourList;
 
 #endif // CONTOUR_H

@@ -6,8 +6,13 @@
 gxSubtreeModel::gxSubtreeModel()
     : gxCustomTreeModel()
 {
+    this->setSupportedDragActions(Qt::MoveAction);
+
+
     treeRoot = new gxTreeFolderObject();
+    treeRoot->setName("Subtree Root");
     this->reset(); // reset model to show changes
+
 }
 
 
@@ -95,13 +100,18 @@ bool gxSubtreeModel::removeRows(int row, int count, const QModelIndex &parent)
 bool gxSubtreeModel::dropMimeData(const QMimeData *data,
     Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(column);
+
+
     if (action == Qt::IgnoreAction || action == Qt::CopyAction)
         return false;
 
-    if (!data->hasFormat("geoix/treeabstractobject"))
-        return false;
+//    if (!data->hasFormat("geoix/treeabstractobject"))
+//        return false;
 
-    QByteArray encodedData = data->data("geoix/treeabstractobject");
+
+    QByteArray encodedData = data->data(data->formats()[0]);
     QDataStream stream(&encodedData, QIODevice::ReadOnly);
     while (!stream.atEnd())
     {
@@ -133,5 +143,5 @@ bool gxSubtreeModel::dropMimeData(const QMimeData *data,
         break; ///  <<<<<======
     }
 
-    return false;
+    return true;
 }

@@ -49,9 +49,6 @@ public:
     void deleteChild(int i);
 
     /// adds object to the children list
-//    void addChild(gxTreeAbstractObject* child);
-
-    /// adds object to the children list
     void addChild(QSharedPointer<gxTreeAbstractObject> child);
 
     /// returns child by index
@@ -74,6 +71,8 @@ public:
 
     /// This functions is used by treemodel
     int getIndex();
+
+    virtual QString getMimeType() { return QString("geoix/folder"); }
 
 public slots:
     void createFolder();

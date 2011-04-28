@@ -19,7 +19,7 @@ public:
     gxRBFMapper();
     ~gxRBFMapper();
 
-    bool calcSurface(const gxPoints3DList points,
+    bool calcSurface(const gxPoint3DList points,
                      const gxSize3D size,
                      const int nx, const int ny,
                      QVector<double> &result);
@@ -37,8 +37,6 @@ private:
     int domainCapacity;
     int tolerance;
 
-    void removeEqualPoints(gxPoints3DList &points);
-    void leastSquare(gxPoints3DList &points);
     void fillResultArray(gxRBFDomain *rootDomain,
                          const int nx, const int ny,
                          const gxSize3D &size, QVector<double> &result);

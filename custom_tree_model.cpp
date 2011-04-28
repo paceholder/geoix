@@ -6,7 +6,9 @@
 
 gxCustomTreeModel::gxCustomTreeModel()
     : QAbstractItemModel()
-{}
+{
+
+}
 
 
 int gxCustomTreeModel::columnCount(const QModelIndex &parent) const
@@ -188,7 +190,7 @@ QVariant gxCustomTreeModel::data(const QModelIndex &index, int role) const
 QStringList gxCustomTreeModel::mimeTypes() const
 {
     QStringList types;
-    types << "geoix/treeabstractobject";
+    types << "geoix/surface" << "geoix/lines" << "geoix/points";
     return types;
 }
 
@@ -201,41 +203,29 @@ QStringList gxCustomTreeModel::mimeTypes() const
 QMimeData *gxCustomTreeModel::mimeData(const QModelIndexList &indexes) const
  {
      QMimeData *mimeData = new QMimeData();
-     QByteArray encodedData;
-
-     QDataStream stream(&encodedData, QIODevice::WriteOnly);
 
      foreach (QModelIndex index, indexes)
      {
          if (index.isValid())
          {
-             void *abstractObject = index.internalPointer();
+             QByteArray encodedData;
+             QDataStream stream(&encodedData, QIODevice::WriteOnly);
+
+             gxTreeAbstractObject *abstractObject = static_cast<gxTreeAbstractObject*>(index.internalPointer());
              if (! abstractObject) continue;
              /// here we turn pointer to 64bit int to pack it into stream
-             stream << (quint64)abstractObject;
+             stream << reinterpret_cast<quint64>(abstractObject);
+
+             mimeData->setData(abstractObject->getMimeType(), encodedData);
+
          }
      }
 
-     mimeData->setData("geoix/treeabstractobject", encodedData);
      return mimeData;
  }
 
 
-//-----------------------------------------------------------------------------
-
-
-
 Qt::DropActions gxCustomTreeModel::supportedDropActions() const
 {
-    return Qt::MoveAction;
-}
-
-
-//------------------------------------------------------------------------------
-
-
-
-Qt::DropActions gxCustomTreeModel::supportedDragActions() const
-{
-    return /*Qt::CopyAction | */Qt::MoveAction;
+    return Qt::MoveAction/* | Qt::CopyAction*/;
 }

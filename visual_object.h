@@ -27,7 +27,7 @@
 
 #include "tree_object.h"
 #include "size.h"
-
+#include "point3D.h"
 #include "scene_3d.h"
 
 class QPaintDevice;
@@ -61,6 +61,7 @@ public:
     virtual void draw2D() = 0;
     virtual void draw3D() = 0;
     virtual void recalcSize() = 0;
+    virtual gxPoint3DList getPoint3DList() = 0;
 
     /// After various changes gl render lists must be rebuilt.
     virtual void recreateDisplayList();

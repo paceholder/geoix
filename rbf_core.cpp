@@ -34,7 +34,7 @@ void gxRBFCore::setFunctionType(RBFFunctionType type)
 
 
 
-bool gxRBFCore::calculate(const gxPoints3DList points,
+bool gxRBFCore::calculate(const gxPoint3DList points,
                           QVector<double> &coeffs)
 {
     int n = points.size();

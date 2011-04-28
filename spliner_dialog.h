@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -26,6 +26,7 @@
 #include <QDialog>
 
 #include "abstract_mapper.h"
+#include "tree_abstract_object.h"
 
 namespace Ui {
     class spliner_dialog;
@@ -40,13 +41,21 @@ public:
 
 protected:
     void changeEvent(QEvent *e);
-
+    bool eventFilter(QObject *obj, QEvent *event);
 private:
     Ui::spliner_dialog *ui;
 
+    /// list of modules for calculation of spline
     QList<QSharedPointer<gxAbstractMapper> > mapperList;
 
-    void setupMapper();
+    QList<QSharedPointer<gxTreeAbstractObject> > objectList;
+
+public slots:
+    void onClose();
+    void onCalculate();
+
+private slots:
+    void setupMapper(int index);
 };
 
 #endif // SPLINER_DIALOG_H

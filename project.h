@@ -42,6 +42,8 @@ public:
 
     virtual QMenu* getMenu();
     virtual QIcon getIcon();
+
+    virtual QString getMimeType() { return QString("geoix/foldex"); }
 };
 
 typedef QList<QSharedPointer<gxProject> > gxProjectList;

@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -28,6 +28,9 @@
 gxProjectTreeModel::gxProjectTreeModel(gxTreeFolderObject *projectTreeRoot)
     : gxCustomTreeModel()
 {
+    this->setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
+
+
     treeRoot = projectTreeRoot;
     this->reset(); // reset model to show changes
 }
@@ -105,6 +108,10 @@ bool gxProjectTreeModel::removeRows(int row, int count, const QModelIndex &paren
 bool gxProjectTreeModel::dropMimeData(const QMimeData *data,
     Qt::DropAction action, int row, int column, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(column);
+
+
     if (action == Qt::IgnoreAction)
         return true;
 
@@ -136,22 +143,18 @@ bool gxProjectTreeModel::dropMimeData(const QMimeData *data,
         gxTreeFolderObject* newFolder = static_cast<gxTreeFolderObject*>(parent.internalPointer());
 
 
-        //gxTreeAbstractObject * obj = (gxTreeAbstractObject*)parent.internalPointer();
-
         beginInsertRows(parent, newFolder->count(), newFolder->count());
         newFolder->addChild(sharedPointer);
         endInsertRows();
-////
-//        QMessageBox::information(0, tr("ololo"), sharedPointer->getParent()->getName());
-//        QMessageBox::information(0, tr("ololo"), QString::number(newFolder->count()));
-//        QMessageBox::information(0, "ololo",  fol->getName());
-//        QMessageBox::information(0, "ololo",  QString::number(fol->count()));
 
-        // NOW I READ JUST ONE ITEM
-        // coz I dont know how I will process multiselection in tree
+
         break; ///  <<<<<======
         // !!!
     }
 
     return false;
 }
+
+
+
+

@@ -5,7 +5,7 @@
 //
 //    Geoix is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
+//    the Free Software Foundation, either version 4 of the License, or
 //    (at your option) any later version.
 //
 //    Geoix is distributed in the hope that it will be useful,
@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -63,6 +63,13 @@ public:
 
     virtual void recalcSize();
 
+    virtual QString getMimeType() { return QString("geoix/surface"); }
+
+    gxPoint3DList getPoint3DList()
+    {
+        gxPoint3DList list;
+        return list;
+    }
 
     /// Set normal for the given plane
     /*!

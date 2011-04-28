@@ -13,5 +13,6 @@
         <file>images/add_surface.png</file>
         <file>images/surface.png</file>
         <file>images/Screenshot.png</file>
+        <file>images/Box.png</file>
     </qresource>
 </RCC>

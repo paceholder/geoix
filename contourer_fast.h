@@ -23,37 +23,16 @@
 #ifndef CONTOURER_FAST_H
 #define CONTOURER_FAST_H
 
-#endif // CONTOURER_FAST_H
+#include <QtCore>
 
-#include <QQueue>
-#include <QMap>
-#include <QPair>
 #include "flat_contour.h"
+#include "edge.h"
 
 
 typedef QMap<int,QPair<int, int> > gxMap;
 
+
 class gxSurfaceData;
-
-/// This is edge if triangle
-/*!
-    \param direction stands for adding new point to the
-    begin of to the end of current gxContour
-*/
-struct gxEdge
-{
-    gxEdge(){}
-    gxEdge(int aknot1, int aknot2, int adirection)
-        :   knot1(aknot1),
-            knot2(aknot2),
-            direction(adirection)
-    { }
-
-    int knot1;
-    int knot2;
-    int direction;
-};
-
 
 
 /// Class is intended to build isolines of current gxSurface
@@ -106,7 +85,7 @@ private:
     QVector<uchar> edges; // bit
 };
 
-
+#endif // CONTOURER_FAST_H
 
 
 

@@ -39,6 +39,8 @@ struct gxMainWindowActions
     QAction* buildMapAct;
 
     QAction* screenShotAct;
+
+    QAction* createCube;
 };
 
 

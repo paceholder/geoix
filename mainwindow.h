@@ -94,6 +94,7 @@ private slots:
     void new3DPanel();
     void closePanel();
     void buildMap();
+    void createCube();
     void screenShot();
     void contextMenuProjectTree(const QPoint& position);
 };
