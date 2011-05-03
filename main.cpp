@@ -29,6 +29,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setAttribute(Qt::AA_DontShowIconsInMenus, false);
+
     MainWindow w;
 
     gxEngine::instance()->setMainWindow(&w);

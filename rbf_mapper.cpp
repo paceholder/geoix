@@ -38,16 +38,17 @@ bool gxRBFMapper::calcSurface(gxPoint3DList points,
 {
     // first of all we should delete points
     // with equal x and y coords.
-    removeEqualPoints(points);
-
+    //removeEqualPoints(points);
 
     // least square method
-    leastSquare(points);
+    QVector<double> lsCoeffs = leastSquare(points);
 
     gxRBFDomain::setMaxLeafCapacity(this->domainCapacity);
-    QScopedPointer<gxRBFDomain> rootDomain(new gxRBFDomain(Width, size, points));
 
-    fillResultArray(rootDomain.data(), nx, ny, size, result);
+    gxPoint3DVector pvec = gxPoint3DVector::fromList(points);
+    gxRBFDomain rootDomain(Width, size, pvec);
+
+    result = fillResultArray(rootDomain, nx, ny, size, lsCoeffs);
 
     return true;
 }
@@ -57,12 +58,12 @@ bool gxRBFMapper::calcSurface(gxPoint3DList points,
 
 
 
-void gxRBFMapper::fillResultArray(gxRBFDomain *rootDomain,
-                                  const int nx, const int ny,
-                                  const gxSize3D &size, QVector<double> &result)
+QVector<double> gxRBFMapper::fillResultArray(gxRBFDomain &rootDomain,
+                                             const int nx, const int ny,
+                                             const gxSize3D &size,
+                                             QVector<double> lsCoeffs)
 {
-    result.resize(nx * ny);
-    result.fill(result.size(), 0);
+    QVector<double> result(nx * ny);
 
     double stepX = size.getW()/double(nx -1);
     double stepY = size.getH()/double(ny -1);
@@ -70,18 +71,21 @@ void gxRBFMapper::fillResultArray(gxRBFDomain *rootDomain,
     double x = 0, y = 0;
     double minx = size.getMinX(), miny = size.getMinY();
 
+
     for (int j = 0; j < ny; ++j)
     {
         y = miny + j * stepY;
         for (int i = 0; i < nx; ++i)
         {
             x = minx + i * stepX;
+            int cell = j * nx + i;
 
-            result[j * nx + i] = rootDomain->getValue(x, y);
-//            R[j*nX+i] = /*abc(0,0) * x + abc(1,0) * y + abc(2,0) +*/
-
+            result[cell] = rootDomain.getValue(x, y);
+            result[cell] += lsCoeffs[0] * x + lsCoeffs[1] * y + lsCoeffs[2];
         }
     }
+
+    return result;
 }
 
 
@@ -96,9 +100,13 @@ QWidget *gxRBFMapper::getSettingsWidget(QWidget *parent)
 
     QIntValidator *validator = new QIntValidator();
     validator->setBottom(0);
-    ui->lineEdit->setValidator(validator);
+    ui->lineDomainCapacity->setValidator(validator);
 
-    ui->lineEdit->setText(QString::number(defaulfDomainCapacity));
+    ui->lineDomainCapacity->setText(QString::number(defaulfDomainCapacity));
+
+    connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(onSplineTypeActivated(int)));
+    connect(ui->lineDomainCapacity, SIGNAL(textChanged(QString)), this, SLOT(onDomainCapacity(QString)));
+    connect(ui->sliderTolerance, SIGNAL(sliderMoved(int)), this, SLOT(onTolerance(int)));
 
     return settingsWidget;
 }

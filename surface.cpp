@@ -37,18 +37,28 @@
 #include <QMessageBox>
 
 
-gxSurface::gxSurface(gxTreeFolderObject* parent)
-    : gxVisualObject(parent)
+gxSurface::gxSurface(gxTreeFolderObject *parent, gxSurfaceData *d)
+    : gxVisualObject(parent),
+    data(d)
 {
     name = tr("New Surface");
 
     setRandomColor();
     setTransparancy(1.0);
 
-    // Here we create class containing surface data
-    data = new gxSurfaceData(&(this->size3d));
+
     // Contours filled after tracing
-    contours = new gxFlatContours;
+    contours = new gxFlatContourList;
+
+    // Here we create class containing surface data
+    if (!data)
+        data = new gxSurfaceData(size3d);
+    else
+    {
+        this->recalcSize();
+        gxContourer contourer(this->size3d.getD()/10.0);
+        contourer.run(this->data, this->contours);
+    }
 
     // Color pallete for gradient fill
     palette = new gxContinuesColorPalette();
@@ -132,24 +142,24 @@ void gxSurface::draw2D()
                         (d4 != Gx::BlankDouble))
                     {
                         glBegin(GL_QUADS);
-                            d = (d1 - data->size3d->getMinZ()) / height;
+                            d = (d1 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
                             glVertex2d(data->getX(i),   data->getY(j));
 
 
-                            d = (d2 - data->size3d->getMinZ()) / height;
+                            d = (d2 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
                             glVertex2d(data->getX(i+1), data->getY(j));
 
 
-                            d = (d3 - data->size3d->getMinZ()) / height;
+                            d = (d3 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
                             glVertex2d(data->getX(i+1), data->getY(j+1));
 
-                            d = (d4 - data->size3d->getMinZ()) / height;
+                            d = (d4 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
                             glVertex2d(data->getX(i),   data->getY(j+1));
@@ -163,7 +173,7 @@ void gxSurface::draw2D()
             // contours
             glColor4f(0.0, 0.0, 0.0, transparency);
 
-            QVectorIterator<gxFlatContour*> it(*contours);
+            QListIterator<gxFlatContour*> it(*contours);
             while (it.hasNext())
             {
                 gxFlatContour* c = it.next();
@@ -224,7 +234,7 @@ void gxSurface::draw3D()
                         glBegin(GL_QUADS);
 
 
-                            d = (d1 - data->size3d->getMinZ()) / height;
+                            d = (d1 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
@@ -233,7 +243,7 @@ void gxSurface::draw3D()
                             glVertex3d(data->getX(i),   data->getY(j),   d1);
 
 
-                            d = (d2 - data->size3d->getMinZ()) / height;
+                            d = (d2 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
@@ -241,14 +251,14 @@ void gxSurface::draw3D()
                             glVertex3d(data->getX(i+1), data->getY(j),   d2);
 
 
-                            d = (d3 - data->size3d->getMinZ()) / height;
+                            d = (d3 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
                             setNormal(data->getX(i) - data->getX(i+1), 0, d4 - d3, 0, data->getY(j) - data->getY(j+1), d2 - d3);
                             glVertex3d(data->getX(i+1), data->getY(j+1), d3);
 
-                            d = (d4 - data->size3d->getMinZ()) / height;
+                            d = (d4 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
@@ -262,7 +272,7 @@ void gxSurface::draw3D()
             // contours
             glColor3f(0.0, 0.0, 0.0);
 
-            QVectorIterator<gxFlatContour*> it(*contours);
+            QListIterator<gxFlatContour*> it(*contours);
             while (it.hasNext())
             {
                 gxFlatContour* c = it.next();
@@ -286,6 +296,8 @@ void gxSurface::draw3D()
 }
 
 
+//------------------------------------------------------------------------------
+
 void gxSurface::recalcSize()
 {
     recreateDisplayList();
@@ -306,8 +318,12 @@ void gxSurface::recalcSize()
             if (z > maxz) maxz = z;
         }
 
-        this->size3d.setMinZ(minz);
-        this->size3d.setMaxZ(maxz);
+        this->data->size3d.setMinZ(minz);
+        this->data->size3d.setMaxZ(maxz);
+//        this->size3d.setMinZ(minz);
+//        this->size3d.setMaxZ(maxz);
+
+        if (data) this->size3d = data->size3d;
     }
 }
 
@@ -315,17 +331,27 @@ void gxSurface::recalcSize()
 //------------------------------------------------------------------------------
 
 
+void gxSurface::setData(gxSurfaceData *d)
+{
+    if (data) delete data;
+    data = d;
+
+    recalcSize();
+    gxContourer contourer(this->size3d.getH()/10.0);
+    contourer.run(this->data, this->contours);
+}
+
+//------------------------------------------------------------------------------
+
+
 void gxSurface::importFromFile()
 {
     this->clearData();
-    if ( ! gxDataLoader::instance()->loadSurfaceData(this->data)) return;
+    if ( ! gxDataLoader::loadSurfaceData(this->data)) return;
 
     this->recalcSize();    
-
-    gxContourer contourer(2);
+    gxContourer contourer(this->size3d.getH()/10.0);
     contourer.run(this->data, this->contours);
-
-//    updateWidgetItemState();
 }
 
 
@@ -341,8 +367,6 @@ void gxSurface::clearData()
 //    {
 //       // delete contour; todo
 //    }
-
-//    updateWidgetItemState();
 }
 
 

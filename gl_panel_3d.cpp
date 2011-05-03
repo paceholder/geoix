@@ -89,8 +89,8 @@ void gxGLPanel3D::initializeGL()
     glEnable(GL_POLYGON_OFFSET_FILL);
     glPolygonOffset(1.0, 1.0);
 
-    //glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-   // glEnable(GL_LINE_SMOOTH);
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glEnable(GL_LINE_SMOOTH);
 
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 }

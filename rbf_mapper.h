@@ -37,9 +37,10 @@ private:
     int domainCapacity;
     int tolerance;
 
-    void fillResultArray(gxRBFDomain *rootDomain,
-                         const int nx, const int ny,
-                         const gxSize3D &size, QVector<double> &result);
+    QVector<double> fillResultArray(gxRBFDomain &rootDomain,
+                                    const int nx, const int ny,
+                                    const gxSize3D &size,
+                                    QVector<double> lsCoeffs);
 
 };
 

@@ -18,7 +18,7 @@ int gxRBFDomain::maxLeafCapacity = defaulfDomainCapacity;
 
 gxRBFDomain::gxRBFDomain(gxDomainLongSide parentLongSide,
                          const gxSize3D &s,
-                         gxPoint3DList p)
+                         gxPoint3DVector p)
     :
      points(p),
      leftDomain(0),
@@ -46,7 +46,7 @@ void gxRBFDomain::buildTree()
 {
     int n = points.size();
 
-    gxDomainLongSide long_side = size.getW() > size.getH() ? Width : Length;
+    longSide = size.getW() > size.getH() ? Width : Length;
 
     if ( n > gxRBFDomain::maxLeafCapacity ) // we still can create two branches
     {
@@ -70,7 +70,7 @@ void gxRBFDomain::buildTree()
         int n2 = (n - n1 - n0);
 
         // prepare left subdomain
-        gxPoint3DList left_points;
+        gxPoint3DVector left_points;
 
         left_points.resize(n1+n0);
         qCopy(points.begin(), points.begin() + n1 + n0, left_points.begin());
@@ -78,7 +78,7 @@ void gxRBFDomain::buildTree()
         // let's change the size of domain
         gxSize3D left_size(size);
 
-        if (long_side == Width)
+        if (longSide == Width)
             left_size.setMaxX(left_points.last().x);
         else
             left_size.setMaxY(left_points.last().y);
@@ -87,7 +87,7 @@ void gxRBFDomain::buildTree()
 
         // prepare right subdomain
 
-        gxPoint3DList right_points;
+        gxPoint3DVector right_points;
         right_points.resize(n2 + n0);
         qCopy(points.end() - (n2 + n0), points.end(), right_points.begin());
 
@@ -95,7 +95,7 @@ void gxRBFDomain::buildTree()
         // let's change the size of domain
         gxSize3D right_size(size);
 
-        if (long_side == Width)
+        if (longSide == Width)
             right_size.setMinX(right_points.first().x);
         else
             right_size.setMinY(right_points.first().y);
@@ -127,7 +127,7 @@ double gxRBFDomain::getValue(const double x, const double y)
     {
         int l = coeff.size();
         for (int i = 0; i < l - 3; ++i)
-            result += gxRBFCore::coreFunction(points[i].distance(x, y)) * coeff[i];
+            result += gxRBFCore::coreFunction(points[i].distance2D(x, y)) * coeff[i];
         result += coeff[l-3] + coeff[l-2] * x + coeff[l-1] * y;
     }
 

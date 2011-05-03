@@ -24,16 +24,13 @@
 #define SIZE_H
 
 #include <math.h>
-#include <QObject>
 
 /// Class contains 3d size variables
-class gxSize3D : QObject
+class gxSize3D
 {
-    Q_OBJECT
 public:
     /// Constructor
     gxSize3D()
-        : QObject()
     {
         setSize(0,0,0,0,0,0);
     }
@@ -48,7 +45,6 @@ public:
 
     /// Constructor
     gxSize3D(const gxSize3D& size)
-        : QObject()
     {
         setSize(size.minx, size.miny, size.minz,
                 size.maxx, size.maxy, size.maxz);

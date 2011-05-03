@@ -268,8 +268,8 @@ void MainWindow::screenShot()
 
 void MainWindow::buildMap()
 {
-    // todo
-    spliner_dialog *dialog = new spliner_dialog(this);
+    // todo: need to delete pointer after usage
+    gxSplinerDialog *dialog = new gxSplinerDialog(this);
     dialog->show();
 }
 

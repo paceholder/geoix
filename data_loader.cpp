@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -30,14 +30,12 @@
 
 #include "mainwindow.h"
 
-gxDataLoader* gxDataLoader::inst = NULL;
-
 bool gxDataLoader::loadPointsData(gxPoint3DList* data)
 {
     data->clear();
 
     QStringList list;
-    openTextFile(&list);
+    openTextFile(list);
     if (list.count() <= 0) return false;
 
     QStringListIterator it(list);
@@ -82,7 +80,7 @@ bool gxDataLoader::loadSurfaceData(gxSurfaceData* data)
     bool ok;
 
     QStringList list;
-    openTextFile(&list);
+    openTextFile(list);
     if (list.count() <= 0) return false;
 
     QStringListIterator it(list);
@@ -106,6 +104,7 @@ bool gxDataLoader::loadSurfaceData(gxSurfaceData* data)
 
     splitList = str.split(re, QString::SkipEmptyParts);
 
+    /// read NX and NY
     int nx = splitList[0].toInt(&ok);
     int ny = splitList[1].toInt(&ok);
 
@@ -115,12 +114,12 @@ bool gxDataLoader::loadSurfaceData(gxSurfaceData* data)
     while (dit.hasNext())
         dit.next() = Gx::BlankDouble;
 
-    data->size3d->setSize(splitList[2].toDouble(&ok),
-                          splitList[4].toDouble(&ok),
-                          0,
-                          splitList[3].toDouble(&ok),
-                          splitList[5].toDouble(&ok),
-                          0);
+    data->size3d = gxSize3D(splitList[2].toDouble(&ok),
+                            splitList[4].toDouble(&ok),
+                            0,
+                            splitList[3].toDouble(&ok),
+                            splitList[5].toDouble(&ok),
+                            0);
 
 
 
@@ -197,7 +196,7 @@ bool gxDataLoader::loadLinesData(gxContourList *data)
     bool ok;
 
     QStringList list;
-    openTextFile(&list);
+    openTextFile(list);
 
     QStringListIterator it(list);
     QString str;
@@ -238,16 +237,116 @@ bool gxDataLoader::loadLinesData(gxContourList *data)
 
 //------------------------------------------------------------------------------
 
-
-void gxDataLoader::openTextFile(QStringList* list)
+bool gxDataLoader::loadWellData(gxPoint3DList *data, QStringList list)
 {
-    if (!list) return;
+    data->clear();
 
-    list->clear();
+    if (list.size() == 0)
+    {
+        openTextFile(list);
+        if (list.count() <= 0) return false;
+    }
 
-    QString fileName = QFileDialog::getOpenFileName(gxEngine::instance()->getMainWindow(),
-                                            tr("Open File"), QDir::homePath(),
-                                            tr("Text Files (*)"));
+    gxPoint3D origin;
+
+    QStringListIterator it(list);
+
+    /// get origin
+    while (it.hasNext())
+    {
+        if (it.peekNext().contains("origin"))
+        {
+            QString s = it.next();
+
+            int i = s.indexOf(':');
+            s = s.remove(0, i + 1).trimmed(); // removes "origin :" then trim string
+
+            QRegExp re("[\t ]+");
+
+            QStringList originList = s.split(re, QString::SkipEmptyParts);
+
+            if (originList.size() != 3) return false;
+
+            bool okx, oky, okz;
+            origin.x = originList[0].toDouble(&okx);
+            origin.y = originList[1].toDouble(&oky);
+            origin.z = originList[2].toDouble(&okz);
+
+            if (!(okx && oky && okz)) return false;
+            break;
+        }
+
+    }
+
+    while (it.hasNext())
+    {
+        QString s = it.next();
+
+        QRegExp re("[\t ]+"); // one or more tab or spaces
+        QStringList splitList = s.split(re, QString::SkipEmptyParts);
+
+        if (splitList.count() != 3) continue;
+
+        bool okx, oky, okz;
+
+        gxPoint3D p;
+        p.x = splitList[0].toDouble(&okx);
+        p.y = splitList[1].toDouble(&oky);
+        p.z = splitList[2].toDouble(&okz);
+
+        if (!(okx && oky && okz)) return false;
+
+        p += origin;
+        p.z = -p.z;
+
+        data->append(p);
+    }
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+
+
+bool gxDataLoader::loadWellsData(QList<gxPoint3DList> &wells)
+{
+    wells.clear();
+    QStringList files = QFileDialog::getOpenFileNames(gxEngine::instance()->getMainWindow(),
+                                                      tr("Open Several Files"),
+                                                      QApplication::applicationDirPath(),
+                                                      tr("Text Files (*)"));
+
+    if (!files.size()) return false;
+
+    foreach(QString fileName, files)
+    {
+        QStringList fileContants;
+        openTextFile(fileContants, fileName);
+
+        /// have some data
+        if (fileContants.size())
+        {
+            gxPoint3DList points;
+            loadWellData(&points, fileContants);
+            wells.append(points);
+        }
+    }
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+
+
+void gxDataLoader::openTextFile(QStringList &list, QString fileName)
+{
+    list.clear();
+
+    if (fileName.isEmpty())
+        fileName = QFileDialog::getOpenFileName(gxEngine::instance()->getMainWindow(),
+                                                tr("Open File"),
+                                                QApplication::applicationDirPath(),
+                                                tr("Text Files (*)"));
 
     if (QFile::exists(fileName))
     {
@@ -258,7 +357,9 @@ void gxDataLoader::openTextFile(QStringList* list)
         QTextStream in(&file);
         while (!in.atEnd())
         {
-            list->append(in.readLine());
+            list.append(in.readLine());
         }
     }
 }
+
+

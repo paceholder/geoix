@@ -42,7 +42,7 @@ public:
     }
     ~gxColorSlider()
     {
-        delete palette;
+        //delete palette;
     }
 
 protected:

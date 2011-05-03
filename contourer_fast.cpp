@@ -14,14 +14,15 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
 
-//#include "contourer_fast.h"
+#include "contourer_fast.h"
 
 #include "surface_data.h"
+
 #include "surface_data_iterator.h"
 
 
@@ -29,28 +30,27 @@
 //                         gxContourer
 
 gxContourer::gxContourer(double step)
-    : QObject()
 {
     this->step = step;
     this->curcont = NULL;
 }
 
-void gxContourer::run(gxSurfaceData* data, gxFlatContours* contours)
+void gxContourer::run(gxSurfaceData *data, gxFlatContourList *contours)
 {
     this->data = data;
     this->contours = contours;
 
-    QVectorIterator<gxFlatContour*> it(*contours);
+    QListIterator<gxFlatContour*> it(*contours);
     while (it.hasNext()) delete it.next();
     contours->clear();
 
     this->edges.resize(data->values.size());
 
-    double minz = data->getSize()->getMinZ();
-    double maxz = data->getSize()->getMaxZ();
+    double minz = data->getSize().getMinZ();
+    double maxz = data->getSize().getMaxZ();
 
     if (abs(maxz - minz) < step)
-        curz = minz +data->getSize()->getD()/2.0;
+        curz = minz +data->getSize().getD()/2.0;
     else
         curz = minz + step/2.0;
 
@@ -65,6 +65,9 @@ void gxContourer::run(gxSurfaceData* data, gxFlatContours* contours)
         curz += step;
     }
 }
+
+
+//------------------------------------------------------------------------------
 
 void gxContourer::markEdges(double curz)
   {
@@ -218,7 +221,7 @@ void gxContourer::addPoint(int pos, int vector, int direction)
 
     d = (curz - z1)/(z2 - z1);
 
-    gxPoint2D p(x1 + (x2 - x1) * d,
+    gxPoint3D p(x1 + (x2 - x1) * d,
                 y1 + (y2 - y1) * d);
 
     if (direction > 0)

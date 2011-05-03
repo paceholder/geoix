@@ -23,7 +23,7 @@ public:
     static void setFunctionType(RBFFunctionType type);
 
     /// Calculates coeffitients of spline
-    static bool calculate(const gxPoint3DList points, QVector<double> &coeffs);
+    static bool calculate(const gxPoint3DVector points, QVector<double> &coeffs);
 
     /// pointer to the RBF function
     static RBFFunction coreFunction;

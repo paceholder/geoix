@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -36,6 +36,7 @@ class gxTreeFolderObject;
 class gxPoints;
 class gxLines;
 class gxSurface;
+class gxWell;
 class gxVisualObject;
 
 
@@ -56,10 +57,14 @@ private:
     QAction* createPoints;
     QAction* createLines;
     QAction* createSurface;
+    QAction* createWell;
 
     QAction* importPoints;
     QAction* importSurface;
     QAction* importLines;
+    QAction* importWell;
+
+    QAction *importWells; // several at once
 
     QAction* showOptionsDialog;
     QAction* clearData;
@@ -86,7 +91,7 @@ public:
     gxTreeMenuFabric();
     virtual ~gxTreeMenuFabric();
 
-
+    QMenu* getWellMenu(gxWell *well);
     QMenu* getProjectMenu(gxProject* project);
     QMenu* getFolderMenu(gxTreeFolderObject* project);
     QMenu* getPointsMenu(gxPoints* points);

@@ -22,11 +22,11 @@ public:
     /// size of domain, vector of points
     gxRBFDomain(gxDomainLongSide parentLongSide,
                 const gxSize3D &s,
-                gxPoint3DList p);
+                gxPoint3DVector p);
     ~gxRBFDomain();
 
     /// points belonging to this domain
-    gxPoint3DList points;
+    gxPoint3DVector points;
 
     gxRBFDomain *leftDomain, *rightDomain; // children
 

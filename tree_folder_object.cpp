@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -26,7 +26,10 @@
 #include "points.h"
 #include "lines.h"
 #include "surface.h"
+#include "well.h"
 #include "logger.h"
+
+#include "data_loader.h"
 
 gxTreeFolderObject::gxTreeFolderObject(gxTreeFolderObject* parent)
     : gxTreeAbstractObject(parent)
@@ -78,59 +81,7 @@ QIcon gxTreeFolderObject::getIcon()
 }
 
 
-//------------------------------------------------------------------------------
 
-void gxTreeFolderObject::createFolder()
-{
-    // creation of new object
-    gxTreeFolderObject* folder = new gxTreeFolderObject(this);
-
-    // creation of sharedPointer from gxTreeFolderObject*
-    QSharedPointer<gxTreeAbstractObject> sharedPointer(folder);
-
-
-    // adding new folder to children
-    this->addChild(sharedPointer);
-
-    // append new item to the model
-    folder->setup();
-}
-
-
-//------------------------------------------------------------------------------
-
-void gxTreeFolderObject::createPoints()
-{
-    gxPoints* points = new gxPoints(this);
-    QSharedPointer<gxTreeAbstractObject> sharedPointer(points);
-    this->addChild(sharedPointer);
-
-    points->update();
-}
-
-
-//------------------------------------------------------------------------------
-
-void gxTreeFolderObject::createLines()
-{
-    gxLines* lines = new gxLines(this);
-    QSharedPointer<gxTreeAbstractObject> sharedPointer(lines);
-    this->addChild(sharedPointer);
-
-    lines->update();
-}
-
-
-//------------------------------------------------------------------------------
-
-void gxTreeFolderObject::createSurface()
-{
-    gxSurface* surface = new gxSurface(this);
-    QSharedPointer<gxTreeAbstractObject> sharedPointer(surface);
-    this->addChild(sharedPointer);
-
-    surface->update();
-}
 
 
 //------------------------------------------------------------------------------
@@ -209,4 +160,106 @@ int gxTreeFolderObject::getIndex()
     return folder->indexOf(this);;
 }
 
+
+//                          slots
+//------------------------------------------------------------------------------
+
+
+void gxTreeFolderObject::createFolder()
+{
+    // creation of new object
+    gxTreeFolderObject* folder = new gxTreeFolderObject(this);
+
+    // creation of sharedPointer from gxTreeFolderObject*
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(folder);
+
+
+    // adding new folder to children
+    this->addChild(sharedPointer);
+
+    // append new item to the model
+    folder->setup();
+}
+
+
+
+//------------------------------------------------------------------------------
+
+void gxTreeFolderObject::createWell()
+{
+    gxWell* well = new gxWell(this);
+
+    QSharedPointer<gxWell> sharedPointer(well);
+
+    this->addChild(sharedPointer);
+
+    well->update();
+}
+
+
+//------------------------------------------------------------------------------
+
+void gxTreeFolderObject::createPoints()
+{
+    gxPoints* points = new gxPoints(this);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(points);
+    this->addChild(sharedPointer);
+
+    points->update();
+}
+
+
+//------------------------------------------------------------------------------
+
+void gxTreeFolderObject::createLines()
+{
+    gxLines* lines = new gxLines(this);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(lines);
+    this->addChild(sharedPointer);
+
+    lines->update();
+}
+
+
+//------------------------------------------------------------------------------
+
+void gxTreeFolderObject::createSurface()
+{
+    gxSurface* surface = new gxSurface(this);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(surface);
+    this->addChild(sharedPointer);
+
+    surface->update();
+}
+
+//------------------------------------------------------------------------------
+
+void gxTreeFolderObject::createSurface(gxSurfaceData *data)
+{
+    gxSurface* surface = new gxSurface(this, data);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(surface);
+    this->addChild(sharedPointer);
+
+    surface->update();
+}
+
+//------------------------------------------------------------------------------
+
+void gxTreeFolderObject::importWells()
+{
+    QList<gxPoint3DList> wellDataList;
+    gxDataLoader::loadWellsData(wellDataList);
+
+    foreach(gxPoint3DList points, wellDataList)
+    {
+        gxWell* well = new gxWell(this);
+        well->setData(points);
+
+        QSharedPointer<gxWell> sharedPointer(well);
+
+        this->addChild(sharedPointer);
+
+        well->update();
+    }
+}
 

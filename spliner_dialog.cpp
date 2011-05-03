@@ -24,14 +24,18 @@
 #include "spliner_dialog.h"
 #include "ui_spliner_dialog.h"
 
+#include "tree_folder_object.h"
 #include "visual_object.h"
+#include "surface_data.h"
+
 #include "rbf_mapper.h"
 #include "kriging_mapper.h"
 
 /// Constructor. Creates Dialog window for spline calculations
-spliner_dialog::spliner_dialog(QWidget *parent) :
+gxSplinerDialog::gxSplinerDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::spliner_dialog)
+    ui(new Ui::SplinerDialog),
+    folder(0)
 {
     ui->setupUi(this);
 
@@ -50,9 +54,16 @@ spliner_dialog::spliner_dialog(QWidget *parent) :
     /// setting up event filter
     ui->listWidget->installEventFilter(this);
     ui->listWidget->setAcceptDrops(true);
+
+    ui->lineMinX->setValidator(new QDoubleValidator(this));
+    ui->lineMaxX->setValidator(new QDoubleValidator(this));
+    ui->lineMinY->setValidator(new QDoubleValidator(this));
+    ui->lineMaxY->setValidator(new QDoubleValidator(this));
+    ui->lineX->setValidator(new QDoubleValidator(this));
+    ui->lineY->setValidator(new QDoubleValidator(this));
 }
 
-spliner_dialog::~spliner_dialog()
+gxSplinerDialog::~gxSplinerDialog()
 {
     delete ui;
 }
@@ -60,64 +71,22 @@ spliner_dialog::~spliner_dialog()
 
 //------------------------------------------------------------------------------
 
-bool spliner_dialog::eventFilter(QObject *obj, QEvent *event)
+bool gxSplinerDialog::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == ui->listWidget)
     {
         switch (event->type())
         {
         case QEvent::DragEnter:
-        {
-            QDragEnterEvent *eventEnter = static_cast<QDragEnterEvent*>(event);
-
-            if (eventEnter->mimeData()->hasFormat("geoix/surface")
-                || eventEnter->mimeData()->hasFormat("geoix/lines")
-                || eventEnter->mimeData()->hasFormat("geoix/points"))
             {
-                eventEnter->acceptProposedAction();
-
-//                eventEnter->setDropAction(Qt::CopyAction);
-//                eventEnter->accept();
-                return true;
+                QDragEnterEvent *eventEnter = static_cast<QDragEnterEvent*>(event);
+                return handleDragEnterEvent(eventEnter);
             }
-            else
-            {
-                eventEnter->ignore();
-                return false;
-            }
-
-        }
         case QEvent::Drop:
-        {
-            QDropEvent *dropEvent = static_cast<QDropEvent*>(event);
-
-            Qt::DropAction action = dropEvent->dropAction();
-
-            dropEvent->acceptProposedAction();
-            dropEvent->setDropAction(Qt::CopyAction);
-            dropEvent->accept();
-
-            foreach(QString format, dropEvent->mimeData()->formats())
             {
-                const QMimeData *mimeData = dropEvent->mimeData();
-                QByteArray encodedData = mimeData->data(format);
-
-                QDataStream stream(&encodedData, QIODevice::ReadOnly);
-
-                while (!stream.atEnd())
-                {
-                    quint64 pointer;
-                    stream >> pointer;
-
-                    gxTreeAbstractObject *abstractObject = reinterpret_cast<gxTreeAbstractObject*>(pointer);
-
-                    this->objectList.append(abstractObject->getSharedPointer());
-                    ui->listWidget->addItem(abstractObject->getName());
-                }
+                QDropEvent *dropEvent = static_cast<QDropEvent*>(event);
+                return handleDropEvent(dropEvent);
             }
-
-            return true;
-        }
         default: break;
         }
         return false;
@@ -129,9 +98,73 @@ bool spliner_dialog::eventFilter(QObject *obj, QEvent *event)
     }
 }
 
+
 //------------------------------------------------------------------------------
 
-void spliner_dialog::changeEvent(QEvent *e)
+
+bool gxSplinerDialog::handleDragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat("geoix/surface")
+        || event->mimeData()->hasFormat("geoix/lines")
+        || event->mimeData()->hasFormat("geoix/points"))
+    {
+        event->setDropAction(Qt::CopyAction);
+        event->accept();
+        return true;
+    }
+    else
+    {
+        event->ignore();
+        return false;
+    }
+}
+
+
+
+//------------------------------------------------------------------------------
+
+
+bool gxSplinerDialog::handleDropEvent(QDropEvent *event)
+{
+    event->setDropAction(Qt::CopyAction);
+    event->accept();
+
+    foreach(QString format, event->mimeData()->formats())
+    {
+        const QMimeData *mimeData = event->mimeData();
+        QByteArray encodedData = mimeData->data(format);
+
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
+
+        while (!stream.atEnd())
+        {
+            quint64 pointer;
+            stream >> pointer;
+
+            gxTreeAbstractObject *abstractObject = reinterpret_cast<gxTreeAbstractObject*>(pointer);
+
+            folder = abstractObject->getParent();
+
+            this->objectList.append(abstractObject->getSharedPointer());
+            ui->listWidget->addItem(abstractObject->getName());
+
+            gxVisualObject *vo = static_cast<gxVisualObject*>(abstractObject);
+            gxSize3D size = vo->getSize();
+
+            this->ui->lineMinX->setText(QString::number(size.getMinX()));
+            this->ui->lineMaxX->setText(QString::number(size.getMaxX()));
+            this->ui->lineMinY->setText(QString::number(size.getMinY()));
+            this->ui->lineMaxY->setText(QString::number(size.getMaxY()));
+
+        }
+    }
+
+    return true;
+}
+
+//------------------------------------------------------------------------------
+
+void gxSplinerDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
     switch (e->type()) {
@@ -145,7 +178,7 @@ void spliner_dialog::changeEvent(QEvent *e)
 
 //------------------------------------------------------------------------------
 
-void spliner_dialog::setupMapper(int index)
+void gxSplinerDialog::setupMapper(int index)
 {
 //    int index = ui->mappersComboBox->currentIndex();
 
@@ -159,11 +192,8 @@ void spliner_dialog::setupMapper(int index)
             delete w;
         }
 
-        ui->settingsLayout->invalidate();
-
         // add new widget
         ui->settingsLayout->addWidget(settingsWidget);
-
         ui->settingsLayout->invalidate();
     }
 }
@@ -173,19 +203,19 @@ void spliner_dialog::setupMapper(int index)
 //------------------------------------------------------------------------------
 
 
-void spliner_dialog::onClose()
+void gxSplinerDialog::onClose()
 {
+    // do nothing
 }
 
 
 //------------------------------------------------------------------------------
 
 
-void spliner_dialog::onCalculate()
+void gxSplinerDialog::onCalculate()
 {
-    // first we get points
+    // 1) first we get points
 
-//    gxPointExtractor pointExtractor;
     gxPoint3DList allPoints;
 
     QListIterator<QSharedPointer<gxTreeAbstractObject> > it(this->objectList);
@@ -196,6 +226,36 @@ void spliner_dialog::onCalculate()
     }
     int index = this->ui->mappersComboBox->currentIndex();
 
+    // 2) then, get size
+    gxSize3D size;
+    bool ok;
+    double val;
+    val = ui->lineMinX->text().toDouble(&ok); size.setMinX(val);
+    val = ui->lineMaxX->text().toDouble(&ok); size.setMaxX(val);
+    val = ui->lineMinY->text().toDouble(&ok); size.setMinY(val);
+    val = ui->lineMaxY->text().toDouble(&ok); size.setMaxY(val);
+
+    // 3) get cell dimensions
+    double dX = ui->lineX->text().toDouble(&ok);
+    double dY = ui->lineY->text().toDouble(&ok);
+
+    // 4) correct size
+    int nx = floor(size.getW()/dX + 0.5);
+    int ny = floor(size.getH()/dY + 0.5);
+
+    size.setMaxX(size.getMinX() + nx * dX);
+    size.setMaxY(size.getMinY() + ny * dY);
+
+    // 5) calc
+
     QVector<double> result;
-    mapperList[index]->calcSurface(allPoints, gxSize3D(), 20, 20, result);
+    mapperList[index]->calcSurface(allPoints, size, nx + 1, ny + 1, result);
+
+    gxSurfaceData *data = new gxSurfaceData(size);
+    data->setnXY(nx + 1, ny + 1);
+    data->setData(result);
+
+    if (folder)
+        folder->createSurface(data);
+
 }

@@ -25,8 +25,7 @@
 
 #include <QVector>
 
-#include "constants.h"
-#include "math.h"
+
 
 /// Contains coordinates of 3d pooint
 struct gxPoint3D
@@ -35,62 +34,26 @@ struct gxPoint3D
     double y;
     double z;
 
-    gxPoint3D(double x, double y, double z)
-    {
-        this->x = x;
-        this->y = y;
-        this->z = z;
-    }
+    gxPoint3D(double x = 0, double y = 0, double z = 0);
 
-    gxPoint3D()
-    {
-        x = 0; y = 0; z = 0;
-    }
+    gxPoint3D& operator=(const gxPoint3D& p);
 
-    inline gxPoint3D& operator=(const gxPoint3D& p)
-    {
-        this->x = p.x;
-        this->y = p.y;
-        this->z = p.z;
+    bool operator==(gxPoint3D &p);
 
-        return *this;
-    }
+    gxPoint3D &operator+=(gxPoint3D &p);
 
-    inline bool operator==(gxPoint3D& p)
-    {
-        return ((qAbs(this->x - p.x) < Gx::Eps) &&
-                (qAbs(this->y - p.y) < Gx::Eps) &&
-                (qAbs(this->z - p.z) < Gx::Eps) );
-    }
+    double distance2D(const gxPoint3D &point) const;
 
-    inline double distance(const gxPoint3D &point) const
-    {
-        return sqrt(pow(x - point.x, 2) +
-                    pow(y - point.y, 2) +
-                    pow(z - point.z, 2));
-    }
-
-    inline double distance(const double x,
-                           const double y) const
-    {
-        return sqrt(pow(this->x - x, 2) +
-                    pow(this->y - y, 2) +
-                    pow(this->z - z, 2));
-    }
+    double distance2D(const double x, const double y) const;
 
     /// Comparison of x coordinate of points
-    static bool pointXLessThan(const gxPoint3D &p1, const gxPoint3D &p2)
-    {
-        return p1.x < p2.x;
-    }
+    static bool pointXLessThan(const gxPoint3D &p1, const gxPoint3D &p2);
 
     /// Comparison of y coordinate of points
-    static bool pointYLessThan(const gxPoint3D &p1, const gxPoint3D &p2)
-    {
-        return p1.y < p2.y;
-    }
+    static bool pointYLessThan(const gxPoint3D &p1, const gxPoint3D &p2);
 };
 
 
-typedef QVector<gxPoint3D> gxPoint3DList; //Data;
+typedef QList<gxPoint3D> gxPoint3DList;
+typedef QVector<gxPoint3D> gxPoint3DVector;
 #endif // POINT3D_H

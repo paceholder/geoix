@@ -38,7 +38,7 @@ void gxVisualObject::recreateDisplayList()
 
 void gxVisualObject::setRandomColor()
 {
-    srand((unsigned)time(0));
+    //srand((unsigned)time(0));
     double r = (double)rand()/(double)(RAND_MAX-1);
     double g = (double)rand()/(double)(RAND_MAX-1);
     double b = (double)rand()/(double)(RAND_MAX-1);

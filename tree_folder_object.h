@@ -27,6 +27,7 @@
 
 #include "tree_abstract_object.h"
 
+class gxSurfaceData;
 
 /// Base class for tree objects which can contain other tree objects
 class gxTreeFolderObject: public gxTreeAbstractObject
@@ -79,6 +80,10 @@ public slots:
     void createPoints();
     void createLines();
     void createSurface();
+    void createSurface(gxSurfaceData *data);
+    void createWell();
+
+    void importWells();
 protected:
     QList<QSharedPointer<gxTreeAbstractObject> > children;
 };

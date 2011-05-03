@@ -131,7 +131,7 @@ void gxLines::recalcSize()
     while (it.hasNext())
     {
         gxContour* contour = it.next();
-        QVectorIterator<gxPoint3D> itp(contour->data);
+        QListIterator<gxPoint3D> itp(contour->data);
         while (itp.hasNext())
         {
             gxPoint3D p = itp.next();
@@ -156,7 +156,7 @@ void gxLines::recalcSize()
 
 void gxLines::importFromFile()
 {
-    gxDataLoader::instance()->loadLinesData(contours);
+    gxDataLoader::loadLinesData(contours);
     this->recalcSize();
 
 //    updateWidgetItemState();

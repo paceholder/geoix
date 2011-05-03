@@ -42,7 +42,11 @@ SOURCES += main.cpp \
     cube.cpp \
     cubedialog.cpp \
     kriging_core.cpp \
-    kriging_mapper.cpp
+    kriging_mapper.cpp \
+    well.cpp \
+    surface_data.cpp \
+    abstract_mapper.cpp \
+    point3D.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -90,11 +94,10 @@ HEADERS += mainwindow.h \
     custom_tree_model.h \
     cube.h \
     cubedialog.h \
-    geoix_pch.h \
     edge.h \
     kriging_mapper.h \
     kriging_core.h \
-    point_extractor.h
+    well.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui \

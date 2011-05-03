@@ -47,14 +47,13 @@ class gxSurfaceData
     friend class gxDataLoader;
     friend class gxSurfaceDataIterator;
     friend class gxContourer;
-
 public:
     /// Constructor
     /*! Gets size of parent surface */
-    gxSurfaceData(gxSize3D* size3d)
+    gxSurfaceData(gxSize3D size = gxSize3D())
+        : size3d(size),
+        nx(0), ny(0)
     {
-        this->size3d = size3d;
-        nx = 0; ny = 0;
     }
     ~gxSurfaceData() {}
 
@@ -83,52 +82,33 @@ public:
     /// The same as setnX
     inline void setnY(int j) { ny = j; values.resize(nx * ny); }
 
-    inline double getStepX()
-    {
-        if (nx != 0)
-            return (size3d->getW()/(double)(nx-1));
-        else
-            return Gx::BlankDouble;
-
-    }
-
-    inline double getStepY()
-    {
-        if (ny != 0)
-            return (size3d->getH()/(double)(ny-1));
-        else
-            return Gx::BlankDouble;
-
-    }
+    double getStepX();
+    double getStepY();
 
 
     /// Returns value of real X coordinate in array's row with number i
     inline double getX(int i)
     {
-        return (size3d->getMinX() + i * getStepX());
+        return (size3d.getMinX() + i * getStepX());
     }
 
     /// Returns value of real Y coordinate in array's column with number j
     inline double getY(int j)
     {
-        return (size3d->getMinY() + j * getStepY());
+        return (size3d.getMinY() + j * getStepY());
     }
 
     /// Sets the size of surface array pointsX x pointsY
-    void setnXY(int i, int j)
-    {
-        nx = i; ny = j;
-        values.resize(nx * ny);
-    }
+    void setnXY(int i, int j);
+
+    void setData(QVector<double> vector);
 
 
-    const gxSize3D* getSize()
-    {
-        return this->size3d;
-    }
+    void setSize(gxSize3D size = gxSize3D()) { this->size3d = size; }
+
+    gxSize3D getSize() { return this->size3d; }
 private:
-    gxSize3D *size3d; ///< Size of parent surface
-
+    gxSize3D size3d; ///< Size of parent surface
 
 
     /// \private Array of surface z-values

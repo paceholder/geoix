@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -26,7 +26,7 @@
 #include <QDialog>
 
 namespace Ui {
-    class surf_prop_dialog;
+    class SurfacePropertiesDialog;
 }
 
 
@@ -43,7 +43,7 @@ protected:
     void changeEvent(QEvent *e);
     void updateUI();
 private:
-    Ui::surf_prop_dialog *ui;
+    Ui::SurfacePropertiesDialog *ui;
     gxSurface* surface;
 };
 

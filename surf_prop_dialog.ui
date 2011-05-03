@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>surf_prop_dialog</class>
- <widget class="QDialog" name="surf_prop_dialog">
+ <class>SurfacePropertiesDialog</class>
+ <widget class="QDialog" name="SurfacePropertiesDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>413</width>
-    <height>374</height>
+    <height>405</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -267,7 +267,7 @@
   <connection>
    <sender>btnOK</sender>
    <signal>clicked()</signal>
-   <receiver>surf_prop_dialog</receiver>
+   <receiver>SurfacePropertiesDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -283,7 +283,7 @@
   <connection>
    <sender>btnCancel</sender>
    <signal>clicked()</signal>
-   <receiver>surf_prop_dialog</receiver>
+   <receiver>SurfacePropertiesDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

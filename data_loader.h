@@ -33,40 +33,28 @@
 
 
 class gxSurfaceData;
-
+class gxWell;
 
 /// Class for importing data of surfaces and points from text files
 class gxDataLoader : public QObject
 {
     Q_OBJECT
 public:
-    /// This class is singletone0
-    static gxDataLoader* instance()
-    {
-        if (!inst)
-            inst = new gxDataLoader();
-
-        return inst;
-    }
-
     /// Loads points' data from txt file
-    bool loadPointsData(gxPoint3DList* data);
+    static bool loadPointsData(gxPoint3DList* data);
     /// Loads surface's data from txt file
-    bool  loadSurfaceData(gxSurfaceData* data);
+    static bool  loadSurfaceData(gxSurfaceData* data);
     /// Loads lines' data from txt file
-    bool loadLinesData(gxContourList* data);
+    static bool loadLinesData(gxContourList* data);
+
+    static bool loadWellData(gxPoint3DList* data, QStringList list = QStringList());
+
+    /// this function impord data for several wells
+    static bool loadWellsData(QList<gxPoint3DList> &wells);
 private:
-    /// Constructor
-    gxDataLoader() {}
-
-    /// Destructor
-    ~gxDataLoader() {}
-
-    /// Instance of this class (Singletone pattern)
-    static gxDataLoader* inst;
 
     /// Opens text file and fill list. List must exist
-    void openTextFile(QStringList* list);
+    static void openTextFile(QStringList &list, QString fileName = QString());
 };
 
 #endif // DATA_LOADER_H

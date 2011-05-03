@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -34,11 +34,9 @@ typedef QMap<int,QPair<int, int> > gxMap;
 
 class gxSurfaceData;
 
-
 /// Class is intended to build isolines of current gxSurface
-class gxContourer : public QObject
+class gxContourer
 {
-    Q_OBJECT
 public:
     /// Constructor. Takes z-step between isolines.
     gxContourer(double step);
@@ -51,7 +49,7 @@ public:
         \param data is the surface's data
         \param contours is container to fill
     */
-    void run(gxSurfaceData* data, gxFlatContours* contours);
+    void run(gxSurfaceData* data, gxFlatContourList* contours);
 
     /// Marks all edges in current grid crossin currens plane z=curz
     void markEdges(double curz);
@@ -79,7 +77,7 @@ private:
     gxSurfaceData* data;
 
     /// Contours set to fill
-    gxFlatContours* contours;
+    gxFlatContourList* contours;
 
     /// Vector contains marked edges
     QVector<uchar> edges; // bit

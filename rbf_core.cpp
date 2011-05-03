@@ -34,7 +34,7 @@ void gxRBFCore::setFunctionType(RBFFunctionType type)
 
 
 
-bool gxRBFCore::calculate(const gxPoint3DList points,
+bool gxRBFCore::calculate(const gxPoint3DVector points,
                           QVector<double> &coeffs)
 {
     int n = points.size();
@@ -54,7 +54,7 @@ bool gxRBFCore::calculate(const gxPoint3DList points,
     for(int i = 1; i < n; ++i)
         for(int j = 0; j < i; ++j)
         {
-            double d = gxRBFCore::coreFunction(points[i].distance(points[j]));
+            double d = gxRBFCore::coreFunction(points[i].distance2D(points[j]));
             M(i,j) = d;
             M(j,i) = d;
         }

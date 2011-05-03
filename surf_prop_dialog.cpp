@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -31,11 +31,10 @@
 
 gxSurfaceOptionsDialog::gxSurfaceOptionsDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::surf_prop_dialog)
+    ui(new Ui::SurfacePropertiesDialog)
 {
     ui->setupUi(this);
 
-//    QRegExp re("[0-9]+([\.,][0-9]+)?"); // только числа, целые или float
     QDoubleValidator* v = new QDoubleValidator(this);
 
     ui->lineStep->setValidator(v);

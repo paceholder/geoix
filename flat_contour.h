@@ -48,14 +48,14 @@ public:
     virtual ~gxFlatContour() {}
 
     /// Addin 2d point to the back of contour
-    void addPointBack(gxPoint2D& point)
+    void addPointBack(gxPoint3D& point)
     {
         data.append(gxPoint3D(point.x, point.y, z));
         checkClosing();
     }
 
     /// Addin 2d point to the frong of contour
-    void addPointFront(gxPoint2D& point)
+    void addPointFront(gxPoint3D& point)
     {
         data.prepend(gxPoint3D(point.x, point.y, z));
         checkClosing();
@@ -69,7 +69,7 @@ private:
 };
 
 /// Vector of gxFlanContour*
-typedef QVector<gxFlatContour*> gxFlatContours;
+typedef QList<gxFlatContour*> gxFlatContourList;
 
 
 #endif // FLAT_CONTOUR_H

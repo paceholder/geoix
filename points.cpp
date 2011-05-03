@@ -56,7 +56,7 @@ void gxPoints::recalcSize()
         gxSize3D size( maxdouble,  maxdouble,  maxdouble,
                       -maxdouble, -maxdouble, -maxdouble);
 
-        QVectorIterator<gxPoint3D> it (data);
+        QListIterator<gxPoint3D> it (data);
         while (it.hasNext())
         {
             gxPoint3D p = it.next();
@@ -89,14 +89,14 @@ void gxPoints::draw2D()
         gl_list_2d = glGenLists(1);
         glNewList(gl_list_2d, GL_COMPILE);
 
-            QVectorIterator<gxPoint3D> it(this->data);
+            QListIterator<gxPoint3D> it(this->data);
 
             while(it.hasNext())
             {
                 gxPoint3D p = it.next();
                 glPushMatrix();
                     glTranslatef(p.x, p.y, 0);
-                    gluDisk(quadObj, 0, 40, 10, 3);
+                    gluDisk(quadObj, 0, 5, 10, 3);
                 glPopMatrix();
             }
 
@@ -109,9 +109,13 @@ void gxPoints::draw2D()
 }
 
 
+//------------------------------------------------------------------------------
+
+
 void gxPoints::draw3D()
 {
-    glColor3f(color.redF(), color.greenF(), color.blueF());
+    int d = (qMax(size3d.getW(), size3d.getH())/70);
+
     if (!gl_list_3d)
     {
         GLUquadricObj* quadObj;
@@ -122,14 +126,24 @@ void gxPoints::draw3D()
         gl_list_3d = glGenLists(1);
         glNewList(gl_list_3d, GL_COMPILE);
 
-            QVectorIterator<gxPoint3D> it(this->data);
+            QListIterator<gxPoint3D> it(this->data);
 
             while(it.hasNext())
             {
                 gxPoint3D p = it.next();
                 glPushMatrix();
                     glTranslatef(p.x, p.y, p.z);
-                    gluDisk(quadObj, 5, 100, 10, 3);
+
+                    glColor3f(color.redF(), color.greenF(), color.blueF());
+                    gluDisk(quadObj, 0,d, 10, 3);
+
+                    glColor3f(1.0, 1.0, 1.0);
+                    gluDisk(quadObj, d * 1.1, d * 1.2, 10, 3);
+
+//                    glColor3f(0.0, 0.0, 0.0);
+//                    gluDisk(quadObj, d+11, d+15, 10, 3);
+
+
                 glPopMatrix();
             }
 
@@ -146,7 +160,7 @@ void gxPoints::draw3D()
 
 void gxPoints::importFromFile()
 {
-    gxDataLoader::instance()->loadPointsData(&(this->data));
+    gxDataLoader::loadPointsData(&(this->data));
     this->recalcSize();
 
 //    updateWidgetItemState();

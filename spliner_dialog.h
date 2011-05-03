@@ -29,26 +29,34 @@
 #include "tree_abstract_object.h"
 
 namespace Ui {
-    class spliner_dialog;
+    class SplinerDialog;
 }
 
+class gxTreeFolderObject;
+
 /// Dialog for building the spline surfaces
-class spliner_dialog : public QDialog {
+class gxSplinerDialog : public QDialog {
     Q_OBJECT
 public:
-    spliner_dialog(QWidget *parent = 0);
-    ~spliner_dialog();
+    gxSplinerDialog(QWidget *parent = 0);
+    ~gxSplinerDialog();
 
 protected:
     void changeEvent(QEvent *e);
     bool eventFilter(QObject *obj, QEvent *event);
 private:
-    Ui::spliner_dialog *ui;
+    Ui::SplinerDialog *ui;
+
+    gxTreeFolderObject *folder;
 
     /// list of modules for calculation of spline
     QList<QSharedPointer<gxAbstractMapper> > mapperList;
 
     QList<QSharedPointer<gxTreeAbstractObject> > objectList;
+
+
+    bool handleDragEnterEvent(QDragEnterEvent *event);
+    bool handleDropEvent(QDropEvent *event);
 
 public slots:
     void onClose();
@@ -58,4 +66,4 @@ private slots:
     void setupMapper(int index);
 };
 
-#endif // SPLINER_DIALOG_H
+#endif // gxSplinerDialog_H

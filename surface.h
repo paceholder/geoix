@@ -47,7 +47,7 @@ class gxSurface : public gxVisualObject
     Q_OBJECT
 public:
     /// Constructor
-    gxSurface(gxTreeFolderObject* parent);
+    gxSurface(gxTreeFolderObject* parent, gxSurfaceData *d = 0);
 
     /// Destructor
     virtual ~gxSurface();
@@ -78,7 +78,7 @@ public:
         then normalizes obtained normal and set
         it usin' opengl function gxNormal3d()
     */
-    void setNormal(double x1, double y1, double z1,
+    static void setNormal(double x1, double y1, double z1,
                    double x2, double y2, double z2);
 
     double getTransparency()
@@ -94,6 +94,7 @@ public:
 
     inline bool hasData() { return (data->values.count() > 0); }
 
+    void setData(gxSurfaceData *d);
 
 public slots:
     /// Calls appropriate functions from gxDataLoader to import data from txt file
@@ -105,7 +106,7 @@ private:
     gxSurfaceData* data;
     gxContinuesColorPalette* palette;
 
-    gxFlatContours* contours;
+    gxFlatContourList* contours;
 
     double transparency;
 };
