@@ -40,6 +40,9 @@ class gxSubTree;
 class gxProjectTreeModel;
 class gxSubtreeModel;
 
+class gxSplinerDialog;
+class gxCubeDialog;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -86,6 +89,10 @@ private:
 
     /// Main Panel. Contains rendering widgets
     QWidget* mainPanel;
+
+    /// dialogs
+    gxSplinerDialog *splinerDialog;
+    gxCubeDialog *cubeDialog;
 
     Ui::MainWindow *ui;
 private slots:

@@ -31,8 +31,6 @@ bool gxKrigingMapper::calcSurface(gxPoint3DList points,
     // least square method
 //    leastSquare(points);
 
-    QScopedPointer<gxKrigingCore> rootDomain(new gxKrigingCore());
-
     QVector<double> coeffs = gxKrigingCore::calculate(points, threshold, radius);
 
     result = fillResultArray(coeffs, points, nx, ny, size);

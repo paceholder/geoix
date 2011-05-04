@@ -36,7 +36,7 @@ gxRenderPanel::gxRenderPanel(QWidget* parent)
     setMouseTracking(true);
     setMinimumSize(20, 20);
 
-    border_width = 5;
+    border_width = 7;
     resizing = false;
     moving = false;
 

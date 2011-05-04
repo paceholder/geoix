@@ -46,7 +46,10 @@ SOURCES += main.cpp \
     well.cpp \
     surface_data.cpp \
     abstract_mapper.cpp \
-    point3D.cpp
+    point3D.cpp \
+    local_b_spline_mapper.cpp \
+    lattice.cpp \
+    bspline.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -97,11 +100,15 @@ HEADERS += mainwindow.h \
     edge.h \
     kriging_mapper.h \
     kriging_core.h \
-    well.h
+    well.h \
+    local_b_spline_mapper.h \
+    lattice.h \
+    bspline.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui \
     rbf_settings_widget.ui \
     cubedialog.ui \
-    kriging_settings_widget.ui
+    kriging_settings_widget.ui \
+    localb_settings_widget.ui
 RESOURCES += images.qrc

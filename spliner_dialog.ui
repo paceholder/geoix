@@ -331,22 +331,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>btnClose</sender>
-   <signal>clicked()</signal>
-   <receiver>SplinerDialog</receiver>
-   <slot>onClose()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>414</x>
-     <y>544</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>303</x>
-     <y>533</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>btnCalculate</sender>
    <signal>clicked()</signal>
    <receiver>SplinerDialog</receiver>
@@ -362,10 +346,43 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>btnClose</sender>
+   <signal>clicked()</signal>
+   <receiver>SplinerDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>382</x>
+     <y>551</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>322</x>
+     <y>542</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>SplinerDialog</sender>
+   <signal>rejected()</signal>
+   <receiver>SplinerDialog</receiver>
+   <slot>cleanup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>221</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>335</x>
+     <y>534</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>setupMapper(int)</slot>
   <slot>onClose()</slot>
   <slot>onCalculate()</slot>
+  <slot>cleanup()</slot>
  </slots>
 </ui>

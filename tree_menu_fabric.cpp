@@ -41,7 +41,7 @@ gxTreeMenuFabric::gxTreeMenuFabric()
     QTreeView* project_tree = gxEngine::instance()->getMainWindow()->getProjectTree();
     createFolder = new QAction(QIcon(":/images/add_folder.png"), tr("Create Folder"), project_tree);
     createPoints = new QAction(QIcon(":/images/add_points.png"), tr("Create Points"), project_tree);
-    createLines = new QAction(QIcon(":/images/add_lines.png"), tr("Create Lines"), project_tree);
+    createLines = new QAction(QIcon(":/images/chart_stock.png"), tr("Create Lines"), project_tree);
     createSurface = new QAction(QIcon(":images/add_surface.png"), tr("Create Surface"), project_tree);
     createWell = new QAction(QIcon(":/images/well.png"), tr("Create Well"), project_tree);
 

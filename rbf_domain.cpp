@@ -7,8 +7,7 @@
 /// default overlapping ratio
 const double OVERLAP = 0.2f;
 
-
-int gxRBFDomain::maxLeafCapacity = defaulfDomainCapacity;
+int gxRBFDomain::maxLeafCapacity = 300;
 
 
 
@@ -16,7 +15,7 @@ int gxRBFDomain::maxLeafCapacity = defaulfDomainCapacity;
 
 
 
-gxRBFDomain::gxRBFDomain(gxDomainLongSide parentLongSide,
+gxRBFDomain::gxRBFDomain(DomainLongSide parentLongSide,
                          const gxSize3D &s,
                          gxPoint3DVector p)
     :

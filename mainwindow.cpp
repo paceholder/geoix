@@ -34,13 +34,17 @@
 #include "project_tree_model.h"
 #include "subtree_model.h"
 
-#include "spliner_dialog.h"
 #include "tree_abstract_object.h"
+
+#include "spliner_dialog.h"
+#include "cubedialog.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    splinerDialog(0),
+    cubeDialog(0)
 {
     ui->setupUi(this);
 
@@ -52,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    if (splinerDialog) delete splinerDialog;
     delete ui;
 }
 
@@ -268,9 +273,9 @@ void MainWindow::screenShot()
 
 void MainWindow::buildMap()
 {
-    // todo: need to delete pointer after usage
-    gxSplinerDialog *dialog = new gxSplinerDialog(this);
-    dialog->show();
+    if (!splinerDialog) splinerDialog = new gxSplinerDialog(this);
+
+    splinerDialog->show();
 }
 
 
@@ -279,7 +284,9 @@ void MainWindow::buildMap()
 
 void MainWindow::createCube()
 {
+    if (!cubeDialog) cubeDialog = new gxCubeDialog(this);
 
+    cubeDialog->show();
 }
 
 

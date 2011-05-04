@@ -12,6 +12,7 @@
 
 
 const int defaulfTolerance = 0;
+const int defaulfDomainCapacity = 300;
 
 
 gxRBFMapper::gxRBFMapper()
@@ -46,7 +47,7 @@ bool gxRBFMapper::calcSurface(gxPoint3DList points,
     gxRBFDomain::setMaxLeafCapacity(this->domainCapacity);
 
     gxPoint3DVector pvec = gxPoint3DVector::fromList(points);
-    gxRBFDomain rootDomain(Width, size, pvec);
+    gxRBFDomain rootDomain(gxRBFDomain::Width, size, pvec);
 
     result = fillResultArray(rootDomain, nx, ny, size, lsCoeffs);
 

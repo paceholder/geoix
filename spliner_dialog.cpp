@@ -30,10 +30,11 @@
 
 #include "rbf_mapper.h"
 #include "kriging_mapper.h"
+#include "local_b_spline_mapper.h"
 
 /// Constructor. Creates Dialog window for spline calculations
 gxSplinerDialog::gxSplinerDialog(QWidget *parent) :
-    QDialog(parent),
+    QDialog(parent, Qt::WindowStaysOnTopHint),
     ui(new Ui::SplinerDialog),
     folder(0)
 {
@@ -42,6 +43,7 @@ gxSplinerDialog::gxSplinerDialog(QWidget *parent) :
     // adding mappers
     mapperList.append(QSharedPointer<gxAbstractMapper>(new gxRBFMapper()));
     mapperList.append(QSharedPointer<gxAbstractMapper>(new gxKrigingMapper()));
+    mapperList.append(QSharedPointer<gxLocalBSplineMapper>(new gxLocalBSplineMapper()));
 
     // adding mappers' names
     foreach(QSharedPointer<gxAbstractMapper> mapper, mapperList)
@@ -203,8 +205,10 @@ void gxSplinerDialog::setupMapper(int index)
 //------------------------------------------------------------------------------
 
 
-void gxSplinerDialog::onClose()
+void gxSplinerDialog::cleanup()
 {
+    this->objectList.clear();
+    ui->listWidget->clear();
     // do nothing
 }
 

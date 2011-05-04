@@ -59,7 +59,7 @@ private:
     bool handleDropEvent(QDropEvent *event);
 
 public slots:
-    void onClose();
+    void cleanup();
     void onCalculate();
 
 private slots:

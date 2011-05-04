@@ -65,7 +65,7 @@ QMenu* gxLines::getMenu()
 
 QIcon gxLines::getIcon()
 {
-    return QIcon(":/images/surface.png");
+    return QIcon(":/images/chart_stock.png");
 }
 
 

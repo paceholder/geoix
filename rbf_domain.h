@@ -5,25 +5,22 @@
 #include "size.h"
 #include "point3D.h"
 
-
-// some definitions below
-enum gxDomainLongSide {Length, Width};
-
-
-static const int defaulfDomainCapacity = 500;
-
-
 //------------------------------------------------------------------------------
 
 
 class gxRBFDomain
 {
 public:
+    enum DomainLongSide {Length, Width};
+
+
     /// size of domain, vector of points
-    gxRBFDomain(gxDomainLongSide parentLongSide,
+    gxRBFDomain(DomainLongSide parentLongSide,
                 const gxSize3D &s,
                 gxPoint3DVector p);
     ~gxRBFDomain();
+
+
 
     /// points belonging to this domain
     gxPoint3DVector points;
@@ -69,7 +66,7 @@ private:
     double area;
 
     /// longest side of domain
-    gxDomainLongSide longSide;
+    DomainLongSide longSide;
 
     /// coefficients of spline
     QVector<double> coeff;
