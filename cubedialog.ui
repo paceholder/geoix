@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>432</width>
-    <height>236</height>
+    <height>240</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -130,5 +130,57 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnOK</sender>
+   <signal>clicked()</signal>
+   <receiver>gxCubeDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>275</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>63</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btkCancel</sender>
+   <signal>clicked()</signal>
+   <receiver>gxCubeDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>373</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>176</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gxCubeDialog</sender>
+   <signal>accepted()</signal>
+   <receiver>gxCubeDialog</receiver>
+   <slot>createCube()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>29</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>106</x>
+     <y>229</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>createCube()</slot>
+ </slots>
 </ui>

@@ -41,6 +41,9 @@ protected:
 
     bool eventFilter(QObject *object, QEvent *event);
 
+private slots:
+    void createCube();
+
 private:
     QSharedPointer<gxTreeAbstractObject> topSurface;
     QSharedPointer<gxTreeAbstractObject> bottomSurface;

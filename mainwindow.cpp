@@ -40,11 +40,11 @@
 #include "cubedialog.h"
 
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow),
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent),
     splinerDialog(0),
-    cubeDialog(0)
+    cubeDialog(0),
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 

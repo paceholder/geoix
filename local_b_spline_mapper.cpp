@@ -69,15 +69,15 @@ bool gxLocalBSplineMapper::calcSurface(gxPoint3DList points,
                     int n = yi + j;
 
                     double w_ab = W_ab(i, j, s, t);
-                    try
-                    {
+//                    try
+//                    {
                         latt->cgrid[m][n].delta += w_ab * w_ab * w_ab * points[k].z / w_s;
                         latt->cgrid[m][n].w += w_ab * w_ab;
-                    }
-                    catch(...)
-                    {
-                        int i = 0;
-                    }
+//                    }
+//                    catch(...)
+//                    {
+//                        int i = 0;
+//                    }
                 }
 
         } // for k
@@ -85,8 +85,8 @@ bool gxLocalBSplineMapper::calcSurface(gxPoint3DList points,
 
         // теперь считаем значения сетки
         double w, delta;
-        for (unsigned int i = 0; i < latt->cgrid.size(); ++i)
-            for (unsigned int j = 0; j < latt->cgrid[i].size(); ++j)
+        for (int i = 0; i < latt->cgrid.size(); ++i)
+            for (int j = 0; j < latt->cgrid[i].size(); ++j)
             {
                 w = latt->cgrid[i][j].w;
                 delta = latt->cgrid[i][j].delta;

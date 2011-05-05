@@ -3,6 +3,8 @@
 
 #include "tree_abstract_object.h"
 #include "visual_object.h"
+#include "surface.h"
+
 
 gxCubeDialog::gxCubeDialog(QWidget *parent) :
     QDialog(parent, Qt::WindowStaysOnTopHint),
@@ -47,6 +49,10 @@ void gxCubeDialog::changeEvent(QEvent *e)
         break;
     }
 }
+
+
+
+//------------------------------------------------------------------------------
 
 
 bool gxCubeDialog::eventFilter(QObject *object, QEvent *event)
@@ -128,22 +134,18 @@ bool gxCubeDialog::handleDropEvent(QObject *object, QDropEvent *event)
     return true;
 }
 
-/*
 
- bool MainWindow::eventFilter(QObject *obj, QEvent *event)
- {
-     if (obj == textEdit) {
-         if (event->type() == QEvent::KeyPress) {
-             QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-             qDebug() << "Ate key press" << keyEvent->key();
-             return true;
-         } else {
-             return false;
-         }
-     } else {
-         // pass the event on to the parent class
-         return QMainWindow::eventFilter(obj, event);
-     }
- }
+//------------------------------------------------------------------------------
 
-*/
+
+void gxCubeDialog::createCube()
+{
+    gxSurface *topSurf = static_cast<gxSurface*>(topSurface.data());
+    gxSurface *botSurf = static_cast<gxSurface*>(bottomSurface.data());
+    gxSurface *baseSurface = ui->cbBaseGrid->currentIndex() == 0 ? topSurf : botSurf;
+
+    /// intersection of sizes of two surfaces
+    gxSize3D size = topSurf->getSize().intersect(botSurf->getSize());
+
+    if (size.volume() < 0) return;
+}

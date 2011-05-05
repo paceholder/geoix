@@ -24,6 +24,7 @@
 #define SIZE_H
 
 #include <math.h>
+#include <QtGlobal>
 
 /// Class contains 3d size variables
 class gxSize3D
@@ -99,13 +100,30 @@ public:
     /*!
         Returns diameter of sphere circumscribed around the box W x H x D
     */
-    inline double getDiameter()
+    inline double getDiameter() const
     {
         return sqrt(pow(getW(), 2) + pow(getH(), 2) + pow(getD(), 2));
     }
 
     /// returns area of field (width * height)
     inline double area() const { return getW() * getH(); }
+    /// returns volume of size (width * height * depth)
+    inline double volume() const { return getW() * getH() * getD(); }
+
+    inline gxSize3D intersect(const gxSize3D &s) const
+    {
+        gxSize3D result;
+
+        result.setSize(qMin(this->maxx, s.getMaxX()),
+                       qMin(this->maxy, s.getMaxY()),
+                       qMin(this->maxz, s.getMaxZ()),
+
+                       qMax(this->minx, s.getMinX()),
+                       qMax(this->miny, s.getMinY()),
+                       qMax(this->minz, s.getMinZ()));
+
+        return result;
+    }
 
 private:
     double minx;

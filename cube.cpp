@@ -34,3 +34,4 @@ void gxCube::setRestrictingSurfaces(gxSurface *top,
     Q_UNUSED(gridDefiningSurface);
     Q_UNUSED(sedimentationModel);
 }
+
