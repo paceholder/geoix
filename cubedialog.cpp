@@ -1,3 +1,26 @@
+//------------------------------------------------------------------------
+//    This file is part of Geoix.
+//
+//    Copyright (C) 2010 Dmitriy Pinaev
+//
+//    Geoix is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Geoix is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
+//
+//    e-mail: prof-x@inbox.ru
+//------------------------------------------------------------------------
+
+
+
 #include "cubedialog.h"
 #include "ui_cubedialog.h"
 
@@ -8,7 +31,8 @@
 
 gxCubeDialog::gxCubeDialog(QWidget *parent) :
     QDialog(parent, Qt::WindowStaysOnTopHint),
-    ui(new Ui::gxCubeDialog)
+    ui(new Ui::gxCubeDialog),
+    folder(0)
 {
     ui->setupUi(this);
 
@@ -120,6 +144,8 @@ bool gxCubeDialog::handleDropEvent(QObject *object, QDropEvent *event)
 
             gxTreeAbstractObject *abstractObject = reinterpret_cast<gxTreeAbstractObject*>(pointer);
 
+            folder = abstractObject->getParent();
+
             if (object == ui->dropWidgetTop)
                 this->topSurface = abstractObject->getSharedPointer();
             else
@@ -147,5 +173,58 @@ void gxCubeDialog::createCube()
     /// intersection of sizes of two surfaces
     gxSize3D size = topSurf->getSize().intersect(botSurf->getSize());
 
-    if (size.volume() < 0) return;
+    /// ajust z min and max
+    size.setMaxZ(qMax(topSurf->getSize().getMaxZ(), botSurf->getSize().getMaxZ()));
+    size.setMinZ(qMin(topSurf->getSize().getMinZ(), botSurf->getSize().getMinZ()));
+
+    //if (size.volume() < 0) return;
+
+    const gxSurfaceData *topSurfData = topSurf->getData();
+    const gxSurfaceData *botSurfData = botSurf->getData();
+    const gxSurfaceData *baseSurfaceData = baseSurface->getData();
+
+    /// get bound indexes
+    int minxi, minyi, maxxi, maxyi;
+
+    minxi = (int)ceil((size.getMinX() - baseSurfaceData->getSize().getMinX()) / baseSurfaceData->getStepX());
+    minyi = (int)ceil((size.getMinY() - baseSurfaceData->getSize().getMinY()) / baseSurfaceData->getStepY());
+
+    maxxi = (int)floor((size.getMaxX() - baseSurfaceData->getSize().getMinX()) / baseSurfaceData->getStepX());
+    maxyi = (int)floor((size.getMaxY() - baseSurfaceData->getSize().getMinY()) / baseSurfaceData->getStepY());
+
+    if ((minxi >= maxxi) || (minyi >= maxyi))
+        return;
+
+    /// correct size using new indexes
+    size.setSize(baseSurfaceData->getX(minxi),
+                 baseSurfaceData->getY(minyi),
+                 size.getMinZ(),
+                 baseSurfaceData->getX(maxxi),
+                 baseSurfaceData->getY(maxyi),
+                 size.getMaxZ());
+
+    /// then set this dimensions to new surface data
+    gxSurfaceData *newTopSurfaceData = new gxSurfaceData(size);
+    newTopSurfaceData->setnXY(maxxi - minxi + 1, maxyi - minyi + 1);
+
+    gxSurfaceData *newBottomSurfaceData = new gxSurfaceData(size);
+    newBottomSurfaceData->setnXY(maxxi - minxi + 1, maxyi - minyi + 1);
+
+    ///fill top and bottom surfaces
+    for(int i = minxi; i <= maxxi; ++i)
+    {
+        double x = baseSurfaceData->getX(i);
+        for(int j = minyi; j <= maxyi; ++j)
+        {
+            double y = baseSurfaceData->getY(j);
+
+            newTopSurfaceData->at(i - minxi, j - minyi) = topSurfData->at(x, y);
+            newBottomSurfaceData->at(i - minxi, j - minyi) = botSurfData->at(x, y);
+
+        }
+
+    }
+
+    if (folder)
+        folder->createCube(newTopSurfaceData, newBottomSurfaceData);
 }

@@ -15,7 +15,7 @@ public:
 
 
     /// size of domain, vector of points
-    gxRBFDomain(DomainLongSide parentLongSide,
+    gxRBFDomain(DomainLongSide pLongSide,
                 const gxSize3D &s,
                 gxPoint3DVector p);
     ~gxRBFDomain();
@@ -36,7 +36,7 @@ public:
         double d;
         if ( inRange(x,y) )
         {
-            if ( longSide == Width )
+            if ( parentLongSide == Width )
                 d = 1 - 4*(x - size.getMinX())*(size.getMaxX() - x)/(size.getW() * size.getW());
             else
                 d = 1 - 4*(y - size.getMinY())*(size.getMaxY() - y)/(size.getH() * size.getH());
@@ -66,7 +66,7 @@ private:
     double area;
 
     /// longest side of domain
-    DomainLongSide longSide;
+    DomainLongSide parentLongSide;
 
     /// coefficients of spline
     QVector<double> coeff;
@@ -99,7 +99,7 @@ private:
     /// if this domain is leaf
     inline bool isLeaf()
     {
-        return ((leftDomain == NULL) || (rightDomain == NULL));
+        return ((leftDomain == 0) || (rightDomain == 0));
     }
 };
 

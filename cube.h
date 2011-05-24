@@ -27,9 +27,12 @@
 #include "surface_data.h"
 #include "surface.h"
 
+
+class gxContinuesColorPalette;
+
 /// class represents 3d volume of rock
 /// restricted by top surface and botton surface
-class gxCube : gxVisualObject
+class gxCube : public gxVisualObject
 {
     Q_OBJECT
 public:
@@ -45,7 +48,7 @@ public:
         Three
     };
 
-    gxCube(gxTreeFolderObject* parent);
+    gxCube(gxTreeFolderObject* paren, gxSurfaceData *topData = 0, gxSurfaceData *bottomData = 0);
 
     virtual ~gxCube();
 
@@ -56,13 +59,37 @@ public:
 
     virtual void draw2D() {}
 
-    virtual void draw3D() {}
+    virtual void draw3D();
 
-    virtual void recalcSize() {}
+    virtual void recalcSize();
+
+    QIcon getIcon();
+
+    QMenu *getMenu();
+
+    QString getMimeType() { return QString("geoix/cube"); }
+
+    gxPoint3DList getPoint3DList() { return gxPoint3DList(); }
+
+    bool hasData() { return false; }
+
+public slots:
+    virtual void importFromFile() {}
+    virtual void clearData() {}
+    virtual void options() {}
 
 private:
-    QSharedPointer<gxSurfaceData> topSurfase;
-    QSharedPointer<gxSurfaceData> bottomSurface;
+    /// top and bottom surfaces
+    gxSurfaceData *topSurfase;
+    gxSurfaceData *bottomSurface;
+
+    /// 3d array with cube inner data
+    QList<gxSurfaceData> data;
+
+    gxContinuesColorPalette* palette;
+
+    void drawSurface3D(gxSurfaceData *data);
+    void drawLateralSurface();
 };
 
 

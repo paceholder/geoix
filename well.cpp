@@ -31,6 +31,9 @@ QMenu *gxWell::getMenu()
 }
 
 
+//------------------------------------------------------------------------------
+
+
 void gxWell::draw2D()
 {
     glLineWidth(2);
@@ -67,9 +70,12 @@ void gxWell::draw2D()
     glLineWidth(1);
 }
 
+//------------------------------------------------------------------------------
+
 void gxWell::draw3D()
 {
     glLineWidth(2);
+
     glColor3f(color.redF(), color.greenF(), color.blueF());
 
     GLUquadricObj* quadObj;
@@ -102,6 +108,9 @@ void gxWell::draw3D()
     gluDeleteQuadric(quadObj);
     glLineWidth(1);
 }
+
+
+//------------------------------------------------------------------------------
 
 void gxWell::recalcSize()
 {
@@ -141,12 +150,9 @@ void gxWell::recalcSize()
 
 void gxWell::importFromFile()
 {
-//    QList<gxPoint3DList> wellDataList;
-//    gxDataLoader::loadWellsData(wellDataList);
-
-
+    QString name;
     gxDataLoader::loadWellData(&data);
-
-
+    this->setName(name);
     this->recalcSize();
+
 }

@@ -36,11 +36,11 @@ struct gxMainWindowActions
     QAction* new3DPanelAct;
     QAction* closePanelAct;
 
-    QAction* buildMapAct;
-
     QAction* screenShotAct;
 
+    QAction* buildMapAct;
     QAction* createCube;
+    QAction* loadCurves;
 };
 
 

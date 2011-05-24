@@ -190,7 +190,7 @@ QVariant gxCustomTreeModel::data(const QModelIndex &index, int role) const
 QStringList gxCustomTreeModel::mimeTypes() const
 {
     QStringList types;
-    types << "geoix/surface" << "geoix/lines" << "geoix/points";
+    types << "geoix/surface" << "geoix/lines" << "geoix/points" << "geoix/well";
     return types;
 }
 

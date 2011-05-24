@@ -32,7 +32,7 @@
 gxRenderPanel::gxRenderPanel(QWidget* parent)
     : QWidget(parent)
 {
-    setGeometry(10, 10, 400, 400);
+    setGeometry(10, 10, 600, 600);
     setMouseTracking(true);
     setMinimumSize(20, 20);
 

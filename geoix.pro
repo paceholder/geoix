@@ -49,7 +49,14 @@ SOURCES += main.cpp \
     point3D.cpp \
     local_b_spline_mapper.cpp \
     lattice.cpp \
-    bspline.cpp
+    bspline.cpp \
+    fourier.cpp \
+    fourier/kiss_fft.cpp \
+    data_exporter.cpp \
+    curve.cpp \
+    curve_load_table_model.cpp \
+    curve_load_table_delegate.cpp \
+    curveloaddialog.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -103,12 +110,21 @@ HEADERS += mainwindow.h \
     well.h \
     local_b_spline_mapper.h \
     lattice.h \
-    bspline.h
+    bspline.h \
+    fourier.h \
+    fourier/kiss_fft.h \
+    fourier/_kiss_fft_guts.h \
+    data_exporter.h \
+    curve.h \
+    curve_load_table_model.h \
+    curve_load_table_delegate.h \
+    curveloaddialog.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui \
     rbf_settings_widget.ui \
     cubedialog.ui \
     kriging_settings_widget.ui \
-    localb_settings_widget.ui
+    localb_settings_widget.ui \
+    curveloader.ui
 RESOURCES += images.qrc

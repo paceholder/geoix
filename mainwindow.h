@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Geoix.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -42,6 +42,7 @@ class gxSubtreeModel;
 
 class gxSplinerDialog;
 class gxCubeDialog;
+class gxCurveLoadDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -93,6 +94,7 @@ private:
     /// dialogs
     gxSplinerDialog *splinerDialog;
     gxCubeDialog *cubeDialog;
+    gxCurveLoadDialog *curveLoadDialog;
 
     Ui::MainWindow *ui;
 private slots:
@@ -102,6 +104,7 @@ private slots:
     void closePanel();
     void buildMap();
     void createCube();
+    void loadCurves();
     void screenShot();
     void contextMenuProjectTree(const QPoint& position);
 };

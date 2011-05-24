@@ -28,6 +28,8 @@
 #include "size.h"
 #include "constants.h"
 
+#include <GL/gl.h>
+
 class gxSurface;
 class gxDataLoader;
 
@@ -52,6 +54,7 @@ public:
     /*! Gets size of parent surface */
     gxSurfaceData(gxSize3D size = gxSize3D())
         : size3d(size),
+        nullValue(Gx::BlankDouble),
         nx(0), ny(0)
     {
     }
@@ -60,13 +63,22 @@ public:
     /// Provide access to the data of surface
     inline double& at(const int i, const int j)
     {
-         return values[j*nx + i];
+        return values[j*nx + i];
     }
+
+    inline double at(const int i, const int j) const
+    {
+        return values[j * nx + i];
+    }
+
+    double at(const double x, const double y) const;
 
     inline void clear()
     {
         setnXY(0, 0);
     }
+
+    static void setNormal(double x1, double y1, double z1, double x2, double y2, double z2);
 
 
     /// Returns the number of knots in each direction
@@ -82,18 +94,18 @@ public:
     /// The same as setnX
     inline void setnY(int j) { ny = j; values.resize(nx * ny); }
 
-    double getStepX();
-    double getStepY();
+    double getStepX() const;
+    double getStepY() const;
 
 
     /// Returns value of real X coordinate in array's row with number i
-    inline double getX(int i)
+    inline double getX(int i) const
     {
         return (size3d.getMinX() + i * getStepX());
     }
 
     /// Returns value of real Y coordinate in array's column with number j
-    inline double getY(int j)
+    inline double getY(int j) const
     {
         return (size3d.getMinY() + j * getStepY());
     }
@@ -103,12 +115,21 @@ public:
 
     void setData(QVector<double> vector);
 
-
     void setSize(gxSize3D size = gxSize3D()) { this->size3d = size; }
 
-    gxSize3D getSize() { return this->size3d; }
+    gxSize3D getSize() const { return this->size3d; }
+
+    void setNullValue(double n)
+    {
+        /// todo: I SHOULD RESET ALL NULLS TO NEW VALUE
+        this->nullValue = n;
+    }
+
+    double getNullValue() const { return nullValue; }
 private:
     gxSize3D size3d; ///< Size of parent surface
+
+    double nullValue;
 
 
     /// \private Array of surface z-values

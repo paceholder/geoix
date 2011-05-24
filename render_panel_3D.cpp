@@ -31,7 +31,7 @@ gxRenderPanel3D::gxRenderPanel3D(QWidget* parent)
     border_active_color   = QColor(140,140,220);
     border_inactive_color = QColor(90,90,140);
 
-    move(40,40); // todo
+//    move(40,40); // todo
 
     gxRenderPanel* topLevelPanel = gxEngine::instance()->getTopLevelPanel();
     QGLWidget* glw = 0;

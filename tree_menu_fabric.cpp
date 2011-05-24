@@ -28,6 +28,7 @@
 #include "lines.h"
 #include "surface.h"
 #include "well.h"
+#include "cube.h"
 
 #include "mainwindow.h"
 #include "engine.h"
@@ -44,13 +45,17 @@ gxTreeMenuFabric::gxTreeMenuFabric()
     createLines = new QAction(QIcon(":/images/chart_stock.png"), tr("Create Lines"), project_tree);
     createSurface = new QAction(QIcon(":images/add_surface.png"), tr("Create Surface"), project_tree);
     createWell = new QAction(QIcon(":/images/well.png"), tr("Create Well"), project_tree);
+    createCube = new QAction(QIcon(":/images/soil_layers.png"), tr("Create Cube"), project_tree);
 
     importPoints  = new QAction(tr("Import Points"),  project_tree);
     importLines   = new QAction(tr("Import Lines"),   project_tree);
     importSurface = new QAction(tr("Import Surface"), project_tree);
     importWell    = new QAction(tr("Import Well"),    project_tree);
 
-    importWells = new QAction(tr("Import Wells"),    project_tree);
+    exportSurface = new QAction(tr("Export Surface"), project_tree);
+
+    importAndCreateWells  = new QAction(tr("Import Wells"),  project_tree);
+    importAndCreatePoints = new QAction(QIcon(":/images/add_points.png"), tr("Import Points"), project_tree);
 
     renameItem = new QAction(tr("Rename"), project_tree);
     showOptionsDialog = new QAction(tr("Options"), project_tree);
@@ -62,6 +67,9 @@ gxTreeMenuFabric::gxTreeMenuFabric()
     clearData->setIconVisibleInMenu(true);
 }
 
+
+//------------------------------------------------------------------------------
+
 gxTreeMenuFabric::~gxTreeMenuFabric()
 {
     delete menu;
@@ -72,6 +80,7 @@ gxTreeMenuFabric::~gxTreeMenuFabric()
     delete createSurface;
     delete createProject;
     delete createWell;
+    delete createCube;
 
     delete showOptionsDialog;
     delete renameItem;
@@ -83,9 +92,14 @@ gxTreeMenuFabric::~gxTreeMenuFabric()
     delete importPoints;
     delete importSurface;
 
-    delete importWells;
+    delete exportSurface;
+
+    delete importAndCreateWells;
+    delete importAndCreatePoints;
 }
 
+
+//------------------------------------------------------------------------------
 
 
 QMenu* gxTreeMenuFabric::getProjectMenu(gxProject* project)
@@ -105,6 +119,10 @@ QMenu* gxTreeMenuFabric::getProjectMenu(gxProject* project)
 
     return menu;
 }
+
+
+//------------------------------------------------------------------------------
+
 
 QMenu *gxTreeMenuFabric::getWellMenu(gxWell *well)
 {
@@ -128,6 +146,9 @@ QMenu *gxTreeMenuFabric::getWellMenu(gxWell *well)
 }
 
 
+//------------------------------------------------------------------------------
+
+
 QMenu* gxTreeMenuFabric::getFolderMenu(gxTreeFolderObject* folder)
 {
     menu->clear();
@@ -136,8 +157,10 @@ QMenu* gxTreeMenuFabric::getFolderMenu(gxTreeFolderObject* folder)
     menu->addAction(createSurface);
     menu->addAction(createFolder);
     menu->addAction(createWell);
+    menu->addAction(createCube);
     menu->addSeparator();
-    menu->addAction(importWells);
+    menu->addAction(importAndCreateWells);
+    menu->addAction(importAndCreatePoints);
     menu->addSeparator();
     menu->addAction(renameItem);
     menu->addAction(deleteItem);
@@ -150,8 +173,11 @@ QMenu* gxTreeMenuFabric::getFolderMenu(gxTreeFolderObject* folder)
     connect(createSurface, SIGNAL(triggered()), folder, SLOT(createSurface()));
     connect(createFolder, SIGNAL(triggered()), folder, SLOT(createFolder()));
     connect(createWell,   SIGNAL(triggered()), folder, SLOT(createWell()));
+    connect(createCube,   SIGNAL(triggered()), folder, SLOT(createCube()));
 
-    connect(importWells, SIGNAL(triggered()), folder, SLOT(importWells()));
+    connect(importAndCreateWells,  SIGNAL(triggered()), folder, SLOT(importAndCreateWells()));
+    connect(importAndCreatePoints, SIGNAL(triggered()), folder, SLOT(importAndCreatePoints()));
+
 
     connect(renameItem, SIGNAL(triggered()), folder, SLOT(renameItem()));
     connect(deleteItem, SIGNAL(triggered()), folder, SLOT(deleteThis()));
@@ -159,6 +185,8 @@ QMenu* gxTreeMenuFabric::getFolderMenu(gxTreeFolderObject* folder)
     return menu;
 }
 
+
+//------------------------------------------------------------------------------
 
 
 QMenu* gxTreeMenuFabric::getPointsMenu(gxPoints *points)
@@ -183,6 +211,8 @@ QMenu* gxTreeMenuFabric::getPointsMenu(gxPoints *points)
 }
 
 
+//------------------------------------------------------------------------------
+
 QMenu* gxTreeMenuFabric::getLinesMenu(gxLines* lines)
 {
     menu->clear();
@@ -205,12 +235,14 @@ QMenu* gxTreeMenuFabric::getLinesMenu(gxLines* lines)
 }
 
 
+//------------------------------------------------------------------------------
 
 
 QMenu* gxTreeMenuFabric::getSurfaceMenu(gxSurface *surface)
 {
     menu->clear();
     menu->addAction(importSurface);
+    menu->addAction(exportSurface);
     menu->addSeparator();
     menu->addAction(showOptionsDialog);
     menu->addAction(renameItem);
@@ -222,6 +254,7 @@ QMenu* gxTreeMenuFabric::getSurfaceMenu(gxSurface *surface)
         disconnect(action, 0, 0, 0);
 
     connect(importSurface, SIGNAL(triggered()), surface, SLOT(importFromFile()));
+    connect(exportSurface, SIGNAL(triggered()), surface, SLOT(exportToFile()));
     connect(showOptionsDialog, SIGNAL(triggered()), surface, SLOT(options()));
     connect(renameItem, SIGNAL(triggered()), surface, SLOT(renameItem()));
     connect(clearData, SIGNAL(triggered()), surface, SLOT(clearData()));
@@ -230,6 +263,36 @@ QMenu* gxTreeMenuFabric::getSurfaceMenu(gxSurface *surface)
     return menu;
 }
 
+//------------------------------------------------------------------------------
+
+
+QMenu* gxTreeMenuFabric::getCubeMenu(gxCube *cube)
+{
+    return 0;
+
+    Q_UNUSED(cube);
+
+//    menu->clear();
+//    menu->addAction(importSurface);
+//    menu->addSeparator();
+//    menu->addAction(showOptionsDialog);
+//    menu->addAction(renameItem);
+//    menu->addAction(clearData);
+//    menu->addSeparator();
+//    menu->addAction(deleteItem);
+
+//    foreach(QAction* action, menu->actions())
+//        disconnect(action, 0, 0, 0);
+
+//    connect(importSurface, SIGNAL(triggered()), surface, SLOT(importFromFile()));
+//    connect(showOptionsDialog, SIGNAL(triggered()), surface, SLOT(options()));
+//    connect(renameItem, SIGNAL(triggered()), surface, SLOT(renameItem()));
+//    connect(clearData, SIGNAL(triggered()), surface, SLOT(clearData()));
+//    connect(deleteItem, SIGNAL(triggered()), surface, SLOT(deleteThis()));
+
+//    return menu;
+}
+//------------------------------------------------------------------------------
 
 
 QMenu* gxTreeMenuFabric::getTreeGeneralMenu()

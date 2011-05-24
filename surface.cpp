@@ -26,6 +26,7 @@
 #undef max
 #include <limits>
 #include "data_loader.h"
+#include "data_exporter.h"
 #include "contourer_fast.h"
 #include "color_palette.h"
 #include "tree_folder_object.h"
@@ -39,16 +40,14 @@
 
 gxSurface::gxSurface(gxTreeFolderObject *parent, gxSurfaceData *d)
     : gxVisualObject(parent),
-    data(d)
+    data(d),
+    contours(new gxFlatContourList)
 {
     name = tr("New Surface");
 
     setRandomColor();
     setTransparancy(1.0);
 
-
-    // Contours filled after tracing
-    contours = new gxFlatContourList;
 
     // Here we create class containing surface data
     if (!data)
@@ -82,31 +81,6 @@ gxSurface::~gxSurface()
     delete data;    
     delete palette;
 }
-
-
-
-//------------------------------------------------------------------------------
-
-
-
-
-void gxSurface::setNormal(double x1, double y1, double z1, double x2, double y2, double z2)
-{
-    double x, y, z, l;
-
-    x =   y1 * z2 - y2 * z1;
-    y = - x1 * z2 + x2 * z1;
-    z =   x1 * y2 - x2 * y1;
-
-    l = sqrt(x*x + y*y + z*z);
-
-    x /= l;
-    y /= l;
-    z /= l;
-
-    glNormal3d(x, y, z);
-}
-
 
 
 //------------------------------------------------------------------------------
@@ -232,14 +206,12 @@ void gxSurface::draw3D()
                         (d4 != Gx::BlankDouble))
                     {
                         glBegin(GL_QUADS);
-
-
                             d = (d1 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
 
-                            setNormal(data->getX(i+1) - data->getX(i), 0, d2 - d1, 0, data->getY(j+1) - data->getY(j), d4 - d1);
+                            gxSurfaceData::setNormal(data->getX(i+1) - data->getX(i), 0, d2 - d1, 0, data->getY(j+1) - data->getY(j), d4 - d1);
                             glVertex3d(data->getX(i),   data->getY(j),   d1);
 
 
@@ -247,7 +219,7 @@ void gxSurface::draw3D()
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
-                            setNormal(0, data->getY(j+1) - data->getY(j), d3 - d2, data->getX(i) - data->getX(i+1), 0, d1 - d2);
+                            gxSurfaceData::setNormal(0, data->getY(j+1) - data->getY(j), d3 - d2, data->getX(i) - data->getX(i+1), 0, d1 - d2);
                             glVertex3d(data->getX(i+1), data->getY(j),   d2);
 
 
@@ -255,14 +227,26 @@ void gxSurface::draw3D()
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
-                            setNormal(data->getX(i) - data->getX(i+1), 0, d4 - d3, 0, data->getY(j) - data->getY(j+1), d2 - d3);
+                            gxSurfaceData::setNormal(data->getX(i) - data->getX(i+1), 0, d4 - d3, 0, data->getY(j) - data->getY(j+1), d2 - d3);
                             glVertex3d(data->getX(i+1), data->getY(j+1), d3);
 
                             d = (d4 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
                             glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
-                            setNormal(0, data->getY(j) - data->getY(j+1), d1 - d4, data->getX(i+1) - data->getX(i), 0, d3 - d4);
+                            gxSurfaceData::setNormal(0, data->getY(j) - data->getY(j+1), d1 - d4, data->getX(i+1) - data->getX(i), 0, d3 - d4);
+                            glVertex3d(data->getX(i),   data->getY(j+1), d4);
+                        glEnd();
+
+
+
+                        /// grid lines
+                        glColor3d(0.4, 0.4, 0.4);
+                        glBegin(GL_LINES);
+                            glVertex3d(data->getX(i),   data->getY(j),   d1);
+                            glVertex3d(data->getX(i+1), data->getY(j),   d2);
+
+                            glVertex3d(data->getX(i),   data->getY(j),   d1);
                             glVertex3d(data->getX(i),   data->getY(j+1), d4);
                         glEnd();
 
@@ -337,7 +321,7 @@ void gxSurface::setData(gxSurfaceData *d)
     data = d;
 
     recalcSize();
-    gxContourer contourer(this->size3d.getH()/10.0);
+    gxContourer contourer(this->size3d.getD()/10.0);
     contourer.run(this->data, this->contours);
 }
 
@@ -350,8 +334,17 @@ void gxSurface::importFromFile()
     if ( ! gxDataLoader::loadSurfaceData(this->data)) return;
 
     this->recalcSize();    
-    gxContourer contourer(this->size3d.getH()/10.0);
+    gxContourer contourer(this->size3d.getD()/10.0);
     contourer.run(this->data, this->contours);
+}
+
+
+//------------------------------------------------------------------------------
+
+
+void gxSurface::exportToFile()
+{
+    gxDataExporter::exportSurfaceData(this->data);
 }
 
 

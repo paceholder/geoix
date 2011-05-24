@@ -78,8 +78,6 @@ public:
         then normalizes obtained normal and set
         it usin' opengl function gxNormal3d()
     */
-    static void setNormal(double x1, double y1, double z1,
-                   double x2, double y2, double z2);
 
     double getTransparency()
     {
@@ -96,9 +94,12 @@ public:
 
     void setData(gxSurfaceData *d);
 
+    const gxSurfaceData *getData() { return this->data; }
+
 public slots:
     /// Calls appropriate functions from gxDataLoader to import data from txt file
     virtual void importFromFile();
+    virtual void exportToFile();
     virtual void clearData();
     virtual void options();
 

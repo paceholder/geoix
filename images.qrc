@@ -16,5 +16,6 @@
         <file>images/Box.png</file>
         <file>images/well.png</file>
         <file>images/chart_stock.png</file>
+        <file>images/soil_layers.png</file>
     </qresource>
 </RCC>

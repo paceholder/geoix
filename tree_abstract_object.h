@@ -50,7 +50,7 @@ public:
     void setName(QString name) { this->name = name; }
 
     /// Returns current object's name
-    QString  getName() { return this->name; }
+    QString  getName() const { return this->name; }
 
     /// Abstract function which returns icon for each tree object
     virtual QIcon getIcon() = 0;
@@ -62,7 +62,7 @@ public:
     virtual int count() { return 0; }
 
     /// returns parent's pointer
-    gxTreeFolderObject* getParent() { return parent; }
+    gxTreeFolderObject* getParent() const { return parent; }
 
     /// If object has parent function returns index of this object among parent's children
     virtual int getIndex() = 0;

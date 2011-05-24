@@ -31,6 +31,8 @@ gxContinuesColorPalette::gxContinuesColorPalette()
 }
 
 
+//------------------------------------------------------------------------------
+
 
 void gxContinuesColorPalette::setColorInterpolationMode(gxColorInterpolationMode mode)
 {
@@ -42,6 +44,9 @@ void gxContinuesColorPalette::setColorInterpolationMode(gxColorInterpolationMode
 }
 
 
+//------------------------------------------------------------------------------
+
+
 void gxContinuesColorPalette::addColor(double d, QColor color)
 {
     if ((d < 0) ||
@@ -51,6 +56,9 @@ void gxContinuesColorPalette::addColor(double d, QColor color)
     colors.append(QPair<double, QColor>(d, color));
     sortColors();
 }
+
+
+//------------------------------------------------------------------------------
 
 
 QColor gxContinuesColorPalette::getColor(double d)
@@ -84,8 +92,6 @@ QColor gxContinuesColorPalette::getColor(double d)
                   g1 + (g2 - g1)   * delta,
                   b1 + (b2 - b1)   * delta,
                   0);
-
-        return c;
     case HSL:
         double h1, s1, l1, h2, s2, l2;
         c1.getHslF(&h1, &s1, &l1, &a1);
@@ -95,6 +101,6 @@ QColor gxContinuesColorPalette::getColor(double d)
                   s1 + (s2 - s1)   * delta,
                   l1 + (l2 - l1)   * delta,
                   0);
-        return c;
     }
+    return c;
 }

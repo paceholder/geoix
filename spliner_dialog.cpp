@@ -261,5 +261,4 @@ void gxSplinerDialog::onCalculate()
 
     if (folder)
         folder->createSurface(data);
-
 }

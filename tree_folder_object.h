@@ -82,8 +82,11 @@ public slots:
     void createSurface();
     void createSurface(gxSurfaceData *data);
     void createWell();
+    void createCube(gxSurfaceData *topData, gxSurfaceData *bottomData);
+    void createCube();
 
-    void importWells();
+    void importAndCreateWells();
+    void importAndCreatePoints();
 protected:
     QList<QSharedPointer<gxTreeAbstractObject> > children;
 };

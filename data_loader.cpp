@@ -308,27 +308,32 @@ bool gxDataLoader::loadWellData(gxPoint3DList *data, QStringList list)
 //------------------------------------------------------------------------------
 
 
-bool gxDataLoader::loadWellsData(QList<gxPoint3DList> &wells)
+bool gxDataLoader::loadWellsData(QList<gxPoint3DList> &wells, QStringList &names)
 {
     wells.clear();
+    names.clear();
+
     QStringList files = QFileDialog::getOpenFileNames(gxEngine::instance()->getMainWindow(),
-                                                      tr("Open Several Files"),
+                                                      QObject::tr("Open Several Files"),
                                                       QApplication::applicationDirPath(),
-                                                      tr("Text Files (*)"));
+                                                      QObject::tr("Text Files (*)"));
 
     if (!files.size()) return false;
 
     foreach(QString fileName, files)
     {
-        QStringList fileContants;
-        openTextFile(fileContants, fileName);
+        QStringList fileContant;
+        openTextFile(fileContant, fileName);
 
         /// have some data
-        if (fileContants.size())
+        if (fileContant.size())
         {
             gxPoint3DList points;
-            loadWellData(&points, fileContants);
+            loadWellData(&points, fileContant);
             wells.append(points);
+
+            QFileInfo fileInfo(fileName);
+            names.append(fileInfo.fileName());
         }
     }
 
@@ -344,9 +349,9 @@ void gxDataLoader::openTextFile(QStringList &list, QString fileName)
 
     if (fileName.isEmpty())
         fileName = QFileDialog::getOpenFileName(gxEngine::instance()->getMainWindow(),
-                                                tr("Open File"),
+                                                QObject::tr("Open File"),
                                                 QApplication::applicationDirPath(),
-                                                tr("Text Files (*)"));
+                                                QObject::tr("Text Files (*)"));
 
     if (QFile::exists(fileName))
     {

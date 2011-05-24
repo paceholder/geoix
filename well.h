@@ -2,6 +2,7 @@
 #define WELL_H
 
 #include "visual_object.h"
+#include "curve.h"
 
 class gxWell : public gxVisualObject
 {
@@ -35,6 +36,7 @@ public slots:
 private:
     gxPoint3DList data;
 
+    QList<gxCurve> curves;
 };
 
 #endif // WELL_H

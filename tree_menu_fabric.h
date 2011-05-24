@@ -37,6 +37,7 @@ class gxPoints;
 class gxLines;
 class gxSurface;
 class gxWell;
+class gxCube;
 class gxVisualObject;
 
 
@@ -58,13 +59,17 @@ private:
     QAction* createLines;
     QAction* createSurface;
     QAction* createWell;
+    QAction* createCube;
 
     QAction* importPoints;
     QAction* importSurface;
     QAction* importLines;
     QAction* importWell;
 
-    QAction *importWells; // several at once
+    QAction* exportSurface;
+
+    QAction *importAndCreateWells; // several at once
+    QAction *importAndCreatePoints;
 
     QAction* showOptionsDialog;
     QAction* clearData;
@@ -97,6 +102,7 @@ public:
     QMenu* getPointsMenu(gxPoints* points);
     QMenu* getLinesMenu(gxLines* lines);
     QMenu* getSurfaceMenu(gxSurface* surface);
+    QMenu* getCubeMenu(gxCube *cube);
     QMenu* getTreeGeneralMenu();
 };
 

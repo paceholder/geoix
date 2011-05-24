@@ -37,6 +37,8 @@ gxEngine* gxEngine::inst = NULL;
 
 gxEngine::gxEngine()
 {
+    srand((unsigned)time(0));
+
     projectsRoot = new gxTreeFolderObject();
     projectsRoot->setName("Projects Root");
 }

@@ -50,6 +50,8 @@ private:
 
     Ui::gxCubeDialog *ui;
 
+    gxTreeFolderObject *folder;
+
     bool handleDragEnterEvent(QDragEnterEvent *event);
     bool handleDropEvent(QObject *object, QDropEvent *event);
 };

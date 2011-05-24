@@ -38,12 +38,14 @@
 
 #include "spliner_dialog.h"
 #include "cubedialog.h"
+#include "curveloaddialog.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
     splinerDialog(0),
     cubeDialog(0),
+    curveLoadDialog(0),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
@@ -57,6 +59,8 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     if (splinerDialog) delete splinerDialog;
+    if (cubeDialog) delete cubeDialog;
+    if (curveLoadDialog) delete curveLoadDialog;
     delete ui;
 }
 
@@ -130,6 +134,8 @@ void MainWindow::createActions()
 
     actions.createCube = new QAction(QIcon(":/images/Box.png"), tr("Create Cube"), this);
 
+    actions.loadCurves = new QAction(QIcon(), tr("Load Curves"), this);
+
     connect(actions.newProjectAct, SIGNAL(triggered()), this, SLOT(newProject()));
     connect(actions.new2DPanelAct, SIGNAL(triggered()), this, SLOT(new2DPanel()));
     connect(actions.new3DPanelAct, SIGNAL(triggered()), this, SLOT(new3DPanel()));
@@ -138,6 +144,7 @@ void MainWindow::createActions()
 
     connect(actions.screenShotAct, SIGNAL(triggered()), this, SLOT(screenShot()));
     connect(actions.createCube,    SIGNAL(triggered()), this, SLOT(createCube()));
+    connect(actions.loadCurves,    SIGNAL(triggered()), this, SLOT(loadCurves()));
 }
 
 
@@ -164,6 +171,7 @@ void MainWindow::createMenus()
     menu = this->menuBar()->addMenu(tr("&Tools"));
     menu->addAction(actions.buildMapAct);
     menu->addAction(actions.createCube);
+    menu->addAction(actions.loadCurves);
 }
 
 
@@ -287,6 +295,17 @@ void MainWindow::createCube()
     if (!cubeDialog) cubeDialog = new gxCubeDialog(this);
 
     cubeDialog->show();
+}
+
+
+//------------------------------------------------------------------------------
+
+
+void MainWindow::loadCurves()
+{
+    if (!curveLoadDialog) curveLoadDialog = new gxCurveLoadDialog(this);
+
+    curveLoadDialog->show();
 }
 
 

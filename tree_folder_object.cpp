@@ -28,6 +28,7 @@
 #include "surface.h"
 #include "well.h"
 #include "logger.h"
+#include "cube.h"
 
 #include "data_loader.h"
 
@@ -79,8 +80,6 @@ QIcon gxTreeFolderObject::getIcon()
 {
     return QIcon(":/images/Closed_folder.png");
 }
-
-
 
 
 
@@ -243,17 +242,43 @@ void gxTreeFolderObject::createSurface(gxSurfaceData *data)
     surface->update();
 }
 
+
 //------------------------------------------------------------------------------
 
-void gxTreeFolderObject::importWells()
+void gxTreeFolderObject::createCube()
+{
+    gxCube* cube = new gxCube(this);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(cube);
+    this->addChild(sharedPointer);
+
+    cube->update();
+}
+
+//------------------------------------------------------------------------------
+
+void gxTreeFolderObject::createCube(gxSurfaceData *topData, gxSurfaceData *bottomData)
+{
+    gxCube* cube = new gxCube(this, topData, bottomData);
+    QSharedPointer<gxTreeAbstractObject> sharedPointer(cube);
+    this->addChild(sharedPointer);
+
+    cube->update();
+}
+
+//------------------------------------------------------------------------------
+
+void gxTreeFolderObject::importAndCreateWells()
 {
     QList<gxPoint3DList> wellDataList;
-    gxDataLoader::loadWellsData(wellDataList);
+    QStringList names;
+    gxDataLoader::loadWellsData(wellDataList, names);
 
-    foreach(gxPoint3DList points, wellDataList)
+    for(int i = 0; i < wellDataList.size(); ++i)
     {
+        gxPoint3DList points = wellDataList[i];
         gxWell* well = new gxWell(this);
         well->setData(points);
+        well->setName(names[i]);
 
         QSharedPointer<gxWell> sharedPointer(well);
 
@@ -261,5 +286,26 @@ void gxTreeFolderObject::importWells()
 
         well->update();
     }
+}
+
+
+//------------------------------------------------------------------------------
+
+void gxTreeFolderObject::importAndCreatePoints()
+{
+//    QList<gxPoint3DList> wellDataList;
+//    gxDataLoader::loadWellsData(wellDataList);
+
+//    foreach(gxPoint3DList points, wellDataList)
+//    {
+//        gxWell* well = new gxWell(this);
+//        well->setData(points);
+
+//        QSharedPointer<gxWell> sharedPointer(well);
+
+//        this->addChild(sharedPointer);
+
+//        well->update();
+//    }
 }
 

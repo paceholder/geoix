@@ -114,7 +114,7 @@ void gxPoints::draw2D()
 
 void gxPoints::draw3D()
 {
-    int d = (qMax(size3d.getW(), size3d.getH())/70);
+    int d = (qMin(size3d.getW(), size3d.getH())/100);
 
     if (!gl_list_3d)
     {

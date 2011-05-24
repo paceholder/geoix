@@ -114,15 +114,24 @@ public:
     {
         gxSize3D result;
 
-        result.setSize(qMin(this->maxx, s.getMaxX()),
-                       qMin(this->maxy, s.getMaxY()),
-                       qMin(this->maxz, s.getMaxZ()),
-
-                       qMax(this->minx, s.getMinX()),
+        result.setSize(qMax(this->minx, s.getMinX()),
                        qMax(this->miny, s.getMinY()),
-                       qMax(this->minz, s.getMinZ()));
+                       qMax(this->minz, s.getMinZ()),
+
+                       qMin(this->maxx, s.getMaxX()),
+                       qMin(this->maxy, s.getMaxY()),
+                       qMin(this->maxz, s.getMaxZ()));
 
         return result;
+    }
+
+
+    bool inRange(const double x, const double y) const
+    {
+        return (x >= minx
+                && x <= maxx
+                && y >= miny
+                && y <= maxy);
     }
 
 private:

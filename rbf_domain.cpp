@@ -15,7 +15,7 @@ int gxRBFDomain::maxLeafCapacity = 300;
 
 
 
-gxRBFDomain::gxRBFDomain(DomainLongSide parentLongSide,
+gxRBFDomain::gxRBFDomain(DomainLongSide pLongSide,
                          const gxSize3D &s,
                          gxPoint3DVector p)
     :
@@ -24,7 +24,7 @@ gxRBFDomain::gxRBFDomain(DomainLongSide parentLongSide,
      rightDomain(0),
      size(s),
      density(p.size() / s.area()),
-     longSide(parentLongSide)
+     parentLongSide(parentLongSide)
 {
     area = size.area();
 
@@ -45,7 +45,7 @@ void gxRBFDomain::buildTree()
 {
     int n = points.size();
 
-    longSide = size.getW() > size.getH() ? Width : Length;
+    DomainLongSide longSide = size.getW() > size.getH() ? Width : Length;
 
     if ( n > gxRBFDomain::maxLeafCapacity ) // we still can create two branches
     {
