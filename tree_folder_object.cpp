@@ -233,9 +233,10 @@ void gxTreeFolderObject::createSurface()
 
 //------------------------------------------------------------------------------
 
-void gxTreeFolderObject::createSurface(gxSurfaceData *data)
+void gxTreeFolderObject::createSurface(gxSurfaceData *data, QString name)
 {
     gxSurface* surface = new gxSurface(this, data);
+    if (!name.isEmpty()) surface->setName(name);
     QSharedPointer<gxTreeAbstractObject> sharedPointer(surface);
     this->addChild(sharedPointer);
 

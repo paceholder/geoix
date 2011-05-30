@@ -2,27 +2,28 @@
 import math
 import random
 
-def save_in_file(list):
-	file = open("points", "w+")
+def save_in_file(list, num):
+	file = open("points_" + str(num), "w+")
 	for line in list:
 		file.write("%f %f %f\n" % line)
 
 	file.close()
 
 
-def generate_well():
+def generate_well(num):
 	random.seed()
     
 	list = []
-	for i in range(0, 100):
-		x = random.randint(0, 1000)
-		y = random.randint(0, 1000)
+	for i in range(0, num):
+		x = random.randint(0, 10000)
+		y = random.randint(0, 10000)
 		z = random.randint(0, 10)
 		list.append((x, y, z))
 
-	save_in_file(list)
+	save_in_file(list, num)
 
 
 
 if __name__ == "__main__":
-		generate_well()
+        for i in range(10, 18):
+                generate_well(2 ** i)

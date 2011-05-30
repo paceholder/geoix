@@ -68,9 +68,9 @@ MainWindow::~MainWindow()
 void MainWindow::createGUIObjects()
 {
     // center window
-//    QRect frect = frameGeometry();
-//    frect.moveCenter(QDesktopWidget().availableGeometry().center());
-//    move(frect.topLeft());
+    //    QRect frect = frameGeometry();
+    //    frect.moveCenter(QDesktopWidget().availableGeometry().center());
+    //    move(frect.topLeft());
 
     projectTreeModel = new gxProjectTreeModel(gxEngine::instance()->getProjectsRoot()/*, this*/);
     subtreeModel = new gxSubtreeModel();

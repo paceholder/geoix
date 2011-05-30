@@ -6,6 +6,9 @@
 
 QWidget* gxCurveLoadTableDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(index);
+    Q_UNUSED(option);
+
     QComboBox *comboBox = new QComboBox(parent);
 
     return comboBox;
@@ -17,6 +20,8 @@ QWidget* gxCurveLoadTableDelegate::createEditor(QWidget *parent, const QStyleOpt
 
 void gxCurveLoadTableDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
+    Q_UNUSED(index);
+
     QComboBox *comboBox = static_cast<QComboBox*>(editor);
 
     comboBox->addItem(tr("no"));

@@ -56,7 +56,8 @@ SOURCES += main.cpp \
     curve.cpp \
     curve_load_table_model.cpp \
     curve_load_table_delegate.cpp \
-    curveloaddialog.cpp
+    curveloaddialog.cpp \
+    cg/cg.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -118,7 +119,13 @@ HEADERS += mainwindow.h \
     curve.h \
     curve_load_table_model.h \
     curve_load_table_delegate.h \
-    curveloaddialog.h
+    curveloaddialog.h \
+    cg/tnt_array2d.h \
+    cg/tnt_array1d.h \
+    cg/tnt_i_refvec.h \
+    cg/tnt_array2d_utils.h \
+    cg/tnt_array1d_utils.h \
+    cg/cg.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui \

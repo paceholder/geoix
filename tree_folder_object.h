@@ -80,7 +80,7 @@ public slots:
     void createPoints();
     void createLines();
     void createSurface();
-    void createSurface(gxSurfaceData *data);
+    void createSurface(gxSurfaceData *data, QString name = QString());
     void createWell();
     void createCube(gxSurfaceData *topData, gxSurfaceData *bottomData);
     void createCube();

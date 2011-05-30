@@ -241,14 +241,14 @@ void gxSurface::draw3D()
 
 
                         /// grid lines
-                        glColor3d(0.4, 0.4, 0.4);
-                        glBegin(GL_LINES);
-                            glVertex3d(data->getX(i),   data->getY(j),   d1);
-                            glVertex3d(data->getX(i+1), data->getY(j),   d2);
+//                        glColor3d(0.4, 0.4, 0.4);
+//                        glBegin(GL_LINES);
+//                            glVertex3d(data->getX(i),   data->getY(j),   d1);
+//                            glVertex3d(data->getX(i+1), data->getY(j),   d2);
 
-                            glVertex3d(data->getX(i),   data->getY(j),   d1);
-                            glVertex3d(data->getX(i),   data->getY(j+1), d4);
-                        glEnd();
+//                            glVertex3d(data->getX(i),   data->getY(j),   d1);
+//                            glVertex3d(data->getX(i),   data->getY(j+1), d4);
+//                        glEnd();
 
                     }
                 }

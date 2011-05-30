@@ -24,7 +24,7 @@ gxRBFDomain::gxRBFDomain(DomainLongSide pLongSide,
      rightDomain(0),
      size(s),
      density(p.size() / s.area()),
-     parentLongSide(parentLongSide)
+     parentLongSide(pLongSide)
 {
     area = size.area();
 

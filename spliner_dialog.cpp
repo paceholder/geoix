@@ -260,5 +260,5 @@ void gxSplinerDialog::onCalculate()
     data->setData(result);
 
     if (folder)
-        folder->createSurface(data);
+        folder->createSurface(data, this->ui->lineName->text());
 }

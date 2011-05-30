@@ -28,6 +28,8 @@ public:
     void setData(gxPoint3DList newPoints) { data = newPoints; recalcSize();}
     bool hasData() { return data.size(); }
 
+    void addCurve(gxCurve curve);
+
 public slots:
     void importFromFile();
     void clearData(){}

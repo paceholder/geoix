@@ -250,7 +250,7 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
-         <widget class="QLineEdit" name="lineEdit_5">
+         <widget class="QLineEdit" name="lineName">
           <property name="text">
            <string>NewSurface</string>
           </property>
@@ -375,6 +375,22 @@
     <hint type="destinationlabel">
      <x>335</x>
      <y>534</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>SplinerDialog</receiver>
+   <slot>cleanup()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>366</x>
+     <y>92</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>272</x>
+     <y>141</y>
     </hint>
    </hints>
   </connection>

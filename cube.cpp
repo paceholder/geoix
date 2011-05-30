@@ -29,7 +29,7 @@
 
 #include "color_palette.h"
 
-gxCube::gxCube(gxTreeFolderObject *paren, gxSurfaceData *topData, gxSurfaceData *bottomData)
+gxCube::gxCube(gxTreeFolderObject *parent, gxSurfaceData *topData, gxSurfaceData *bottomData)
     : gxVisualObject(parent),
       topSurfase(topData),
       bottomSurface(bottomData)

@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="toolTip">
+   <string>Drop wells here</string>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="4" column="0" colspan="4">
     <widget class="QDialogButtonBox" name="buttonBox">

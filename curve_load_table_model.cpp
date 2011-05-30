@@ -69,23 +69,27 @@ void gxCurveLoadTableModel::clearFiles()
 
 int gxCurveLoadTableModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return wells.size();
 }
 
 
 int gxCurveLoadTableModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return 2;
 }
 
 QModelIndex gxCurveLoadTableModel::index(int row, int column, const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return createIndex(row, column, row);
 }
 
 
 QModelIndex gxCurveLoadTableModel::parent(const QModelIndex &child) const
 {
+    Q_UNUSED(child);
     return QModelIndex();
 }
 
@@ -163,5 +167,8 @@ QVariant gxCurveLoadTableModel::data(const QModelIndex &index, int role) const
 
 bool gxCurveLoadTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-
+    Q_UNUSED(index);
+    Q_UNUSED(role);
+    Q_UNUSED(value);
+    return false;
 }

@@ -9,6 +9,8 @@
 
 bool gxDataExporter::exportPointsData(gxPoint3DList* data)
 {
+    Q_UNUSED(data);
+
     QStringList list;
     return false;
 }
@@ -74,6 +76,7 @@ bool gxDataExporter::exportSurfaceData(gxSurfaceData* data)
 
 bool gxDataExporter::exportLinesData(gxContourList* data)
 {
+    Q_UNUSED(data);
     return false;
 }
 
