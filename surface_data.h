@@ -78,6 +78,13 @@ public:
         setnXY(0, 0);
     }
 
+    /// Set normal for the given plane
+    /*!
+        Plane is represented by two vectors.
+        Procedure calculates vector product of them,
+        then normalizes obtained normal and set
+        it usin' opengl function gxNormal3d()
+    */
     static void setNormal(double x1, double y1, double z1, double x2, double y2, double z2);
 
 

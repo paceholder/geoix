@@ -67,7 +67,7 @@ public:
 
 
     /// Returns gl_panel.
-    /// Function MUST BE removed
+    /// todo: Function MUST BE removed
     QGLWidget* getGLPanel()
     {
         return gl_panel;

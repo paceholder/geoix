@@ -69,6 +69,8 @@ bool gxDataExporter::exportSurfaceData(gxSurfaceData* data)
             }
         }
 
+    if (!s.isEmpty()) list << s << "\n";
+
     saveToTextFile(list);
 
     return true;

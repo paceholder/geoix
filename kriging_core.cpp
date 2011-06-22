@@ -1,23 +1,30 @@
+//------------------------------------------------------------------------
+//    This file is part of Geoix.
+//
+//    Copyright (C) 2010 Dmitriy Pinaev
+//
+//    Geoix is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Geoix is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
+//
+//    e-mail: prof-x@inbox.ru
+//------------------------------------------------------------------------
+
+
 #include "kriging_core.h"
 
 #include "math.h"
 #include "matrix.h"
 
-static double exponentialFunc(double threshold, double radius, double r)
-{
-    return threshold * (1 - exp(- r / radius));
-}
-static double gaussianFunc(double threshold, double radius, double r)
-{
-    return threshold* (1 - exp(-  r*r/(radius*radius)));
-}
-static double sphericalFunc(double threshold, double radius, double r)
-{
-    if (r < radius)
-        return threshold * (1.5 * r/radius - 0.5 * (r*r*r)/(radius*radius*radius));
-    else
-        return threshold;
-}
 
 VariogramFunction gxKrigingCore::coreFunction = exponentialFunc;
 

@@ -46,8 +46,6 @@ QVector<double> gxKrigingMapper::fillResultArray(QVector<double> &coeffs,
                                                  int nx, int ny,
                                                  const gxSize3D &size)
 {
-//    double *r = new double[nx * ny];
-
     QVector<double> result(nx * ny);
     result.fill(0);
 
@@ -68,7 +66,9 @@ QVector<double> gxKrigingMapper::fillResultArray(QVector<double> &coeffs,
             result[cell] = 0;
 
             for(int k = 0; k < coeffs.size() - 3; ++k)
-                result[cell] += coeffs[k] * gxKrigingCore::coreFunction(threshold, radius, points[k].distance2D(x, y));
+                result[cell] += coeffs[k] * gxKrigingCore::coreFunction(threshold,
+                                                                        radius,
+                                                                        points[k].distance2D(x, y));
 
             int k = coeffs.size();
             result[cell] +=  coeffs[k-3] + coeffs[k-2] * x + coeffs[k-1] * y;

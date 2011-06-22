@@ -60,7 +60,7 @@ gxRenderPanel::~gxRenderPanel()
     delete size3d;
 }
 
-//------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 
 void gxRenderPanel::dragEnterEvent(QDragEnterEvent *event)
@@ -109,7 +109,6 @@ void gxRenderPanel::dropEvent(QDropEvent *event)
         {
             gxVisualObject* vo = (gxVisualObject*)object;
             this->registerObject(vo);
-//                gxEngine::instance()->recheckTreeItems();
         }
     }
 }

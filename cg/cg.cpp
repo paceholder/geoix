@@ -17,7 +17,7 @@
 #include "cg.h"              /* for REAL, MAT, VEC ...................*/
 
 #define  ZERO      0
-#define  MACH_EPS  2e-16     /* convenient for double type on a PC    */
+#define  MACH_EPS  2e-8     /* convenient for double type on a PC    */
 
 int cg_method                /* Conjugate Gradient Method ............*/
                 (
@@ -55,55 +55,57 @@ int cg_method                /* Conjugate Gradient Method ............*/
 * ZERO, MACH_EPS, MAT, REAL, VEC.                                      *
 ***********************************************************************/
 {
-  VEC  d(n),            /* [0..n-1] auxiliary vectors d and g            */
-       g(n),            /*                                               */
-       AmalD(n);        /* [0..n-1] auxiliary vector A * d               */
-  REAL alpha,        /* coefficient                                   */
-       beta,         /* coefficient                                   */
-       dividend,     /* numerator and denominator of a fraction,      */
-       divisor,      /* respectively, used to compute alpha, beta     */
-       hilf,         /* auxiliary variables                           */
-       hilf2,        /*                                               */
-       abstand,      /* distance of two successive approximations     */
-                     /* for the solution vector x (taken in the       */
-                     /* euclidean norm)                               */
-       xnorm;        /* euklidean norm of x                           */
-  int  k, i, j;      /* loop variables                                */
+    VEC  d(n),            /* [0..n-1] auxiliary vectors d and g            */
+         g(n),            /*                                               */
+         AmalD(n);        /* [0..n-1] auxiliary vector A * d               */
+    REAL    alpha,        /* coefficient                                   */
+            beta,         /* coefficient                                   */
+            dividend,     /* numerator and denominator of a fraction,      */
+            divisor,      /* respectively, used to compute alpha, beta     */
+            hilf,         /* auxiliary variables                           */
+            hilf2,        /*                                               */
+            abstand,      /* distance of two successive approximations     */
+                         /* for the solution vector x (taken in the       */
+                         /* euclidean norm)                               */
+            xnorm;        /* euklidean norm of x                           */
+    int  k, i, j;      /* loop variables                                */
 
 
-  if (n < 2)                              /* invalid parameter?       */
-    return 1;
+    if (n < 2)                              /* invalid parameter?       */
+        return 1;
 
-  for (i = n - 1; i >= 0; i--)            /* Matrix A empty ?         */
-    if (a[i] == NULL)                     /* disallowed  !            */
-      return 1;
+    for (i = n - 1; i >= 0; i--)            /* Matrix A empty ?         */
+        if (a[i] == NULL)                     /* disallowed  !            */
+            return 1;
 
-  /*------------------------------------------------------------------*/
-  /* start with x at the origin                                       */
-  /*------------------------------------------------------------------*/
+    /*------------------------------------------------------------------*/
+    /* start with x at the origin                                       */
+    /*------------------------------------------------------------------*/
 
-  for (i = n - 1; i >= 0; i--)
-    x[i] = ZERO;
-
-
-  /*------------------------------------------------------------------*/
-  /* initialize  d and g :                                            */
-  /* d = -g = -(a*x - y) = y (since x = 0)                            */
-  /*------------------------------------------------------------------*/
-
-  for (i = n - 1; i >= 0; i--)
-    hilf = y[i],
-    d[i] = hilf,
-    g[i] = -hilf;
+    for (i = n - 1; i >= 0; i--)
+        x[i] = ZERO;
 
 
+    /*------------------------------------------------------------------*/
+    /* initialize  d and g :                                            */
+    /* d = -g = -(a*x - y) = y (since x = 0)                            */
+    /*------------------------------------------------------------------*/
 
-  /*------------------------------------------------------------------*/
-  /* perform at most n steps of the CG Method                         */
-  /*------------------------------------------------------------------*/
+    for (i = n - 1; i >= 0; i--)
+    {
+        hilf = y[i];
+        d[i] = hilf;
+        g[i] = -hilf;
+    }
 
-  for (k = n; k > 0; k--)
-  {
+
+
+    /*------------------------------------------------------------------*/
+    /* perform at most n steps of the CG Method                         */
+    /*------------------------------------------------------------------*/
+
+    for (k = n; k > 0; k--)
+    {
 
 
     /*----------------------------------------------------------------*/
@@ -112,82 +114,83 @@ int cg_method                /* Conjugate Gradient Method ............*/
     /*----------------------------------------------------------------*/
 
 
-    dividend = ZERO;
-    divisor  = ZERO;
+        dividend = ZERO;
+        divisor  = ZERO;
 
-    for (i = n - 1; i >= 0; i--)
-    {
-      dividend += d[i] * g[i];
-      for (j = 0, hilf = ZERO; j < i; j++)
-        hilf += a[j][i] * d[j];
-      for (j = i; j < n; j++)
-        hilf += a[i][j] * d[j];
-      AmalD[i] = hilf;
-      divisor += d[i] * hilf;
+        for (i = n - 1; i >= 0; i--)
+        {
+            dividend += d[i] * g[i];
+            for (j = 0, hilf = ZERO; j < i; j++)
+                hilf += a[j][i] * d[j];
+            for (j = i; j < n; j++)
+                hilf += a[i][j] * d[j];
+            AmalD[i] = hilf;
+            divisor += d[i] * hilf;
+        }
+
+        if (divisor == ZERO)
+        {
+            return 0;
+        }
+
+        alpha = -dividend / divisor;
+
+
+        /*----------------------------------------------------------------*/
+        /* compute the norm of x und  alpha * d  and find a new x:        */
+        /* x  =  x + alpha * d, then check whether x is close enough,     */
+        /* in order to stop the process before n complete steps           */
+        /*----------------------------------------------------------------*/
+
+        xnorm   = ZERO;
+        abstand = ZERO;
+
+        for (i = n - 1; i >= 0; i--)
+        {
+            hilf    =  x[i];
+            xnorm   += hilf*hilf;
+            hilf2   =  alpha * d[i];
+            abstand += hilf2*hilf2;
+            x[i]    =  hilf + hilf2;
+        }
+
+        if (abstand < MACH_EPS * xnorm)
+        {
+            return 0;
+        }
+
+
+        /*----------------------------------------------------------------*/
+        /* compute new g:   g  =  g + alpha * (a * d)                     */
+        /*----------------------------------------------------------------*/
+
+        for (i = n - 1; i >= 0; i--)
+            g[i] += alpha * AmalD[i];
+
+
+        /*----------------------------------------------------------------*/
+        /* compute new beta :                                             */
+        /* beta = (g(transp) * (a * d)) / (d(transp) * (a * d))           */
+        /*----------------------------------------------------------------*/
+
+        dividend = ZERO;
+
+        for (i = n - 1; i >= 0; i--)
+            dividend += g[i] * AmalD[i];
+
+        beta = dividend / divisor;
+
+
+        /*----------------------------------------------------------------*/
+        /* compute new d :   d  =  - g + beta * d                         */
+        /*----------------------------------------------------------------*/
+
+        for (i = n - 1; i >= 0; i--)
+            d[i] = -g[i] + beta * d[i];
+
     }
 
-    if (divisor == ZERO)
-    {
-      return 0;
-    }
-
-    alpha = -dividend / divisor;
-
-
-    /*----------------------------------------------------------------*/
-    /* compute the norm of x und  alpha * d  and find a new x:        */
-    /* x  =  x + alpha * d, then check whether x is close enough,     */
-    /* in order to stop the process before n complete steps           */
-    /*----------------------------------------------------------------*/
-
-    xnorm   = ZERO;
-    abstand = ZERO;
-
-    for (i = n - 1; i >= 0; i--)
-      hilf    =  x[i],
-      xnorm   += hilf*hilf,
-      hilf2   =  alpha * d[i],
-      abstand += hilf2*hilf2,
-      x[i]    =  hilf + hilf2;
-
-    if (abstand < MACH_EPS * xnorm)
-    {
-      return 0;
-    }
-
-
-    /*----------------------------------------------------------------*/
-    /* compute new g:   g  =  g + alpha * (a * d)                     */
-    /*----------------------------------------------------------------*/
-
-    for (i = n - 1; i >= 0; i--)
-      g[i] += alpha * AmalD[i];
-
-
-    /*----------------------------------------------------------------*/
-    /* compute new beta :                                             */
-    /* beta = (g(transp) * (a * d)) / (d(transp) * (a * d))           */
-    /*----------------------------------------------------------------*/
-
-    dividend = ZERO;
-
-    for (i = n - 1; i >= 0; i--)
-      dividend += g[i] * AmalD[i];
-
-    beta = dividend / divisor;
-
-
-    /*----------------------------------------------------------------*/
-    /* compute new d :   d  =  - g + beta * d                         */
-    /*----------------------------------------------------------------*/
-
-    for (i = n - 1; i >= 0; i--)
-      d[i] = -g[i] + beta * d[i];
-
-
-  }
-
-  return 0;
+    return 0;
 }
 
 /* ---------------------------- END cg.cpp -------------------------- */

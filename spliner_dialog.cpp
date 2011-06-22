@@ -30,6 +30,7 @@
 
 #include "rbf_mapper.h"
 #include "kriging_mapper.h"
+#include "sgs_2d_mapper.h"
 #include "local_b_spline_mapper.h"
 
 /// Constructor. Creates Dialog window for spline calculations
@@ -43,7 +44,8 @@ gxSplinerDialog::gxSplinerDialog(QWidget *parent) :
     // adding mappers
     mapperList.append(QSharedPointer<gxAbstractMapper>(new gxRBFMapper()));
     mapperList.append(QSharedPointer<gxAbstractMapper>(new gxKrigingMapper()));
-    mapperList.append(QSharedPointer<gxLocalBSplineMapper>(new gxLocalBSplineMapper()));
+    mapperList.append(QSharedPointer<gxAbstractMapper>(new gxSGS2DMapper()));
+    mapperList.append(QSharedPointer<gxAbstractMapper>(new gxLocalBSplineMapper()));
 
     // adding mappers' names
     foreach(QSharedPointer<gxAbstractMapper> mapper, mapperList)
@@ -182,18 +184,18 @@ void gxSplinerDialog::changeEvent(QEvent *e)
 
 void gxSplinerDialog::setupMapper(int index)
 {
-//    int index = ui->mappersComboBox->currentIndex();
-
     QWidget *settingsWidget = mapperList[index].data()->getSettingsWidget();
+
+    // remove previous widget
+    if (ui->settingsLayout->count())
+    {
+        QWidget * w = ui->settingsLayout->takeAt(0)->widget();
+        delete w;
+    }
+
+
     if (settingsWidget)
     {
-        // remove previous widget
-        if (ui->settingsLayout->count())
-        {
-            QWidget * w = ui->settingsLayout->takeAt(0)->widget();
-            delete w;
-        }
-
         // add new widget
         ui->settingsLayout->addWidget(settingsWidget);
         ui->settingsLayout->invalidate();

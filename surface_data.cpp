@@ -9,6 +9,9 @@ double gxSurfaceData::getStepX() const
         return Gx::BlankDouble;
 }
 
+
+//------------------------------------------------------------------------------
+
 double gxSurfaceData::getStepY() const
 {
     if (ny != 0)
@@ -18,6 +21,9 @@ double gxSurfaceData::getStepY() const
 }
 
 
+//------------------------------------------------------------------------------
+
+
 void gxSurfaceData::setnXY(int i, int j)
 {
     nx = i; ny = j;
@@ -25,12 +31,17 @@ void gxSurfaceData::setnXY(int i, int j)
 }
 
 
+//------------------------------------------------------------------------------
+
 void gxSurfaceData::setData(QVector<double> vector)
 {
     Q_ASSERT_X(values.size() == vector.size(), "set data to surface data", "size error");
 
     values = vector;
 }
+
+
+//------------------------------------------------------------------------------
 
 
 double gxSurfaceData::at(const double x, const double y) const
@@ -67,6 +78,8 @@ double gxSurfaceData::at(const double x, const double y) const
 
 }
 
+
+//------------------------------------------------------------------------------
 
 
 void gxSurfaceData::setNormal(double x1, double y1, double z1, double x2, double y2, double z2)

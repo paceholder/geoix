@@ -14,7 +14,7 @@
 //    GNU General Public License for more details.
 //
 //    You should have received a copy of the GNU General Public License
-//    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
 //
 //    e-mail: prof-x@inbox.ru
 //------------------------------------------------------------------------
@@ -24,6 +24,16 @@
 #define POINT3D_H
 
 #include <QVector>
+
+
+//template <int Dimension>
+//struct gxPoint
+//{
+//    double coords[Dimension];
+
+//    gxPoint(QVector)
+//};
+
 
 
 

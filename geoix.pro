@@ -57,7 +57,9 @@ SOURCES += main.cpp \
     curve_load_table_model.cpp \
     curve_load_table_delegate.cpp \
     curveloaddialog.cpp \
-    cg/cg.cpp
+    cg/cg.cpp \
+    kriging_var_core.cpp \
+    sgs_2d_mapper.cpp
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -125,7 +127,12 @@ HEADERS += mainwindow.h \
     cg/tnt_i_refvec.h \
     cg/tnt_array2d_utils.h \
     cg/tnt_array1d_utils.h \
-    cg/cg.h
+    cg/cg.h \
+    kriging_var_core.h \
+    kriging_core_functions.h \
+    sgs_2d_mapper.h \
+    gaussian_distr.h \
+    cumulative_distribution.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui \

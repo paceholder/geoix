@@ -4,28 +4,63 @@
 
 void gxAbstractMapper::removeEqualPoints(gxPoint3DList &points)
 {
+    /// arranges points by x coordinate
     qSort(points.begin(), points.end(), gxPoint3D::pointXLessThan);
 
+    /// new cleared array
     gxPoint3DList newPointList;
 
     while (points.size())
     {
-        gxPoint3DList toBeAveraged;
 
-        // take fist
         gxPoint3D point = points.takeFirst();
+        gxPoint3DList ySortedList;
+        ySortedList.append(point);
 
-        // put in temporal array
-        toBeAveraged.append(point);
-
-        // looking for duplicate
-        while (points.size()
-            && fabs(points.first().y - point.y) < Gx::Eps)
+        // collect points with equal X's
+        while(points.size()
+              && (fabs(points.first().x - point.x) < Gx::Eps))
         {
-            toBeAveraged.append(points.takeFirst());
+            ySortedList.append(points.takeFirst());
+        }
+        // sort by y
+        qSort(ySortedList.begin(), ySortedList.end(), gxPoint3D::pointYLessThan);
+
+        //----
+
+        while (ySortedList.size())
+        {
+            // local average array
+            gxPoint3DList toBeAveraged;
+            point = ySortedList.takeFirst();
+            toBeAveraged.append(point);
+
+            while (ySortedList.size()
+                   && (fabs(ySortedList.first().x - point.x) < Gx::Eps)
+                   && (fabs(ySortedList.first().y - point.y) < Gx::Eps))
+            {
+                toBeAveraged.append(ySortedList.takeFirst());
+            }
+
+            newPointList.append(average(toBeAveraged));
         }
 
-        newPointList.append(average(toBeAveraged));
+
+        // take fist
+//        gxPoint3D point = points.takeFirst();
+
+//        // put in temporal array
+//        toBeAveraged.append(point);
+
+//        // collect points with equal X
+//        while (points.size()
+//              && (fabs(points.first().x - point.x) < Gx::Eps)
+////              && (fabs(points.first().y - point.y) < Gx::Eps))
+//        {
+//            toBeAveraged.append(points.takeFirst());
+//        }
+
+//        newPointList.append(average(toBeAveraged));
     }
 
     points = newPointList;

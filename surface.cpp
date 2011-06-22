@@ -41,7 +41,9 @@
 gxSurface::gxSurface(gxTreeFolderObject *parent, gxSurfaceData *d)
     : gxVisualObject(parent),
     data(d),
-    contours(new gxFlatContourList)
+    contours(new gxFlatContourList),
+//    cellFillPattern(gxSurface::continues)
+    cellFillPattern(gxSurface::discrete)
 {
     name = tr("New Surface");
 
@@ -116,26 +118,56 @@ void gxSurface::draw2D()
                         (d4 != Gx::BlankDouble))
                     {
                         glBegin(GL_QUADS);
-                            d = (d1 - data->size3d.getMinZ()) / height;
-                            c = palette->getColor(d);
-                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+                            if (cellFillPattern != gxSurface::continues)
+                            {
+                                d = (d1 + d2 + d3 + d4)/4.0 - data->size3d.getMinZ();
+                                c = palette->getColor(d/height);
+                                glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+                            }
+
+
+                            if (cellFillPattern == gxSurface::continues)
+                            {
+                                d = (d1 - data->size3d.getMinZ()) / height;
+                                c = palette->getColor(d);
+                                glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+                            }
                             glVertex2d(data->getX(i),   data->getY(j));
 
 
-                            d = (d2 - data->size3d.getMinZ()) / height;
-                            c = palette->getColor(d);
-                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+                            if (cellFillPattern == gxSurface::continues)
+                            {
+                                d = (d2 - data->size3d.getMinZ()) / height;
+                                c = palette->getColor(d);
+                                glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+                            }
                             glVertex2d(data->getX(i+1), data->getY(j));
 
 
-                            d = (d3 - data->size3d.getMinZ()) / height;
-                            c = palette->getColor(d);
-                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+                            if (cellFillPattern == gxSurface::continues)
+                            {
+                                d = (d3 - data->size3d.getMinZ()) / height;
+                                c = palette->getColor(d);
+                                glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+                            }
                             glVertex2d(data->getX(i+1), data->getY(j+1));
 
-                            d = (d4 - data->size3d.getMinZ()) / height;
-                            c = palette->getColor(d);
-                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+                            if (cellFillPattern == gxSurface::continues)
+                            {
+                                d = (d4 - data->size3d.getMinZ()) / height;
+                                c = palette->getColor(d);
+                                glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+                            }
+                            glVertex2d(data->getX(i),   data->getY(j+1));
+                        glEnd();
+
+
+                        glColor3d(0.4, 0.4, 0.4);
+                        glBegin(GL_LINES);
+                            glVertex2d(data->getX(i),   data->getY(j));
+                            glVertex2d(data->getX(i+1), data->getY(j));
+
+                            glVertex2d(data->getX(i),   data->getY(j));
                             glVertex2d(data->getX(i),   data->getY(j+1));
                         glEnd();
 
@@ -143,28 +175,37 @@ void gxSurface::draw2D()
                 }
             }
 
+//            drawContours2D();
 
-            // contours
-            glColor4f(0.0, 0.0, 0.0, transparency);
-
-            QListIterator<gxFlatContour*> it(*contours);
-            while (it.hasNext())
-            {
-                gxFlatContour* c = it.next();
-
-                glBegin(GL_LINE_STRIP);
-                    for(int i = 0; i < c->count(); ++i)
-                    {
-                        glVertex2d(c->at(i).x, c->at(i).y);
-                    }
-        //                    if (c->isClosed())
-        //                        glVertex3d(c->at(0).x, c->at(0).y, c->getZ());
-                glEnd();
-            }
         glEndList();
     }    
 
     glCallList(gl_list_2d);
+}
+
+
+//------------------------------------------------------------------------------
+
+
+void gxSurface::drawContours2D()
+{
+    // contours
+    glColor4f(0.0, 0.0, 0.0, transparency);
+
+    QListIterator<gxFlatContour*> it(*contours);
+    while (it.hasNext())
+    {
+        gxFlatContour* c = it.next();
+
+        glBegin(GL_LINE_STRIP);
+            for(int i = 0; i < c->count(); ++i)
+            {
+                glVertex2d(c->at(i).x, c->at(i).y);
+            }
+//                    if (c->isClosed())
+//                        glVertex3d(c->at(0).x, c->at(0).y, c->getZ());
+        glEnd();
+    }
 }
 
 
@@ -217,7 +258,9 @@ void gxSurface::draw3D()
 
                             d = (d2 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
-                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+
+                            if (cellFillPattern == gxSurface::continues)
+                                glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
                             gxSurfaceData::setNormal(0, data->getY(j+1) - data->getY(j), d3 - d2, data->getX(i) - data->getX(i+1), 0, d1 - d2);
                             glVertex3d(data->getX(i+1), data->getY(j),   d2);
@@ -225,14 +268,17 @@ void gxSurface::draw3D()
 
                             d = (d3 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
-                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+
+                            if (cellFillPattern == gxSurface::continues)
+                                glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
                             gxSurfaceData::setNormal(data->getX(i) - data->getX(i+1), 0, d4 - d3, 0, data->getY(j) - data->getY(j+1), d2 - d3);
                             glVertex3d(data->getX(i+1), data->getY(j+1), d3);
 
                             d = (d4 - data->size3d.getMinZ()) / height;
                             c = palette->getColor(d);
-                            glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
+                            if (cellFillPattern == gxSurface::continues)
+                                glColor4d(c.redF(), c.greenF(), c.blueF(), transparency);
 
                             gxSurfaceData::setNormal(0, data->getY(j) - data->getY(j+1), d1 - d4, data->getX(i+1) - data->getX(i), 0, d3 - d4);
                             glVertex3d(data->getX(i),   data->getY(j+1), d4);
@@ -253,23 +299,11 @@ void gxSurface::draw3D()
                     }
                 }
             }
+
+
+            //--------------
             // contours
-            glColor3f(0.0, 0.0, 0.0);
-
-            QListIterator<gxFlatContour*> it(*contours);
-            while (it.hasNext())
-            {
-                gxFlatContour* c = it.next();
-
-                glBegin(GL_LINE_STRIP);
-                    for(int i = 0; i < c->count(); ++i)
-                    {
-                        glVertex3d(c->at(i).x, c->at(i).y, c->getZ());
-                    }
-//                    if (c->isClosed())
-//                        glVertex3d(c->at(0).x, c->at(0).y, c->getZ());
-                glEnd();
-            }
+            drawContours3D();
 
         glEndList();
     }
@@ -279,6 +313,28 @@ void gxSurface::draw3D()
     glEnable(GL_DEPTH_TEST);
 }
 
+//------------------------------------------------------------------------------
+
+
+void gxSurface::drawContours3D()
+{
+    glColor3f(0.0, 0.0, 0.0);
+
+    QListIterator<gxFlatContour*> it(*contours);
+    while (it.hasNext())
+    {
+        gxFlatContour* c = it.next();
+
+        glBegin(GL_LINE_STRIP);
+            for(int i = 0; i < c->count(); ++i)
+            {
+                glVertex3d(c->at(i).x, c->at(i).y, c->getZ());
+            }
+//                    if (c->isClosed())
+//                        glVertex3d(c->at(0).x, c->at(0).y, c->getZ());
+        glEnd();
+    }
+}
 
 //------------------------------------------------------------------------------
 

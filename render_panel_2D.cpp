@@ -66,7 +66,6 @@ void gxRenderPanel2D::gldraw()
 
     // border afterall
     coord_system->draw();
-
 }
 
 

@@ -28,7 +28,7 @@ namespace Gx
 {
     const double BlankDouble = -9999.0;
     const int BlankInt = -9999;
-    const double Eps = 1e-6; ///< very small value =)
+    const double Eps = 1e-4; ///< very small value =)
 }
 
 #endif // CONSTANTS_H

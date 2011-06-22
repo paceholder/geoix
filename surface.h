@@ -71,18 +71,9 @@ public:
         return list;
     }
 
-    /// Set normal for the given plane
-    /*!
-        Plane is represented by two vectors.
-        Procedure calculates vector product of them,
-        then normalizes obtained normal and set
-        it usin' opengl function gxNormal3d()
-    */
+    ///
 
-    double getTransparency()
-    {
-        return this->transparency;
-    }
+    double getTransparency() { return this->transparency; }
 
     void setTransparancy(double value)
     {
@@ -90,7 +81,17 @@ public:
             this->transparency = value;
     }
 
-    inline bool hasData() { return (data->values.count() > 0); }
+
+    /// Defines type of fill for each cell
+    enum gxCellFillPattern
+    {
+        continues, // each cell's corner has own color
+        discrete  // each cell's corner has unified color
+    } cellFillPattern;
+
+    ///
+
+    inline bool hasData() { return data && (data->values.count() > 0); }
 
     void setData(gxSurfaceData *d);
 
@@ -110,6 +111,10 @@ private:
     gxFlatContourList* contours;
 
     double transparency;
+
+    void drawContours2D();
+
+    void drawContours3D();
 };
 
 

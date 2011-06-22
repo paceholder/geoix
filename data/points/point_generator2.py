@@ -2,6 +2,9 @@
 import math
 import random
 
+""" Script generates two sets of points: for top and bottom of some horisont """
+
+
 def save_in_file(list, name):
 	file = open("points_"+name, "w+")
 	for line in list:

@@ -2,6 +2,9 @@
 import math
 import random
 
+
+""" Script generates file with point data named points_numpoints. """
+
 def save_in_file(list, num):
 	file = open("points_" + str(num), "w+")
 	for line in list:
@@ -25,5 +28,5 @@ def generate_well(num):
 
 
 if __name__ == "__main__":
-        for i in range(10, 18):
+        for i in range(5, 18):
                 generate_well(2 ** i)
