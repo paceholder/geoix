@@ -61,14 +61,14 @@ void gxPoints::recalcSize()
         {
             gxPoint3D p = it.next();
 
-            if (p.x < size.getMinX()) size.setMinX(p.x);
-            if (p.x > size.getMaxX()) size.setMaxX(p.x);
+            if (p.x() < size.getMinX()) size.setMinX(p.x());
+            if (p.x() > size.getMaxX()) size.setMaxX(p.x());
 
-            if (p.y < size.getMinY()) size.setMinY(p.y);
-            if (p.y > size.getMaxY()) size.setMaxY(p.y);
+            if (p.y() < size.getMinY()) size.setMinY(p.y());
+            if (p.y() > size.getMaxY()) size.setMaxY(p.y());
 
-            if (p.z < size.getMinZ()) size.setMinZ(p.z);
-            if (p.z > size.getMaxZ()) size.setMaxZ(p.z);
+            if (p.z() < size.getMinZ()) size.setMinZ(p.z());
+            if (p.z() > size.getMaxZ()) size.setMaxZ(p.z());
         }
 
         this->size3d.setSize(size);
@@ -76,8 +76,13 @@ void gxPoints::recalcSize()
 }
 
 
+//------------------------------------------------------------------------------
+
+
 void gxPoints::draw2D()
 {
+    int d = (qMin(size3d.getW(), size3d.getH())/150);
+
     glColor3f(color.redF(), color.greenF(), color.blueF());
     if (!gl_list_2d)
     {
@@ -95,8 +100,8 @@ void gxPoints::draw2D()
             {
                 gxPoint3D p = it.next();
                 glPushMatrix();
-                    glTranslatef(p.x, p.y, 0);
-                    gluDisk(quadObj, 0, 5, 10, 3);
+                    glTranslatef(p.x(), p.y(), 0);
+                    gluDisk(quadObj, 0, d, 10, 3);
                 glPopMatrix();
             }
 
@@ -132,10 +137,10 @@ void gxPoints::draw3D()
             {
                 gxPoint3D p = it.next();
                 glPushMatrix();
-                    glTranslatef(p.x, p.y, p.z);
+                    glTranslatef(p.x(), p.y(), p.z());
 
                     glColor3f(color.redF(), color.greenF(), color.blueF());
-                    gluDisk(quadObj, 0,d, 10, 3);
+                    gluDisk(quadObj, 0, d, 10, 3);
 
                     glColor3f(1.0, 1.0, 1.0);
                     gluDisk(quadObj, d * 1.1, d * 1.2, 10, 3);

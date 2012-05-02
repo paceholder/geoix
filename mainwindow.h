@@ -106,7 +106,7 @@ private slots:
     void createCube();
     void loadCurves();
     void screenShot();
-    void contextMenuProjectTree(const QPoint& position);
+    void onCustomContextMenuRequested(const QPoint& position);
 };
 
 #endif // MAINWINDOW_H

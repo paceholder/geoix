@@ -87,7 +87,7 @@ public:
     {
         continues, // each cell's corner has own color
         discrete  // each cell's corner has unified color
-    } cellFillPattern;
+    };
 
     ///
 
@@ -107,6 +107,7 @@ public slots:
 private:
     gxSurfaceData* data;
     gxContinuesColorPalette* palette;
+    gxCellFillPattern cellFillPattern;
 
     gxFlatContourList* contours;
 

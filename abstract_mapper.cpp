@@ -19,7 +19,7 @@ void gxAbstractMapper::removeEqualPoints(gxPoint3DList &points)
 
         // collect points with equal X's
         while(points.size()
-              && (fabs(points.first().x - point.x) < Gx::Eps))
+              && (fabs(points.first().x() - point.x()) < Gx::Eps))
         {
             ySortedList.append(points.takeFirst());
         }
@@ -36,8 +36,8 @@ void gxAbstractMapper::removeEqualPoints(gxPoint3DList &points)
             toBeAveraged.append(point);
 
             while (ySortedList.size()
-                   && (fabs(ySortedList.first().x - point.x) < Gx::Eps)
-                   && (fabs(ySortedList.first().y - point.y) < Gx::Eps))
+                   && (fabs(ySortedList.first().x() - point.x()) < Gx::Eps)
+                   && (fabs(ySortedList.first().y() - point.y()) < Gx::Eps))
             {
                 toBeAveraged.append(ySortedList.takeFirst());
             }
@@ -45,22 +45,6 @@ void gxAbstractMapper::removeEqualPoints(gxPoint3DList &points)
             newPointList.append(average(toBeAveraged));
         }
 
-
-        // take fist
-//        gxPoint3D point = points.takeFirst();
-
-//        // put in temporal array
-//        toBeAveraged.append(point);
-
-//        // collect points with equal X
-//        while (points.size()
-//              && (fabs(points.first().x - point.x) < Gx::Eps)
-////              && (fabs(points.first().y - point.y) < Gx::Eps))
-//        {
-//            toBeAveraged.append(points.takeFirst());
-//        }
-
-//        newPointList.append(average(toBeAveraged));
     }
 
     points = newPointList;
@@ -78,9 +62,9 @@ gxPoint3D gxAbstractMapper::average(gxPoint3DList &toBeAveraged)
         averaged += point;
     }
 
-    averaged.x /= double(toBeAveraged.size());
-    averaged.y /= double(toBeAveraged.size());
-    averaged.z /= double(toBeAveraged.size());
+    averaged.x() /= double(toBeAveraged.size());
+    averaged.y() /= double(toBeAveraged.size());
+    averaged.z() /= double(toBeAveraged.size());
 
     return averaged;
 }
@@ -88,7 +72,7 @@ gxPoint3D gxAbstractMapper::average(gxPoint3DList &toBeAveraged)
 
 
 
-QVector<double> gxAbstractMapper::leastSquare(gxPoint3DList &points)
+std::vector<double> gxAbstractMapper::leastSquare(gxPoint3DList &points)
 {
     math::matrix<double> M(3,3);
     math::matrix<double> D(3,1);
@@ -109,9 +93,9 @@ QVector<double> gxAbstractMapper::leastSquare(gxPoint3DList &points)
     for(int i = 0; i < points.size(); ++i)
     {
         double X,Y,Z;
-        X = points[i].x;
-        Y = points[i].y;
-        Z = points[i].z;
+        X = points[i].x();
+        Y = points[i].y();
+        Z = points[i].z();
 
         M(0,0) += X*X;
         M(0,1) += X*Y;
@@ -132,10 +116,12 @@ QVector<double> gxAbstractMapper::leastSquare(gxPoint3DList &points)
     double A = abc(0,0), B = abc(1,0), C = abc(2,0);
     for(int i = 0; i < points.size(); ++i)
     {
-        points[i].z -=  A * points[i].x + B * points[i].y + C;
+        points[i].z() -=  A * points[i].x() + B * points[i].y() + C;
     }
 
-    QVector<double> result;
-    result << A << B << C;
+    std::vector<double>  result;
+    result.push_back(A);
+    result.push_back(B);
+    result.push_back(C);
     return result;
 }

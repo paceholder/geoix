@@ -35,14 +35,14 @@ gxRBFMapper::~gxRBFMapper()
 bool gxRBFMapper::calcSurface(gxPoint3DList points,
                               const gxSize3D size,
                               const int nx, const int ny,
-                              QVector<double> &result)
+                              std::vector<double> &result)
 {
     // first of all we should delete points
     // with equal x and y coords.
     //removeEqualPoints(points);
 
     // least square method
-    QVector<double> lsCoeffs = leastSquare(points);
+    std::vector<double> lsCoeffs = leastSquare(points);
 
     gxRBFDomain::setMaxLeafCapacity(this->domainCapacity);
 
@@ -59,12 +59,12 @@ bool gxRBFMapper::calcSurface(gxPoint3DList points,
 
 
 
-QVector<double> gxRBFMapper::fillResultArray(gxRBFDomain &rootDomain,
+std::vector<double> gxRBFMapper::fillResultArray(gxRBFDomain &rootDomain,
                                              const int nx, const int ny,
                                              const gxSize3D &size,
-                                             QVector<double> lsCoeffs)
+                                             std::vector<double> lsCoeffs)
 {
-    QVector<double> result(nx * ny);
+    std::vector<double> result(nx * ny);
 
     double stepX = size.getW()/double(nx -1);
     double stepY = size.getH()/double(ny -1);

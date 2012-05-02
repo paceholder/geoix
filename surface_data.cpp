@@ -33,11 +33,18 @@ void gxSurfaceData::setnXY(int i, int j)
 
 //------------------------------------------------------------------------------
 
-void gxSurfaceData::setData(QVector<double> vector)
+void gxSurfaceData::setData(QVector<double> &vector)
 {
     Q_ASSERT_X(values.size() == vector.size(), "set data to surface data", "size error");
 
     values = vector;
+}
+
+void gxSurfaceData::setData(std::vector<double> &vector)
+{
+    Q_ASSERT_X(values.size() == vector.size(), "set data to surface data", "size error");
+
+    values = QVector<double>().fromStdVector(vector);
 }
 
 

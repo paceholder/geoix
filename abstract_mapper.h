@@ -3,7 +3,7 @@
 
 #include <QtCore>
 
-#include "point3D.h"
+#include "point_nd.h"
 #include "size.h"
 #include "matrix.h"
 
@@ -19,7 +19,7 @@ public:
     virtual bool calcSurface(const gxPoint3DList points,
                              const gxSize3D size,
                              const int nx, const int ny,
-                             QVector<double> &result) = 0;
+                             std::vector<double> &result) = 0;
 
     QString getName() { return name; }
 
@@ -33,7 +33,7 @@ protected:
 
     gxPoint3D average(gxPoint3DList &toBeAveraged);
 
-    QVector<double> leastSquare(gxPoint3DList &points);
+    std::vector<double> leastSquare(gxPoint3DList &points);
 
 };
 

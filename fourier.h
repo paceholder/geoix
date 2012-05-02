@@ -14,6 +14,7 @@ public:
     static QVector<gxComplex> directFFT(QVector<gxComplex> vector);
     static QVector<gxComplex> inverseFFT(QVector<gxComplex> vector);
 private:
+    /// Makes expansion of the array to length 2^n
     static void expandArrayToPowerOfTwo(QVector<gxComplex> &vector);
 };
 

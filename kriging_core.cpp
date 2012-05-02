@@ -23,26 +23,44 @@
 #include "kriging_core.h"
 
 #include "math.h"
-#include "matrix.h"
 
 
-VariogramFunction gxKrigingCore::coreFunction = exponentialFunc;
+
+inline double grad_to_rad(double grad)
+{
+    return ( grad * M_PI ) / 180.0;
+}
+
+
+
+
+gxUniversalKriginigCore2D::gxUniversalKriginigCore2D(gxKrigingParams2D &krigingParams)
+    : params(krigingParams),
+      coreFunction(exponentialFunc),
+      transformation(2, 2)
+{
+    /// creates rotation / scale matrix
+    createTransformation2D();
+
+    setVariogramModel();
+}
+
 
 //------------------------------------------------------------------------------
 
 
-void gxKrigingCore::setVariogramModel(VariogramModel model)
+void gxUniversalKriginigCore2D::setVariogramModel()
 {
-    switch(model)
+    switch(params.variogramModel)
     {
-    case Exponential:
-        gxKrigingCore::coreFunction = exponentialFunc;
+    case gxKrigingParams2D::Exponential:
+        coreFunction = exponentialFunc;
         break;
-    case Gaussian:
-        gxKrigingCore::coreFunction = gaussianFunc;
+    case gxKrigingParams2D::Gaussian:
+        coreFunction = gaussianFunc;
         break;
-    case Spherical:
-        gxKrigingCore::coreFunction = sphericalFunc;
+    case gxKrigingParams2D::Spherical:
+        coreFunction = sphericalFunc;
         break;
     }
 }
@@ -52,11 +70,9 @@ void gxKrigingCore::setVariogramModel(VariogramModel model)
 //------------------------------------------------------------------------------
 
 
-QVector<double> gxKrigingCore::calculate(const gxPoint3DList points,
-                                         const double threshold,
-                                         const double radius)
+std::vector<double> gxUniversalKriginigCore2D::calculate(const gxPoint3DList points)
 {
-    QVector<double> coeffs;
+    std::vector<double> coeffs;
     int n = points.size();
     math::matrix<double> M(n+3,n+3), D(n+3,1), R(n+3,1); // matrix and free coefficients
 
@@ -74,7 +90,7 @@ QVector<double> gxKrigingCore::calculate(const gxPoint3DList points,
     for(int i = 1; i < n; ++i)
         for(int j = 0; j <= i; ++j)
         {
-            double d = gxKrigingCore::coreFunction(threshold, radius, points[i].distance2D(points[j]));
+            double d = this->operator()(points[i], points[j]);
             M(i,j) = d;
             M(j,i) = d;
         }
@@ -83,11 +99,11 @@ QVector<double> gxKrigingCore::calculate(const gxPoint3DList points,
     for (int j = 0; j < n; ++j)
     {
         M(n,j) = 1;
-        M(n+1,j) = points[j].x;  //
-        M(n+2,j) = points[j].y;
+        M(n+1,j) = points[j].x();  //
+        M(n+2,j) = points[j].y();
         M(j,n) = 1;
-        M(j,n+1) = points[j].x;
-        M(j,n+2) = points[j].y;
+        M(j,n+1) = points[j].x();
+        M(j,n+2) = points[j].y();
     }
 
     // actually not necessary
@@ -101,7 +117,7 @@ QVector<double> gxKrigingCore::calculate(const gxPoint3DList points,
 
     /// free column
     for (int i = 0; i < n; ++i)
-        D(i,0) = points[i].z;
+        D(i,0) = points[i].z();
 
     // solving
     R = M.Solve(D); // TODO
@@ -109,7 +125,69 @@ QVector<double> gxKrigingCore::calculate(const gxPoint3DList points,
     /// fetching coefficients
     coeffs.clear();
     for(int i = 0; i < n + 3; ++i)
-        coeffs.append(R(i,0));
+        coeffs.push_back(R(i,0));
 
     return coeffs;
+}
+
+
+//------------------------------------------------------------------------------
+
+
+double gxUniversalKriginigCore2D::operator()(const double h) const
+{
+    return coreFunction(h, params);
+}
+
+
+//------------------------------------------------------------------------------
+
+
+double gxUniversalKriginigCore2D::operator()(const gxPoint3D &p1, const gxPoint3D &p2) const
+{
+    /// direction vector
+    double x, y;
+    x = p2.x() - p1.x();
+    y = p2.y() - p1.y();
+
+
+    // matrix transformation (rotation)
+    double h = 0.0;
+    double d;
+    d = x * transformation(0, 0) + y * transformation(1, 0);
+    h += d * d;
+
+    d = x * transformation(0, 1) + y * transformation(1, 1);
+    h += d * d;
+
+    h = sqrt(h);
+
+    return coreFunction(h, params);
+}
+
+
+//------------------------------------------------------------------------------
+
+
+void gxUniversalKriginigCore2D::createTransformation2D()
+{
+    math::matrix<double> scale(2, 2);
+    math::matrix<double> rotate_z(2, 2);
+
+    scale(0, 0) = 1.0;
+    scale(1, 1) = params.rangex/params.rangey;
+//    scale(2, 2) = 1.0;
+
+    double a, b;
+
+    a = cos(grad_to_rad(params.anglez));
+    b = sin(grad_to_rad(params.anglez));
+
+    rotate_z(0, 0) = a;
+    rotate_z(1, 1) = a;
+    rotate_z(0, 1) = b;
+    rotate_z(1, 0) = -b;
+//    rotate_z(2, 2) = 1;
+
+    transformation = rotate_z * scale;
 }

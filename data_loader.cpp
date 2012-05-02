@@ -268,9 +268,9 @@ bool gxDataLoader::loadWellData(gxPoint3DList *data, QStringList list)
             if (originList.size() != 3) return false;
 
             bool okx, oky, okz;
-            origin.x = originList[0].toDouble(&okx);
-            origin.y = originList[1].toDouble(&oky);
-            origin.z = originList[2].toDouble(&okz);
+            origin.x() = originList[0].toDouble(&okx);
+            origin.y() = originList[1].toDouble(&oky);
+            origin.z() = originList[2].toDouble(&okz);
 
             if (!(okx && oky && okz)) return false;
             break;
@@ -290,14 +290,14 @@ bool gxDataLoader::loadWellData(gxPoint3DList *data, QStringList list)
         bool okx, oky, okz;
 
         gxPoint3D p;
-        p.x = splitList[0].toDouble(&okx);
-        p.y = splitList[1].toDouble(&oky);
-        p.z = splitList[2].toDouble(&okz);
+        p.x() = splitList[0].toDouble(&okx);
+        p.y() = splitList[1].toDouble(&oky);
+        p.z() = splitList[2].toDouble(&okz);
 
         if (!(okx && oky && okz)) return false;
 
         p += origin;
-        p.z = -p.z;
+        p.z() = -p.z();
 
         data->append(p);
     }

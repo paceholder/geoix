@@ -1,7 +1,7 @@
 #include "bspline.h"
 #include "lattice.h"
 
-/// конструктор
+/// РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 Lattice::Lattice(gxSize3D s)
     : size(s)
 {
@@ -39,11 +39,11 @@ void Lattice::Refine()
     Grid temp;
     step *= 2;
 
-	// изменяем размер ячейки
+	// РёР·РјРµРЅСЏРµРј СЂР°Р·РјРµСЂ СЏС‡РµР№РєРё
     stepX /= 2;
     stepY /= 2;
 
-    // изменяем размер границ
+    // РёР·РјРµРЅСЏРµРј СЂР°Р·РјРµСЂ РіСЂР°РЅРёС†
     size.setSize(size.getMinX() + stepX,
                  size.getMinY() + stepY,
                  0,
@@ -51,13 +51,13 @@ void Lattice::Refine()
                  size.getMaxY() - stepY,
                  0);
 
-    //Изменяем размер сетки
+    //РР·РјРµРЅСЏРµРј СЂР°Р·РјРµСЂ СЃРµС‚РєРё
     temp.resize(step+3);
     for (int i = 0; i < temp.size(); ++i)
         temp[i].resize(step + 3);
 
-    // копируем старые коэффициенты в новую сетку с перерасчетом
-    // что бы на новой уплотненной сетке строился тот же самый сплайн
+    // РєРѕРїРёСЂСѓРµРј СЃС‚Р°СЂС‹Рµ РєРѕСЌС„С„РёС†РёРµРЅС‚С‹ РІ РЅРѕРІСѓСЋ СЃРµС‚РєСѓ СЃ РїРµСЂРµСЂР°СЃС‡РµС‚РѕРј
+    // С‡С‚Рѕ Р±С‹ РЅР° РЅРѕРІРѕР№ СѓРїР»РѕС‚РЅРµРЅРЅРѕР№ СЃРµС‚РєРµ СЃС‚СЂРѕРёР»СЃСЏ С‚РѕС‚ Р¶Рµ СЃР°РјС‹Р№ СЃРїР»Р°Р№РЅ
 
     for (int i = 0; i<step/2+3-1; ++i)
         for (int j = 0; j<step/2+3-1; ++j)
@@ -101,12 +101,12 @@ void Lattice::Refine()
             }
         }
 
-    // и заменяем на новую
+    // Рё Р·Р°РјРµРЅСЏРµРј РЅР° РЅРѕРІСѓСЋ
     cgrid = temp;
 }
 
 
-// увеличивает размер сетки (x2)
+// СѓРІРµР»РёС‡РёРІР°РµС‚ СЂР°Р·РјРµСЂ СЃРµС‚РєРё (x2)
 void Lattice::Rescale()
 {
     step *= 2;
@@ -115,7 +115,7 @@ void Lattice::Rescale()
     stepX /= 2;
     stepY /= 2;
 
-    // изменяем размер границ
+    // РёР·РјРµРЅСЏРµРј СЂР°Р·РјРµСЂ РіСЂР°РЅРёС†
     size.setSize(size.getMinX() + stepX,
                  size.getMinY() + stepY,
                  0,
@@ -136,7 +136,7 @@ void Lattice::Rescale()
 }
 
 
-// возвращает z-значение точки
+// РІРѕР·РІСЂР°С‰Р°РµС‚ z-Р·РЅР°С‡РµРЅРёРµ С‚РѕС‡РєРё
 double Lattice::GetZ(const double X, const double Y) const
 {
     double s = GetPartX(X);
@@ -145,8 +145,11 @@ double Lattice::GetZ(const double X, const double Y) const
     int xi =  GetIndexX(X) - 1;
     int yi =  GetIndexY(Y) - 1;
 
-    if (xi > step-1) { --xi; s = 1;}
-    if (yi > step-1) { --yi; t = 1;}
+    if (xi > step + 2) { --xi; s = 1;}
+    if (yi > step + 2) { --yi; t = 1;}
+
+    if (xi < 0) { xi = 0; s = 0;}
+    if (yi < 0) { yi = 0; t = 0;}
 
     double result = 0;
     for(int i = 0; i< 4; ++i )
@@ -155,8 +158,8 @@ double Lattice::GetZ(const double X, const double Y) const
             int m = xi + i;
             int n = yi + j;
 
-            //if (m > (cgrid.size()-1)) { --m; s =1; }
-            //if (n > (cgrid[m].size()-1)) { --n; t = 1; }
+            if (m > (cgrid.size()-1)) { --m; s =1; }
+            if (n > (cgrid[m].size()-1)) { --n; t = 1; }
 
             result += W_ab(i,j,s,t) * (cgrid[m][n].value);
         }
@@ -165,7 +168,7 @@ double Lattice::GetZ(const double X, const double Y) const
 }
 
 
-// суммирует две сетки
+// СЃСѓРјРјРёСЂСѓРµС‚ РґРІРµ СЃРµС‚РєРё
 void Lattice::Add(const Lattice* src)
 {
     int l = src->step+3;

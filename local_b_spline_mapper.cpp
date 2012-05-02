@@ -27,12 +27,12 @@ gxLocalBSplineMapper::~gxLocalBSplineMapper()
 bool gxLocalBSplineMapper::calcSurface(gxPoint3DList points,
                                        gxSize3D size,
                                        int nx, int ny,
-                                       QVector<double> &result)
+                                       std::vector<double> &result)
 {
     QScopedPointer<Lattice> latt(new Lattice(size));
     QScopedPointer<Lattice> latt_f(new Lattice(size));
 
-    QVector<double> lsCoeffs = leastSquare(points);
+    std::vector<double> lsCoeffs = leastSquare(points);
 
 
     for (int l = 0; l < levels; ++l) // it итераций
@@ -47,17 +47,24 @@ bool gxLocalBSplineMapper::calcSurface(gxPoint3DList points,
 
             // TODO it's should be without recalculation of xi, yi
             // считаем долю интервала между точками сетки 0..1
-            s = latt->GetPartX(points[k].x);
-            t = latt->GetPartY(points[k].y);
+            s = latt->GetPartX(points[k].x());
+            t = latt->GetPartY(points[k].y());
 
             // номер ячейки в сетке для текущей точки
             int xi, yi;
-            xi = latt->GetIndexX(points[k].x) - 1;
-            yi = latt->GetIndexY(points[k].y) - 1;
+            xi = latt->GetIndexX(points[k].x()) - 1;
+            yi = latt->GetIndexY(points[k].y()) - 1;
 
             // надо предусмотрет выход xi, yi за границы
-            if (xi > latt->step - 1) { --xi; s = 1;}
-            if (yi > latt->step - 1) { --yi; t = 1;}
+            if (xi > latt->step) { --xi; s = 1;}
+            if (yi > latt->step) { --yi; t = 1;}
+
+            if (xi < 0) { xi = 0; s = 0;}
+            if (yi < 0) { yi = 0; t = 0;}
+
+//            size = step + 3
+//            last elem = step + 2
+
 
             double w_s = Summ_w_ab(s, t); // normalizing multiplier
 
@@ -71,7 +78,7 @@ bool gxLocalBSplineMapper::calcSurface(gxPoint3DList points,
                     double w_ab = W_ab(i, j, s, t);
 //                    try
 //                    {
-                        latt->cgrid[m][n].delta += w_ab * w_ab * w_ab * points[k].z / w_s;
+                        latt->cgrid[m][n].delta += w_ab * w_ab * w_ab * points[k].z() / w_s;
                         latt->cgrid[m][n].w += w_ab * w_ab;
 //                    }
 //                    catch(...)
@@ -97,7 +104,7 @@ bool gxLocalBSplineMapper::calcSurface(gxPoint3DList points,
         // 2. считаем P = P - F(Ф)
         for(int i = 0; i < points.size(); ++i)
         {
-            points[i].z -= latt->GetZ(points[i].x, points[i].y);
+            points[i].z() -= latt->GetZ(points[i].x(), points[i].y());
         }
 
         // 3. считаем fi' = fi' + Ф
@@ -126,12 +133,12 @@ bool gxLocalBSplineMapper::calcSurface(gxPoint3DList points,
 
 
 
-QVector<double> gxLocalBSplineMapper::fillResultArray(const Lattice* lattice,
+std::vector<double> gxLocalBSplineMapper::fillResultArray(const Lattice* lattice,
                                                       const int nx, const int ny,
                                                       const gxSize3D &size,
-                                                      QVector<double> lsCoeffs)
+                                                      std::vector<double> lsCoeffs)
 {
-    QVector<double> result(nx * ny);
+    std::vector<double> result(nx * ny);
 
     double stepX = size.getW()/double(nx -1);
     double stepY = size.getH()/double(ny -1);

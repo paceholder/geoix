@@ -41,9 +41,11 @@
 gxSurface::gxSurface(gxTreeFolderObject *parent, gxSurfaceData *d)
     : gxVisualObject(parent),
     data(d),
-    contours(new gxFlatContourList),
-//    cellFillPattern(gxSurface::continues)
-    cellFillPattern(gxSurface::discrete)
+//    cellFillPattern(gxSurface::discrete),
+    cellFillPattern(gxSurface::continues),
+    contours(new gxFlatContourList)
+
+
 {
     name = tr("New Surface");
 
@@ -162,20 +164,20 @@ void gxSurface::draw2D()
                         glEnd();
 
 
-                        glColor3d(0.4, 0.4, 0.4);
-                        glBegin(GL_LINES);
-                            glVertex2d(data->getX(i),   data->getY(j));
-                            glVertex2d(data->getX(i+1), data->getY(j));
+//                        glColor3d(0.4, 0.4, 0.4);
+//                        glBegin(GL_LINES);
+//                            glVertex2d(data->getX(i),   data->getY(j));
+//                            glVertex2d(data->getX(i+1), data->getY(j));
 
-                            glVertex2d(data->getX(i),   data->getY(j));
-                            glVertex2d(data->getX(i),   data->getY(j+1));
-                        glEnd();
+//                            glVertex2d(data->getX(i),   data->getY(j));
+//                            glVertex2d(data->getX(i),   data->getY(j+1));
+//                        glEnd();
 
                     }
                 }
             }
 
-//            drawContours2D();
+            drawContours2D();
 
         glEndList();
     }    
@@ -200,7 +202,7 @@ void gxSurface::drawContours2D()
         glBegin(GL_LINE_STRIP);
             for(int i = 0; i < c->count(); ++i)
             {
-                glVertex2d(c->at(i).x, c->at(i).y);
+                glVertex2d(c->at(i).x(), c->at(i).y());
             }
 //                    if (c->isClosed())
 //                        glVertex3d(c->at(0).x, c->at(0).y, c->getZ());
@@ -328,7 +330,7 @@ void gxSurface::drawContours3D()
         glBegin(GL_LINE_STRIP);
             for(int i = 0; i < c->count(); ++i)
             {
-                glVertex3d(c->at(i).x, c->at(i).y, c->getZ());
+                glVertex3d(c->at(i).x(), c->at(i).y(), c->getZ());
             }
 //                    if (c->isClosed())
 //                        glVertex3d(c->at(0).x, c->at(0).y, c->getZ());

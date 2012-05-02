@@ -3,6 +3,7 @@
 #undef max
 #undef min
 #include <limits>
+#include <GL/glu.h>
 
 #include "tree_menu_fabric.h"
 #include "data_loader.h"
@@ -50,7 +51,7 @@ void gxWell::draw2D()
     {
         gxPoint3D p = it.next();
         glPushMatrix();
-            glTranslatef(p.x, p.y, 0);
+            glTranslatef(p.x(), p.y(), 0);
             gluDisk(quadObj, 0, 5, 20, 20);
         glPopMatrix();
     }
@@ -60,7 +61,7 @@ void gxWell::draw2D()
         while(it.hasNext())
         {
             gxPoint3D p = it.next();
-            glVertex3d(p.x, p.y, 0);
+            glVertex3d(p.x(), p.y(), 0);
         }
     glEnd();
 
@@ -89,7 +90,7 @@ void gxWell::draw3D()
     {
         gxPoint3D p = it.next();
         glPushMatrix();
-            glTranslatef(p.x, p.y, p.z);
+            glTranslatef(p.x(), p.y(), p.z());
             gluSphere(quadObj, 5, 10, 10);
         glPopMatrix();
     }
@@ -99,7 +100,7 @@ void gxWell::draw3D()
         while(it.hasNext())
         {
             gxPoint3D p = it.next();
-            glVertex3d(p.x, p.y, p.z);
+            glVertex3d(p.x(), p.y(), p.z());
         }
     glEnd();
 
@@ -131,14 +132,14 @@ void gxWell::recalcSize()
         {
             gxPoint3D p = it.next();
 
-            if (p.x < size.getMinX()) size.setMinX(p.x);
-            if (p.x > size.getMaxX()) size.setMaxX(p.x);
+            if (p.x() < size.getMinX()) size.setMinX(p.x());
+            if (p.x() > size.getMaxX()) size.setMaxX(p.x());
 
-            if (p.y < size.getMinY()) size.setMinY(p.y);
-            if (p.y > size.getMaxY()) size.setMaxY(p.y);
+            if (p.y() < size.getMinY()) size.setMinY(p.y());
+            if (p.y() > size.getMaxY()) size.setMaxY(p.y());
 
-            if (p.z < size.getMinZ()) size.setMinZ(p.z);
-            if (p.z > size.getMaxZ()) size.setMaxZ(p.z);
+            if (p.z() < size.getMinZ()) size.setMinZ(p.z());
+            if (p.z() > size.getMaxZ()) size.setMaxZ(p.z());
         }
 
         this->size3d.setSize(size);

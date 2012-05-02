@@ -22,7 +22,7 @@ public:
     bool calcSurface(const gxPoint3DList points,
                      const gxSize3D size,
                      const int nx, const int ny,
-                     QVector<double> &result);
+                     std::vector<double> &result);
 
     QWidget *getSettingsWidget(QWidget *parent);
 
@@ -37,10 +37,10 @@ private:
     int domainCapacity;
     int tolerance;
 
-    QVector<double> fillResultArray(gxRBFDomain &rootDomain,
+    std::vector<double> fillResultArray(gxRBFDomain &rootDomain,
                                     const int nx, const int ny,
                                     const gxSize3D &size,
-                                    QVector<double> lsCoeffs);
+                                    std::vector<double> lsCoeffs);
 
 };
 

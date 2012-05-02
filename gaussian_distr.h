@@ -35,7 +35,7 @@ public:
             double x2 = b;
 
             double y1 = probability(x1) - prob;
-            double y2 = probability(x2) - prob;
+            //double y2 = probability(x2) - prob;
 
             /// we should have wider interval
             //if (y1 * y2 > 0) return 0;

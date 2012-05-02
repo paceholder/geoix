@@ -26,7 +26,7 @@
 #include "contour.h"
 
 
-#include "point2D.h"
+#include "point_nd.h"
 
 
 /// Class represents contour with constant Z-value
@@ -50,14 +50,14 @@ public:
     /// Addin 2d point to the back of contour
     void addPointBack(gxPoint3D& point)
     {
-        data.append(gxPoint3D(point.x, point.y, z));
+        data.append(gxPoint3D(point.x(), point.y(), z));
         checkClosing();
     }
 
     /// Addin 2d point to the frong of contour
     void addPointFront(gxPoint3D& point)
     {
-        data.prepend(gxPoint3D(point.x, point.y, z));
+        data.prepend(gxPoint3D(point.x(), point.y(), z));
         checkClosing();
     }
 

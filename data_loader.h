@@ -26,7 +26,7 @@
 #include <QtCore>
 
 
-#include "point3D.h"
+#include "point_nd.h"
 #include "contour.h"
 
 

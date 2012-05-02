@@ -117,21 +117,19 @@ bool gxRBFCore::calculate(const gxPoint3DVector points,
     {
         Precond[j][j] = 1.0; // единичная матрица
         M[n][j] = 1;
-        M[n+1][j] = points[j].x;  //
-        M[n+2][j] = points[j].y;
+        M[n+1][j] = points[j].x();  //
+        M[n+2][j] = points[j].y();
         M[j][n] = 1;
-        M[j][n+1] = points[j].x;
-        M[j][n+2] = points[j].y;
+        M[j][n+1] = points[j].x();
+        M[j][n+2] = points[j].y();
     }
 
     /// free column
     for (int i = 0; i < n; ++i)
-        D[i] = points[i].z;
+        D[i] = points[i].z();
 
+    // conjugate gradient
     cg_method(n, M, D, R);
-
-    // solving
-//    R = M.Solve(D); // TODO
 
     /// fetching coefficients
     coeffs.clear();

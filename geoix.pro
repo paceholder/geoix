@@ -6,6 +6,8 @@ TARGET = geoix
 TEMPLATE = app
 CONFIG += precompile_header
 
+LIBS += -lGLU
+
 # PRECOMPILED_HEADER = geoix_pch.h
 # DEFINES += USING_PCH
 SOURCES += main.cpp \
@@ -17,7 +19,6 @@ SOURCES += main.cpp \
     render_panel.cpp \
     data_loader.cpp \
     render_panel_3D.cpp \
-    points.cpp \
     surface.cpp \
     gl_panel_3d.cpp \
     render_panel_2D.cpp \
@@ -46,7 +47,6 @@ SOURCES += main.cpp \
     well.cpp \
     surface_data.cpp \
     abstract_mapper.cpp \
-    point3D.cpp \
     local_b_spline_mapper.cpp \
     lattice.cpp \
     bspline.cpp \
@@ -59,7 +59,9 @@ SOURCES += main.cpp \
     curveloaddialog.cpp \
     cg/cg.cpp \
     kriging_var_core.cpp \
-    sgs_2d_mapper.cpp
+    sgs_2d_mapper.cpp \
+    points.cpp \
+    kdtree.c
 HEADERS += mainwindow.h \
     mainwindow_actions.h \
     project.h \
@@ -74,7 +76,6 @@ HEADERS += mainwindow.h \
     coord_system_3d.h \
     points.h \
     data_loader.h \
-    point3D.h \
     constants.h \
     surface_data.h \
     contour.h \
@@ -100,7 +101,6 @@ HEADERS += mainwindow.h \
     abstract_mapper.h \
     rbf_mapper.h \
     matrix.h \
-    point2D.h \
     rbf_core.h \
     rbf_domain.h \
     subtree_model.h \
@@ -132,7 +132,12 @@ HEADERS += mainwindow.h \
     kriging_core_functions.h \
     sgs_2d_mapper.h \
     gaussian_distr.h \
-    cumulative_distribution.h
+    cumulative_distribution.h \
+    variance_model.h \
+    point_nd.h \
+    kriging_params.h \
+    kdtree.h \
+    kd_tree.h
 FORMS += mainwindow.ui \
     spliner_dialog.ui \
     surf_prop_dialog.ui \

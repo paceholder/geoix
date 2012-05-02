@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QVector>
 
-#include "point3D.h"
+#include "point_nd.h"
 #include "constants.h"
 
 class gxLines;

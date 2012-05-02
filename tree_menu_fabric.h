@@ -41,9 +41,11 @@ class gxCube;
 class gxVisualObject;
 
 
-/// Class builds different context menus for all
-/// types of visual and non-visual objects
-/// in project tree.
+/*!
+    Class builds different context menus for all
+    types of visual and non-visual objects
+    in project tree.
+*/
 class gxTreeMenuFabric : public QObject
 {
     Q_OBJECT
@@ -77,17 +79,11 @@ private:
     QAction* deleteItem;
 
 
-
-
-//    QMenu* getVisualObjectMenu(gxVisualObject*);
-
 public:
     static gxTreeMenuFabric* instance()
     {
         if (!inst)
-        {
             inst = new gxTreeMenuFabric();
-        }
 
        return inst;
     }

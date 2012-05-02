@@ -1,7 +1,7 @@
 #ifndef CUMULATIVE_DISTRIBUTION_H
 #define CUMULATIVE_DISTRIBUTION_H
 
-#include "point3D.h"
+#include "point_nd.h"
 
 #include <QtCore>
 #include <QtAlgorithms>
@@ -41,13 +41,13 @@ public:
     {
         QVector<double> values;
         foreach(gxPoint3D point, points)
-            values.append(point.z);
+            values.append(point.z());
 
         gxAbstractCDF::transform(values, from_cdf, to_cdf);
 
         for(int i = 0; i < points.size(); ++i)
         {
-            points[i].z = values[i];
+            points[i].z() = values[i];
         }
     }
 };
@@ -64,12 +64,12 @@ public:
         QMap<double, int> hash;
         foreach(gxPoint3D point, vector)
         {
-            if (hash.contains(point.z))
+            if (hash.contains(point.z()))
             {
-                hash[point.z] += 1;
+                hash[point.z()] += 1;
             }
             else
-                hash.insert(point.z, 1);
+                hash.insert(point.z(), 1);
         }
 
         summation(hash);

@@ -21,7 +21,7 @@ public:
     bool calcSurface(gxPoint3DList points,
                      gxSize3D size,
                      int nx, int ny,
-                     QVector<double> &result);
+                     std::vector<double> &result);
 
 
     QWidget *getSettingsWidget(QWidget *parent);
@@ -34,10 +34,10 @@ private:
 
     int levels;
 
-    QVector<double> fillResultArray(const Lattice* lattice,
+    std::vector<double> fillResultArray(const Lattice* lattice,
                                     const int nx, const int ny,
                                     const gxSize3D &size,
-                                    QVector<double> lsCoeffs);
+                                    std::vector<double> lsCoeffs);
 };
 
 #endif // LOCAL_B_SPLINE_MAPPER_H

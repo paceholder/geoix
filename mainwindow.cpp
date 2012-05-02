@@ -88,7 +88,7 @@ void MainWindow::createGUIObjects()
 
     projectTree->setModel((QAbstractItemModel*)projectTreeModel);
 
-    connect(projectTree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuProjectTree(QPoint)));
+    connect(projectTree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(onCustomContextMenuRequested(QPoint)));
 
     subTree = new QTreeView(ui->leftDock);
     subTree->header()->hide();
@@ -313,11 +313,12 @@ void MainWindow::loadCurves()
 
 
 
-void MainWindow::contextMenuProjectTree(const QPoint& position)
+void MainWindow::onCustomContextMenuRequested(const QPoint& position)
 {
     QPoint p = projectTree->mapToGlobal(position);
+
     // little offset to prevent clickin' menu by right mouse button
-    p.setX( p.x()+ 5); p.setY( p.y() + 5);
+    p += QPoint(5, 5);
 
     QModelIndex index = projectTree->indexAt(position);
     if (index.isValid())

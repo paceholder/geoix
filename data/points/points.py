@@ -1,11 +1,11 @@
 import random
 
-file = open("points", "w")
+f = open("points.txt", "w")
 
-for i in range(0, 30):
-	x = random.randint(-100, 100)
-	y = random.randint(-100, 100)
-	z = random.randint(0, 20)
-	file.write("%d %d %d\n" % (x, y, z))
+for i in range(0, 40):
+	x = random.randint(0, 200)
+	y = random.randint(0, 200)
+	z = float(random.randint(0, 40))/100.0
+	f.write("%d %d %f\n" % (x, y, z))
 
-file.close()		
+f.close()		

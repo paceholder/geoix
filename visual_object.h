@@ -27,7 +27,7 @@
 
 #include "tree_object.h"
 #include "size.h"
-#include "point3D.h"
+#include "point_nd.h"
 #include "scene_3d.h"
 
 class QPaintDevice;

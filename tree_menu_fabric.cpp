@@ -39,31 +39,31 @@ gxTreeMenuFabric::gxTreeMenuFabric()
 {
     menu = new QMenu(NULL);
 
-    QTreeView* project_tree = gxEngine::instance()->getMainWindow()->getProjectTree();
-    createFolder = new QAction(QIcon(":/images/add_folder.png"), tr("Create Folder"), project_tree);
-    createPoints = new QAction(QIcon(":/images/add_points.png"), tr("Create Points"), project_tree);
-    createLines = new QAction(QIcon(":/images/chart_stock.png"), tr("Create Lines"), project_tree);
-    createSurface = new QAction(QIcon(":images/add_surface.png"), tr("Create Surface"), project_tree);
-    createWell = new QAction(QIcon(":/images/well.png"), tr("Create Well"), project_tree);
-    createCube = new QAction(QIcon(":/images/soil_layers.png"), tr("Create Cube"), project_tree);
+    QTreeView* projectTree = gxEngine::instance()->getMainWindow()->getProjectTree();
+    createFolder = new QAction(QIcon(":/images/add_folder.png"), tr("Create Folder"), projectTree);
+    createPoints = new QAction(QIcon(":/images/add_points.png"), tr("Create Points"), projectTree);
+    createLines  = new QAction(QIcon(":/images/chart_stock.png"), tr("Create Lines"), projectTree);
+    createSurface = new QAction(QIcon(":images/add_surface.png"), tr("Create Surface"), projectTree);
+    createWell  = new QAction(QIcon(":/images/well.png"), tr("Create Well"), projectTree);
+    createCube  = new QAction(QIcon(":/images/soil_layers.png"), tr("Create Cube"), projectTree);
 
-    importPoints  = new QAction(tr("Import Points"),  project_tree);
-    importLines   = new QAction(tr("Import Lines"),   project_tree);
-    importSurface = new QAction(tr("Import Surface"), project_tree);
-    importWell    = new QAction(tr("Import Well"),    project_tree);
+    importPoints  = new QAction(tr("Import Points"),  projectTree);
+    importLines   = new QAction(tr("Import Lines"),   projectTree);
+    importSurface = new QAction(tr("Import Surface"), projectTree);
+    importWell    = new QAction(tr("Import Well"),    projectTree);
 
-    exportSurface = new QAction(tr("Export Surface"), project_tree);
+    exportSurface = new QAction(tr("Export Surface"), projectTree);
 
-    importAndCreateWells  = new QAction(tr("Import Wells"),  project_tree);
-    importAndCreatePoints = new QAction(QIcon(":/images/add_points.png"), tr("Import Points"), project_tree);
+    importAndCreateWells  = new QAction(tr("Import Wells"),  projectTree);
+    importAndCreatePoints = new QAction(QIcon(":/images/add_points.png"), tr("Import Points"), projectTree);
 
-    renameItem = new QAction(tr("Rename"), project_tree);
-    showOptionsDialog = new QAction(tr("Options"), project_tree);
+    renameItem = new QAction(tr("Rename"), projectTree);
+    showOptionsDialog = new QAction(tr("Options"), projectTree);
 
-    deleteItem = new QAction(QIcon(":/images/Delete.png"), tr("Delete"), project_tree);
+    deleteItem = new QAction(QIcon(":/images/Delete.png"), tr("Delete"), projectTree);
     deleteItem->setIconVisibleInMenu(true);
 
-    clearData = new QAction(QIcon(":/images/clearData.png"), tr("Clear Data"), project_tree);
+    clearData = new QAction(QIcon(":/images/clearData.png"), tr("Clear Data"), projectTree);
     clearData->setIconVisibleInMenu(true);
 }
 

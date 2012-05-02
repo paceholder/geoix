@@ -27,7 +27,7 @@
 
 
 #include "visual_object.h"
-#include "point3D.h"
+#include "point_nd.h"
 
 class gx3dScene;
 class gxTreeFolderObject;

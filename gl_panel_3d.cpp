@@ -26,7 +26,7 @@
 
 #include "render_panel_3D.h"
 #include "engine.h"
-
+#include <GL/glu.h>
 
 gxGLPanel3D::gxGLPanel3D(gxRenderPanel3D* parent, QGLWidget* shareWidget, gxSize3D* size3d)
     : QGLWidget(parent, shareWidget)

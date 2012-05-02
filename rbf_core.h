@@ -1,14 +1,14 @@
 #ifndef RBF_CORE_H
 #define RBF_CORE_H
 
-#include "point3D.h"
+#include "point_nd.h"
 #include "math.h"
 
 
 /// I used pointer to the function
 /// instead of switch(funtion type) operator
 /// to reduce calculation time since
-/// this function if called very frequent
+/// this function if called very frequently
 typedef double(*RBFFunction)(double r);
 
 

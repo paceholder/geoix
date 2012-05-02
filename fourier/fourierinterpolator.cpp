@@ -22,6 +22,7 @@ void FourierInterpolator::interpolate(QList<WellData> wells)
     }
 
     QList<QVector<gxComplex> > complexWellDatas;
+
     // now get fourier coeffs
     foreach(QVector<double> vector, wellDatas)
     {
@@ -31,23 +32,28 @@ void FourierInterpolator::interpolate(QList<WellData> wells)
     realCoeffs.clear();
     imgCoeffs.clear();
 
-    // interpolation layer by layer (all freqs)
+    // interpolation layer by layer (all freqs, all coeffs)
     for(int i = 0; i < this->numSamples; ++i)
     {
+        // i-th frequence
+
+
         gxPoint3DVector points;
 
-        // real
-        // i-th frequence
+        // Real part
+        // for each well
         for(int j = 0; j < complexWellDatas.size(); ++j)
             points.append(gxPoint3D(wells[j].X, wells[j].Y, complexWellDatas[j][i].r));
 
         QVector<double> coeffs;
+
         gxRBFCore::calculate(points, coeffs); // set of coeffs for each freq
+
+        /// got coeffs of RBF interpolation
         realCoeffs.append(coeffs);
 
 
-        //image
-
+        // Img part
         points.clear();
 
         for(int j = 0; j < complexWellDatas.size(); ++j)
@@ -104,16 +110,22 @@ QVector<double> FourierInterpolator::getInterpolatedValue(QList<WellData> wells,
 
     QVector<gxComplex> vector;
 
+    /// Construct Complex number from Re and Im
     for(int i = 0; i < numSamples; ++i)
     {
         vector.append(gxComplex(interpolatedReal[i], interpolatedImg[i]));
     }
 
+    /// backward trasformation
     QVector<gxComplex> result = gxFourier::inverseFFT(vector);
 
     QVector<double> realResult;
     foreach(gxComplex cpx, result)
     {
+        /// !!!
+        /// Don't know why, but array occurs to be upturned
+        /// Maybe it's bug of FFT library
+        /// So, I use PREPEND instead of APPEND
         realResult.prepend(cpx.r);
     }
 

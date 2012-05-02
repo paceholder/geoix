@@ -23,15 +23,11 @@
 #ifndef KRIGING_CORE_H
 #define KRIGING_CORE_H
 
-#include "point3D.h"
+#include "point_nd.h"
 #include "math.h"
+#include "matrix.h"
 #include "kriging_core_functions.h"
-
-/// I used pointer to the function
-/// instead of switch(funtion type) operator
-/// to reduce calculation time since
-/// this function is called very frequent
-typedef double(*VariogramFunction)(double threshold, double radius, double r);
+#include "kriging_params.h"
 
 
 //This class solves Kriging system:
@@ -46,23 +42,33 @@ typedef double(*VariogramFunction)(double threshold, double radius, double r);
 //              i = 0..N
 
 
+
 /// Wrapper around RBF routines
-class gxKrigingCore
+class gxUniversalKriginigCore2D
 {
 public:
-    /// Type of RBF function
-    enum VariogramModel { Exponential, Gaussian, Spherical};
+    gxUniversalKriginigCore2D(gxKrigingParams2D &krigingParams);
 
-    /// Here we set core RBF function
-    static void setVariogramModel(VariogramModel model);
 
     /// Calculates coeffitients of spline
-    static QVector<double> calculate(const gxPoint3DList points,
-                                     const double threshold,
-                                     const double radius);
+    std::vector<double> calculate(const gxPoint3DList points);
+
+    double operator()(const double h) const;
+    double operator()(const gxPoint3D &p1, const gxPoint3D &p2) const;
+
+private:
+    /// kriging parameters
+    gxKrigingParams2D params;
 
     /// pointer to the RBF function
-    static VariogramFunction coreFunction;
+    VariogramFunction coreFunction;
+
+    math::matrix<double> transformation;
+
+    /// Here we set core RBF function
+    void setVariogramModel();
+
+    void createTransformation2D();
 };
 
 #endif // KRIGING_CORE_H

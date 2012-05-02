@@ -1,7 +1,7 @@
 #ifndef DATAEXPORTER_H
 #define DATAEXPORTER_H
 
-#include "point3D.h"
+#include "point_nd.h"
 #include "contour.h"
 
 class gxSurfaceData;

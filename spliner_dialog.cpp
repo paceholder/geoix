@@ -254,7 +254,7 @@ void gxSplinerDialog::onCalculate()
 
     // 5) calc
 
-    QVector<double> result;
+    std::vector<double>  result;
     mapperList[index]->calcSurface(allPoints, size, nx + 1, ny + 1, result);
 
     gxSurfaceData *data = new gxSurfaceData(size);

@@ -120,7 +120,9 @@ public:
     /// Sets the size of surface array pointsX x pointsY
     void setnXY(int i, int j);
 
-    void setData(QVector<double> vector);
+    void setData(QVector<double> &vector);
+
+    void setData(std::vector<double> &vector);
 
     void setSize(gxSize3D size = gxSize3D()) { this->size3d = size; }
 

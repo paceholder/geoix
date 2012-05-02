@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>378</width>
-    <height>113</height>
+    <height>214</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,28 +46,58 @@
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Variogram threshold</string>
+      <string>Variogram sill</string>
      </property>
      <property name="buddy">
-      <cstring>lineThreshold</cstring>
+      <cstring>lineSill</cstring>
      </property>
     </widget>
    </item>
    <item row="1" column="1">
-    <widget class="QLineEdit" name="lineThreshold"/>
+    <widget class="QLineEdit" name="lineSill"/>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Variogram radius</string>
+      <string>Variogram radius A</string>
      </property>
      <property name="buddy">
-      <cstring>lineRadius</cstring>
+      <cstring>lineRadiusA</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="lineRadiusA"/>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Variogram radius B</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QLineEdit" name="lineRadiusB"/>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Rotation Angle</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QLineEdit" name="lineRotationAngle"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Variogram nugget</string>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QLineEdit" name="lineRadius"/>
+    <widget class="QLineEdit" name="lineNugget"/>
    </item>
   </layout>
  </widget>

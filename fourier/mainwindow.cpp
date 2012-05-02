@@ -3,7 +3,7 @@
 #include "ui_mainwindow.h"
 #include <QtGui>
 
-#include "../point3D.h"
+#include "../point_nd.h"
 
 MainWindow::MainWindow()
     : ui(new Ui::MainWindow)
@@ -33,7 +33,7 @@ void MainWindow::generateWells()
 {
     values.clear();
     wells.clear();
-    for(int i = 0; i < 2; ++i)
+    for(int i = 0; i < 3; ++i)
     {
         wells.append(WellData());
     }

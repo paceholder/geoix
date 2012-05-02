@@ -78,9 +78,9 @@ void gxRBFDomain::buildTree()
         gxSize3D left_size(size);
 
         if (longSide == Width)
-            left_size.setMaxX(left_points.last().x);
+            left_size.setMaxX(left_points.last().x());
         else
-            left_size.setMaxY(left_points.last().y);
+            left_size.setMaxY(left_points.last().y());
 
         leftDomain = new gxRBFDomain(longSide, left_size, left_points);
 
@@ -95,9 +95,9 @@ void gxRBFDomain::buildTree()
         gxSize3D right_size(size);
 
         if (longSide == Width)
-            right_size.setMinX(right_points.first().x);
+            right_size.setMinX(right_points.first().x());
         else
-            right_size.setMinY(right_points.first().y);
+            right_size.setMinY(right_points.first().y());
 
         rightDomain = new gxRBFDomain(longSide, right_size, right_points);
     }

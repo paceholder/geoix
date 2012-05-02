@@ -1,16 +1,16 @@
 #ifndef KRIGING_VAR_CORE_H
 #define KRIGING_VAR_CORE_H
 
-#include "point3D.h"
+#include "point_nd.h"
 #include "math.h"
-
+#include "matrix.h"
 #include "kriging_core_functions.h"
 
 /// I used pointer to the function
 /// instead of switch(funtion type) operator
 /// to reduce calculation time since
 /// this function is called very frequent
-typedef double(*VariogramFunction)(double threshold, double radius, double r);
+//typedef double(*VariogramFunction)(double h, gxKrigingParams2D &params);
 
 
 //This class solves Kriging system for point (X, Y):
@@ -27,35 +27,45 @@ typedef double(*VariogramFunction)(double threshold, double radius, double r);
 //              variance:
 
 
-class gxOrdinaryKrigingCore
+class gxOrdinaryKrigingCore2D
 {
 public:
+    /// constructor
+    gxOrdinaryKrigingCore2D(gxKrigingParams2D &krigingParams);
+
+
     /// Type of RBF function
     enum VariogramModel { Exponential, Gaussian, Spherical};
 
     /// Here we set core RBF function
-    static void setVariogramModel(VariogramModel model);
+    void setVariogramModel();
 
     /// Calculates coeffitients of spline
-    static QVector<double> calculate(const gxPoint3DList points,
-                                     const double threshold,
-                                     const double radius,
-                                     const double X,
-                                     const double Y);
+    QVector<double> calculate(const gxPoint3DList points,
+                              const double X,
+                              const double Y);
 
     /// calculates variance at given point
-    static double variance(const gxPoint3DList points,
-                           const QVector<double> coeffs,
-                           const double threshold,
-                           const double radius,
-                           const double X,
-                           const double Y);
+    double variance(const gxPoint3DList points,
+                    const QVector<double> coeffs,
+                    const double X,
+                    const double Y);
 
-    static double value(const gxPoint3DList points,
+    double value(const gxPoint3DList points,
                         const QVector<double> coeffs);
 
+    double operator()(const double h) const;
+    double operator()(const gxPoint3D &p1, const gxPoint3D &p2) const;
+
+private:
     /// pointer to the RBF function
-    static VariogramFunction coreFunction;
+    VariogramFunction coreFunction;
+
+    gxKrigingParams2D params;
+
+    math::matrix<double> transformation;
+
+    void createTransformation2D();
 };
 
 #endif // KRIGING_VAR_CORE_H

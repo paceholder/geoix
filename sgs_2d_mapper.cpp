@@ -7,15 +7,22 @@
 #include "cumulative_distribution.h"
 #include "gaussian_distr.h"
 
-const double defaultThreshold = 100;
+const double defaultSill = 100;
+const double defaultNugget = 0;
 const double defaultRadius = 100;
+const double defaultRotationAngle = 0;
+const gxKrigingParams2D::VariogramModel defaultVariogramModel = gxKrigingParams2D::Exponential;
 
 
 gxSGS2DMapper::gxSGS2DMapper()
     : gxAbstractMapper(tr("SGS 2D")),
     ui(new Ui::KrigingSettingsWidget),
-    threshold(defaultThreshold),
-    radius(defaultRadius)
+    params(defaultVariogramModel,
+           defaultRadius,
+           defaultRadius,
+           defaultRotationAngle,
+           defaultSill,
+           defaultNugget)
 {
 }
 
@@ -24,7 +31,7 @@ gxSGS2DMapper::gxSGS2DMapper()
 bool gxSGS2DMapper::calcSurface(gxPoint3DList points,
                                   const gxSize3D size,
                                   const int nx, const int ny,
-                                  QVector<double> &result)
+                                  std::vector<double> &result)
 {
     // first of all we should delete points
     // with equal x and y coords.
@@ -34,9 +41,10 @@ bool gxSGS2DMapper::calcSurface(gxPoint3DList points,
     // least square method
     // leastSquare(points);
 
+    gxOrdinaryKrigingCore2D krigingCore(params);
     //QVector<double> coeffs = gxKrigingVarianceCore::calculate(points, threshold, radius);
 
-    result = fillResultArray(points, nx, ny, size);
+    result = fillResultArray(points, krigingCore, nx, ny, size);
 
     return true;
 }
@@ -44,12 +52,13 @@ bool gxSGS2DMapper::calcSurface(gxPoint3DList points,
 //------------------------------------------------------------------------------
 
 
-QVector<double> gxSGS2DMapper::fillResultArray(gxPoint3DList &points,
+std::vector<double> gxSGS2DMapper::fillResultArray(gxPoint3DList &points,
+                                               gxOrdinaryKrigingCore2D &krigingCore,
                                                int nx, int ny,
                                                const gxSize3D &size)
 {
-    QVector<double> result(nx * ny);
-    result.fill(0);
+    std::vector<double> result(nx * ny);
+    std::fill(result.begin(), result.end(), 0.0);
 
     double stepX = size.getW()/double(nx -1);
     double stepY = size.getH()/double(ny -1);
@@ -70,7 +79,7 @@ QVector<double> gxSGS2DMapper::fillResultArray(gxPoint3DList &points,
 
     /// Distribution of raw data
     gxCDF cdf(points.toVector());
-    /// Creation of Gaussian distribution
+    /// Gaussian distribution (meance = 0, var = 1)
     gxGaussianCDF gaussCDF;
 
 
@@ -83,30 +92,26 @@ QVector<double> gxSGS2DMapper::fillResultArray(gxPoint3DList &points,
     {
         // random point of the grid
         int index = rand() % path.size();
-//        int index = i;
+
         QPair<int, int> pair = path.takeAt(index);
-//        QPair<int, int> pair = path.takeFirst();
         x = minx + pair.first * stepX;
         y = miny + pair.second  * stepY;
 
 
-        // solving of the ordinary kriging equations
-        QVector<double> coeffs = gxOrdinaryKrigingCore::calculate(points,
-                                                                  threshold,
-                                                                  radius,
-                                                                  x, y);
-        // estimation of variance
-        double variance = gxOrdinaryKrigingCore::variance(points,
-                                                          coeffs,
-                                                          threshold,
-                                                          radius,
-                                                          x, y);
-        // estimation of value
-        double value = gxOrdinaryKrigingCore::value(points, coeffs);
+        // solving of the ordinary kriging equations at point (X, Y)
+        QVector<double> coeffs = krigingCore.calculate(points,
+                                                       x, y);
+        // estimation of variance at point (X, Y)
+        double variance = krigingCore.variance(points,
+                                               coeffs,
+                                               x, y);
+        // estimation of value at point (X, Y)
+        double value = krigingCore.value(points, coeffs);
 
-        // random probability
+        // random probability in range (0, 1)
         double random_prob = rand() / (double)RAND_MAX;
 
+        // gaussian distribution with given parameters
         gxGaussianCDF localCDF(value, variance);
 
         // generation of value corresponding to given mean and variance
@@ -133,22 +138,22 @@ void gxSGS2DMapper::onVariogramModelActivated(int type)
 {
     switch(type)
     {
-    case 0: gxOrdinaryKrigingCore::setVariogramModel(gxOrdinaryKrigingCore::Exponential); break;
-    case 1: gxOrdinaryKrigingCore::setVariogramModel(gxOrdinaryKrigingCore::Gaussian); break;
-    case 2: gxOrdinaryKrigingCore::setVariogramModel(gxOrdinaryKrigingCore::Spherical); break;
+    case 0: params.variogramModel = gxKrigingParams2D::Exponential; break;
+    case 1: params.variogramModel = gxKrigingParams2D::Gaussian; break;
+    case 2: params.variogramModel = gxKrigingParams2D::Spherical; break;
     }
 }
 
-void gxSGS2DMapper::onThreshold(QString threshold)
+void gxSGS2DMapper::onSill(QString sill)
 {
     bool ok;
-    this->threshold = threshold.toDouble(&ok);
+    params.sill = sill.toDouble(&ok);
 }
 
 void gxSGS2DMapper::onRadius(QString radius)
 {
     bool ok;
-    this->radius = radius.toDouble(&ok);
+    params.rangex = radius.toDouble(&ok);
 }
 
 
@@ -161,18 +166,25 @@ QWidget *gxSGS2DMapper::getSettingsWidget(QWidget *parent)
 
     QIntValidator *validator = new QIntValidator();
     validator->setBottom(0);
-    ui->lineRadius->setValidator(validator);
+    ui->lineRadiusA->setValidator(validator);
 
     validator = new QIntValidator();
     validator->setBottom(0);
-    ui->lineThreshold->setValidator(validator);
+    ui->lineRadiusB->setValidator(validator);
 
-    ui->lineRadius->setText(QString::number(defaultRadius));
-    ui->lineThreshold->setText(QString::number(defaultThreshold));
+    validator = new QIntValidator();
+    validator->setBottom(0);
+    ui->lineSill->setValidator(validator);
+
+    ui->lineRadiusA->setText(QString::number(defaultRadius));
+    ui->lineRadiusB->setText(QString::number(defaultRadius));
+    ui->lineSill->setText(QString::number(defaultSill));
+    ui->lineNugget->setText(QString::number(defaultNugget));
 
     connect(ui->comboBox, SIGNAL(activated(int)), this, SLOT(onVariogramModelActivated(int)));
-    connect(ui->lineRadius, SIGNAL(textChanged(QString)), this, SLOT(onRadius(QString)));
-    connect(ui->lineThreshold, SIGNAL(textEdited(QString)), this, SLOT(onThreshold(QString)));
+    connect(ui->lineRadiusA, SIGNAL(textChanged(QString)), this, SLOT(onRadius(QString)));
+    connect(ui->lineRadiusB, SIGNAL(textChanged(QString)), this, SLOT(onRadius(QString)));
+    connect(ui->lineSill, SIGNAL(textEdited(QString)), this, SLOT(onSill(QString)));
 
     return settingsWidget;;
 }

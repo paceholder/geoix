@@ -9,10 +9,10 @@
 //typedef  REAL  MAT[SIZE][SIZE]; /* square matrix type */
 //typedef  REAL  VEC[SIZE];       /* vector type */
 
-#include "cg/tnt_array1d.h"
-#include "cg/tnt_array2d.h"
-#include "cg/tnt_array1d_utils.h"
-#include "cg/tnt_array2d_utils.h"
+#include "../cg/tnt_array1d.h"
+#include "../cg/tnt_array2d.h"
+#include "../cg/tnt_array1d_utils.h"
+#include "../cg/tnt_array2d_utils.h"
 
 typedef double REAL;
 typedef TNT::Array2D<double> MAT;

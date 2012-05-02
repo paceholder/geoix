@@ -1,26 +1,62 @@
+//------------------------------------------------------------------------
+//    This file is part of Geoix.
+//
+//    Copyright (C) 2010 Dmitriy Pinaev
+//
+//    Geoix is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, either version 3 of the License, or
+//    (at your option) any later version.
+//
+//    Geoix is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with Geoix. If not, see <http://www.gnu.org/licenses/>.
+//
+//    e-mail: prof-x@inbox.ru
+//------------------------------------------------------------------------
+
+
 #include "kriging_var_core.h"
 
 #include "math.h"
 #include "matrix.h"
 
 
-VariogramFunction gxOrdinaryKrigingCore::coreFunction = exponentialFunc;
+inline double grad_to_rad(double grad)
+{
+    return ( grad * M_PI ) / 180.0;
+}
+
+
+
+gxOrdinaryKrigingCore2D::gxOrdinaryKrigingCore2D(gxKrigingParams2D &krigingParams)
+    : params(krigingParams),
+    coreFunction(exponentialFunc)
+{
+    createTransformation2D();
+
+    setVariogramModel();
+}
 
 //------------------------------------------------------------------------------
 
 
-void gxOrdinaryKrigingCore::setVariogramModel(VariogramModel model)
+void gxOrdinaryKrigingCore2D::setVariogramModel()
 {
-    switch(model)
+    switch(params.variogramModel)
     {
-    case Exponential:
-        gxOrdinaryKrigingCore::coreFunction = exponentialFunc;
+    case gxKrigingParams2D::Exponential:
+        coreFunction = exponentialFunc;
         break;
-    case Gaussian:
-        gxOrdinaryKrigingCore::coreFunction = gaussianFunc;
+    case gxKrigingParams2D::Gaussian:
+        coreFunction = gaussianFunc;
         break;
-    case Spherical:
-        gxOrdinaryKrigingCore::coreFunction = sphericalFunc;
+    case gxKrigingParams2D::Spherical:
+        coreFunction = sphericalFunc;
         break;
     }
 }
@@ -30,11 +66,9 @@ void gxOrdinaryKrigingCore::setVariogramModel(VariogramModel model)
 //------------------------------------------------------------------------------
 
 
-QVector<double> gxOrdinaryKrigingCore::calculate(const gxPoint3DList points,
-                                                 const double threshold,
-                                                 const double radius,
-                                                 const double X,
-                                                 const double Y)
+QVector<double> gxOrdinaryKrigingCore2D::calculate(const gxPoint3DList points,
+                                                   const double X,
+                                                   const double Y)
 {
     QVector<double> coeffs;
     int n = points.size();
@@ -57,9 +91,7 @@ QVector<double> gxOrdinaryKrigingCore::calculate(const gxPoint3DList points,
     for(int i = 1; i < n; ++i)
         for(int j = 0; j <= i; ++j)
         {
-            double d = gxOrdinaryKrigingCore::coreFunction(threshold,
-                                                           radius,
-                                                           points[i].distance2D(points[j]));
+            double d = this->operator()(points[i], points[j]);
             M(i,j) = d;
             M(j,i) = d;
         }
@@ -77,9 +109,7 @@ QVector<double> gxOrdinaryKrigingCore::calculate(const gxPoint3DList points,
 
     /// free column
     for (int i = 0; i < n; ++i)
-        D(i,0) = gxOrdinaryKrigingCore::coreFunction(threshold,
-                                                     radius,
-                                                     points[i].distance2D(X, Y));
+        D(i,0) = this->operator()(points[i], gxPoint3D(X, Y));
 
 
     /// last 3 coeffs
@@ -103,19 +133,15 @@ QVector<double> gxOrdinaryKrigingCore::calculate(const gxPoint3DList points,
 //------------------------------------------------------------------------------
 
 
-double gxOrdinaryKrigingCore::variance(const gxPoint3DList points,
-                                       const QVector<double> coeffs,
-                                       const double threshold,
-                                       const double radius,
-                                       const double X,
-                                       const double Y)
+double gxOrdinaryKrigingCore2D::variance(const gxPoint3DList points,
+                                         const QVector<double> coeffs,
+                                         const double X,
+                                         const double Y)
 {
     double result = 0.0;
     const int n = points.size();
     for(int i = 0; i < n; ++i)
-        result += coeffs[i] * gxOrdinaryKrigingCore::coreFunction(threshold,
-                                                                  radius,
-                                                                  points[i].distance2D(X, Y));
+        result += coeffs[i] * this->operator ()(points[i], gxPoint3D(X, Y));
 
     result += coeffs[n]; // + coeffs[n + 1] * X + coeffs[n + 2] * Y;
 
@@ -126,14 +152,74 @@ double gxOrdinaryKrigingCore::variance(const gxPoint3DList points,
 //------------------------------------------------------------------------------
 
 
-double gxOrdinaryKrigingCore::value(const gxPoint3DList points,
-                                    const QVector<double> coeffs)
+double gxOrdinaryKrigingCore2D::value(const gxPoint3DList points,
+                                const QVector<double> coeffs)
 {
     double result = 0.0;
 
     for(int i = 0; i < points.size(); ++i)
-        result += coeffs[i] * points[i].z;
+        result += coeffs[i] * points[i].z();
 
     return result;
 }
 
+//------------------------------------------------------------------------------
+
+
+double gxOrdinaryKrigingCore2D::operator()(const double h) const
+{
+    return coreFunction(h, params);
+}
+
+
+//------------------------------------------------------------------------------
+
+
+double gxOrdinaryKrigingCore2D::operator()(const gxPoint3D &p1, const gxPoint3D &p2) const
+{
+    /// direction vector
+    double x, y;
+    x = p2.x() - p1.x();
+    y = p2.y() - p1.y();
+
+
+    // matrix transformation (rotation)
+    double h = 0.0;
+    for (int i = 0; i < 2; ++i)
+    {
+        double d;
+        d = x * transformation(1, 1) + y * transformation(2, 1);
+        h += d * d;
+
+        d = x * transformation(1, 2) + y * transformation(2, 2);
+        h += d * d;
+    }
+
+
+    return coreFunction(sqrt(h), params);
+}
+
+
+
+
+
+//------------------------------------------------------------------------------
+
+
+void gxOrdinaryKrigingCore2D::createTransformation2D()
+{
+    math::matrix<double> scale(3, 3);
+    math::matrix<double> rotate_z(3, 3);
+
+    scale(0, 0) = 1.0;
+    scale(1, 1) = params.rangex/params.rangey;
+    scale(2, 2) = 1.0;
+
+    rotate_z(1, 1) = cos(grad_to_rad(params.anglez));
+    rotate_z(2, 2) = cos(grad_to_rad(params.anglez));
+    rotate_z(1, 2) = sin(grad_to_rad(params.anglez));
+    rotate_z(2, 1) = -sin(grad_to_rad(params.anglez));
+    rotate_z(3, 3) = 1;
+
+    transformation = /*scale **/ rotate_z;
+}

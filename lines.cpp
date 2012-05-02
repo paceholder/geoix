@@ -82,7 +82,7 @@ void gxLines::draw2D()
         glBegin(GL_LINE_STRIP);
             for(int i = 0; i < c->count(); ++i)
             {
-                glVertex2d(c->at(i).x, c->at(i).y);
+                glVertex2d(c->at(i).x(), c->at(i).y());
             }
 //                    if (c->isClosed())
 //                        glVertex3d(c->at(0).x, c->at(0).y, c->getZ());
@@ -104,7 +104,7 @@ void gxLines::draw3D()
         glBegin(GL_LINE_STRIP);
             for(int i = 0; i < c->count(); ++i)
             {
-                glVertex3d(c->at(i).x, c->at(i).y, c->at(i).z);
+                glVertex3d(c->at(i).x(), c->at(i).y(), c->at(i).z());
             }
 //                    if (c->isClosed())
 //                        glVertex3d(c->at(0).x, c->at(0).y, c->getZ());
@@ -136,14 +136,14 @@ void gxLines::recalcSize()
         {
             gxPoint3D p = itp.next();
 
-            if (p.x < size.getMinX()) size.setMinX(p.x);
-            if (p.x > size.getMaxX()) size.setMaxX(p.x);
+            if (p.x() < size.getMinX()) size.setMinX(p.x());
+            if (p.x() > size.getMaxX()) size.setMaxX(p.x());
 
-            if (p.y < size.getMinY()) size.setMinY(p.y);
-            if (p.y > size.getMaxY()) size.setMaxY(p.y);
+            if (p.y() < size.getMinY()) size.setMinY(p.y());
+            if (p.y() > size.getMaxY()) size.setMaxY(p.y());
 
-            if (p.z < size.getMinZ()) size.setMinZ(p.z);
-            if (p.z > size.getMaxZ()) size.setMaxZ(p.z);
+            if (p.z() < size.getMinZ()) size.setMinZ(p.z());
+            if (p.z() > size.getMaxZ()) size.setMaxZ(p.z());
         }
     }
 

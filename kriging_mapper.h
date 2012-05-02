@@ -3,6 +3,8 @@
 
 
 #include "abstract_mapper.h"
+#include "kriging_params.h"
+#include "kriging_core.h"
 
 namespace Ui
 {
@@ -20,26 +22,26 @@ public:
     bool calcSurface(const gxPoint3DList points,
                      const gxSize3D size,
                      const int nx, const int ny,
-                     QVector<double> &result);
+                     std::vector<double> &result);
 
     QWidget *getSettingsWidget(QWidget *parent);
 
 public slots:
     void onVariogramModelActivated(int type);
-    void onThreshold(QString threshold);
-    void onRadius(QString radius);
+    void onSill(QString sill);
+    void onNugget(QString nugget);
+    void onRadiusA(QString radius);
+    void onRadiusB(QString radius);
+    void onRotationAngle(QString angle);
 
 private:
     Ui::KrigingSettingsWidget *ui;
 
-    /// threshold value of variogram
-    double threshold;
+    gxKrigingParams2D params;
 
-    /// radius of variogram
-    double radius;
-
-    QVector<double> fillResultArray(QVector<double> &coeffs,
+    std::vector<double> fillResultArray(std::vector<double> &coeffs,
                                     gxPoint3DList &points,
+                                    gxUniversalKriginigCore2D &krigingCore,
                                     int nx, int ny,
                                     const gxSize3D &size);
 

@@ -19,4 +19,5 @@ SOURCES += main.cpp \
     ../rbf_core.cpp \
     ../point3D.cpp \
     fourierinterpolator.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    ../cg/cg.cpp
