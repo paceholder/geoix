@@ -23,8 +23,8 @@
 #ifndef DATA_LOADER_H
 #define DATA_LOADER_H
 
-#include <QtCore>
-
+#include <QtCore/QList>
+#include <QtCore/QStringList>
 
 #include "point_nd.h"
 #include "contour.h"

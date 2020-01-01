@@ -25,14 +25,25 @@
 
 #include "custom_tree_model.h"
 
+#include <Qt>
+
 
 class gxTreeFolderObject;
 
 class gxProjectTreeModel : public gxCustomTreeModel
 {
-    Q_OBJECT
+    //Q_OBJECT
 public:
-    gxProjectTreeModel(gxTreeFolderObject* projectTreeRoot);
+    gxProjectTreeModel(gxTreeFolderObject* projectTreeRoot)
+      : gxCustomTreeModel()
+    {
+        //setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
+
+
+        treeRoot = projectTreeRoot;
+        //reset(); // reset model to show changes
+    }
+
     ~gxProjectTreeModel() {}
 protected:
     Qt::ItemFlags flags(const QModelIndex &index) const;

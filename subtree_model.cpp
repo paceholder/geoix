@@ -6,12 +6,12 @@
 gxSubtreeModel::gxSubtreeModel()
     : gxCustomTreeModel()
 {
-    this->setSupportedDragActions(Qt::MoveAction);
+    //this->setSupportedDragActions(Qt::MoveAction);
 
 
     treeRoot = new gxTreeFolderObject();
     treeRoot->setName("Subtree Root");
-    this->reset(); // reset model to show changes
+    //this->reset(); // reset model to show changes
 
 }
 

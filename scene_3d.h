@@ -24,9 +24,9 @@
 #define SCENE_3D_H
 
 
-#include <QGLWidget>
+#include <QtCore/QObject>
+#include <QtOpenGL/QGLWidget>
 
-#include "size.h"
 #include <math.h>
 
 #include "size.h"
@@ -37,7 +37,7 @@ class gx3dScene : public QObject
 {
     Q_OBJECT
 public:
-    gx3dScene(gxSize3D* size3d)
+    inline gx3dScene(gxSize3D* size3d)
     {
         this->size3d = size3d;
         dx = 0;

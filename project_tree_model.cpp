@@ -22,18 +22,19 @@
 
 
 #include "project_tree_model.h"
+
 #include "project.h"
 #include "engine.h"
 
-gxProjectTreeModel::gxProjectTreeModel(gxTreeFolderObject *projectTreeRoot)
-    : gxCustomTreeModel()
-{
-    this->setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
+//gxProjectTreeModel::gxProjectTreeModel(gxTreeFolderObject *projectTreeRoot)
+    //: gxCustomTreeModel()
+//{
+    //setSupportedDragActions(Qt::CopyAction | Qt::MoveAction);
 
 
-    treeRoot = projectTreeRoot;
-    this->reset(); // reset model to show changes
-}
+    //treeRoot = projectTreeRoot;
+    //reset(); // reset model to show changes
+//}
 
 
 

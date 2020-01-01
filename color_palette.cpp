@@ -92,6 +92,7 @@ QColor gxContinuesColorPalette::getColor(double d)
                   g1 + (g2 - g1)   * delta,
                   b1 + (b2 - b1)   * delta,
                   0);
+        break;
     case HSL:
         double h1, s1, l1, h2, s2, l2;
         c1.getHslF(&h1, &s1, &l1, &a1);
@@ -101,6 +102,7 @@ QColor gxContinuesColorPalette::getColor(double d)
                   s1 + (s2 - s1)   * delta,
                   l1 + (l2 - l1)   * delta,
                   0);
+        break;
     }
     return c;
 }

@@ -23,8 +23,8 @@
 #ifndef CONTOUR_H
 #define CONTOUR_H
 
-#include <QObject>
-#include <QVector>
+#include <QtCore/QObject>
+#include <QtCore/QVector>
 
 #include "point_nd.h"
 #include "constants.h"
@@ -40,7 +40,7 @@ class gxContour : public QObject
     friend class gxLines;
 public:
     /// Constructor
-    gxContour()
+    inline gxContour()
         : QObject(),
         closed(false)
     { }

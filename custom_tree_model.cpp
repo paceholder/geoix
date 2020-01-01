@@ -175,7 +175,7 @@ QVariant gxCustomTreeModel::data(const QModelIndex &index, int role) const
 
         gxVisualObject *vo = static_cast<gxVisualObject*>(object);
 
-        return vo->hasData() ? Qt::black : Qt::gray;
+        return vo->hasData() ? QColor(Qt::black) : QColor(Qt::gray);
 
         break;
     }

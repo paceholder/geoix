@@ -23,8 +23,8 @@
 #ifndef TREE_ABSTRACT_OBJECT_H
 #define TREE_ABSTRACT_OBJECT_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QtCore/QObject>
+#include <QtWidgets/QMenu>
 
 
 class gxTreeFolderObject;

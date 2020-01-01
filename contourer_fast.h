@@ -23,7 +23,8 @@
 #ifndef CONTOURER_FAST_H
 #define CONTOURER_FAST_H
 
-#include <QtCore>
+#include <QtCore/QMap>
+#include <QtCore/QQueue>
 
 #include "flat_contour.h"
 #include "edge.h"

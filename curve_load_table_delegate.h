@@ -1,7 +1,8 @@
 #ifndef CURVE_LOAD_TABLE_DELEGATE_H
 #define CURVE_LOAD_TABLE_DELEGATE_H
 
-#include <QItemDelegate>
+#include <QtWidgets/QItemDelegate>
+#include <QtWidgets/QWidget>
 
 class gxCurveLoadTableDelegate: public QItemDelegate
 {

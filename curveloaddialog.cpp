@@ -27,6 +27,12 @@
 #include "curve_load_table_model.h"
 #include "curve_load_table_delegate.h"
 
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QFileDialog>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QDragMoveEvent>
+#include <QtCore/QMimeData>
+
 
 gxCurveLoadDialog::gxCurveLoadDialog(QWidget *parent)
     : QDialog(parent, Qt::WindowStaysOnTopHint),
@@ -44,7 +50,7 @@ gxCurveLoadDialog::gxCurveLoadDialog(QWidget *parent)
 
 //    ui->tableView->setEditTriggers(QAbstractItemView::SelectedClicked);
 
-    ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 gxCurveLoadDialog::~gxCurveLoadDialog()

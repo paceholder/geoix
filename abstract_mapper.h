@@ -1,7 +1,7 @@
 #ifndef ABSTRACT_MAPPER_H
 #define ABSTRACT_MAPPER_H
 
-#include <QtCore>
+#include <QtCore/QObject>
 
 #include "point_nd.h"
 #include "size.h"

@@ -3,6 +3,8 @@
 #include "ui_mainwindow.h"
 #include <QtGui>
 
+#include <QWidgets/QFileDialog>
+
 #include "../point_nd.h"
 
 MainWindow::MainWindow()

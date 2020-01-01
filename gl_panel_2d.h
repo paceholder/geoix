@@ -23,8 +23,8 @@
 #ifndef GL_PANEL_2D_H
 #define GL_PANEL_2D_H
 
-#include <QGLWidget>
-#include <QMouseEvent>
+#include <QtOpenGL/QGLWidget>
+#include <QtGui/QMouseEvent>
 
 #include "scene_2d.h"
 

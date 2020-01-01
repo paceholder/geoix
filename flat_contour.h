@@ -25,7 +25,6 @@
 
 #include "contour.h"
 
-
 #include "point_nd.h"
 
 
@@ -38,14 +37,14 @@ class gxFlatContour : public gxContour
 {
 public:
     /// Consturctor
-    gxFlatContour(double z)
+    inline gxFlatContour(double z)
         : gxContour()
     {
         this->z = z;
     }
 
     /// Destructor
-    virtual ~gxFlatContour() {}
+    ~gxFlatContour() {}
 
     /// Addin 2d point to the back of contour
     void addPointBack(gxPoint3D& point)

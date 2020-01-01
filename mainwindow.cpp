@@ -23,9 +23,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
-#include <QtGui>
-#include <QtCore>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QHeaderView>
 
 #include "tree_object.h"
 #include "tree_menu_fabric.h"

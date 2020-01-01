@@ -23,8 +23,8 @@
 #ifndef CURVE_LOAD_TABLE_MODEL_H
 #define CURVE_LOAD_TABLE_MODEL_H
 
-#include <QAbstractItemModel>
-#include <QSharedPointer>
+#include <QtCore/QAbstractItemModel>
+#include <QtCore/QSharedPointer>
 
 #include "tree_abstract_object.h"
 

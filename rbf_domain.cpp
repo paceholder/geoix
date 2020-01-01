@@ -50,15 +50,15 @@ void gxRBFDomain::buildTree()
     if ( n > gxRBFDomain::maxLeafCapacity ) // we still can create two branches
     {
         if (longSide == Width )
-            qSort(points.begin(), points.end(), gxPoint3D::pointXLessThan);
+            std::sort(points.begin(), points.end(), gxPoint3D::pointXLessThan);
         else
-            qSort(points.begin(), points.end(), gxPoint3D::pointYLessThan);
+            std::sort(points.begin(), points.end(), gxPoint3D::pointYLessThan);
 
-        double overlap = OVERLAP;
+        //double overlap = OVERLAP;
 
         // overlapping depends on density ?
         // ?? is it equalls 1.0 ?
-        overlap = OVERLAP * density / (points.size() / area) ;
+        //double overlap = OVERLAP * density / (points.size() / area) ;
 
         /// number of common points
         int n0 = OVERLAP * n; // + 1 ?
@@ -72,7 +72,7 @@ void gxRBFDomain::buildTree()
         gxPoint3DVector left_points;
 
         left_points.resize(n1+n0);
-        qCopy(points.begin(), points.begin() + n1 + n0, left_points.begin());
+        std::copy(points.begin(), points.begin() + n1 + n0, left_points.begin());
 
         // let's change the size of domain
         gxSize3D left_size(size);
@@ -88,7 +88,7 @@ void gxRBFDomain::buildTree()
 
         gxPoint3DVector right_points;
         right_points.resize(n2 + n0);
-        qCopy(points.end() - (n2 + n0), points.end(), right_points.begin());
+        std::copy(points.end() - (n2 + n0), points.end(), right_points.begin());
 
 
         // let's change the size of domain

@@ -38,7 +38,7 @@ class gx2dScene : public QObject
 {
     Q_OBJECT
 public:
-    gx2dScene(gxSize3D* size3d)
+    inline gx2dScene(gxSize3D* size3d)
     {
         this->size3d = size3d;
         dx = 0;

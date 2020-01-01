@@ -5,6 +5,8 @@
 #include "lattice.h"
 #include "bspline.h"
 
+#include <QtGui/QIntValidator>
+
 const int defaultLevelNumber = 8;
 
 

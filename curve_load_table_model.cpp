@@ -44,7 +44,7 @@ void gxCurveLoadTableModel::addWell(QSharedPointer<gxTreeAbstractObject> well)
 
     wells.append(QPair<QSharedPointer<gxTreeAbstractObject>, QString>(well, QString()));
 
-    this->reset();
+    //this->reset();
 }
 
 
@@ -60,7 +60,7 @@ void gxCurveLoadTableModel::clearFiles()
     while(it.hasNext())
         it.next().second.clear();
 
-    this->reset();
+    //this->reset();
 }
 
 
@@ -100,9 +100,13 @@ QVariant gxCurveLoadTableModel::headerData(int section, Qt::Orientation orientat
         switch(section)
         {
         case 0:
-            if ( role == Qt::DisplayRole ) return tr("Well Name");
+            if ( role == Qt::DisplayRole )
+              return tr("Well Name");
+            break;
         case 1:
-            if ( role == Qt::DisplayRole ) return tr("File Name");
+            if ( role == Qt::DisplayRole )
+              return tr("File Name");
+            break;
         }
     }
     else
@@ -146,6 +150,7 @@ QVariant gxCurveLoadTableModel::data(const QModelIndex &index, int role) const
             }
             break;
         }
+        break;
     case Qt::ToolTipRole:
         switch (index.column())
         {
@@ -156,6 +161,7 @@ QVariant gxCurveLoadTableModel::data(const QModelIndex &index, int role) const
             return wells[index.row()].second;
             break;
         }
+        break;
     }
 
     return QVariant();

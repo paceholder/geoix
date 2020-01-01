@@ -22,6 +22,9 @@
 
 #include "data_loader.h"
 
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QFileDialog>
+
 #include "points.h"
 #include "constants.h"
 #include "surface_data.h"
@@ -95,8 +98,9 @@ bool gxDataLoader::loadSurfaceData(gxSurfaceData* data)
     str = it.next();
     splitList = str.split(re, QString::SkipEmptyParts);
 
-    double blank = splitList[1].toDouble(&ok);
-    if (!ok) blank = Gx::BlankDouble;
+    //double blank = splitList[1].toDouble(&ok);
+    //if (!ok) 
+      //blank = Gx::BlankDouble;
 
 
     // get nx and ny

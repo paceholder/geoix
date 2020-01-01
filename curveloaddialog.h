@@ -24,8 +24,7 @@
 #ifndef CURVELOADDIALOG_H
 #define CURVELOADDIALOG_H
 
-#include <QtGui>
-#include <QtCore>
+#include <QtWidgets/QDialog>
 
 namespace Ui
 {

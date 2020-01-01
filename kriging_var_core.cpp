@@ -34,8 +34,8 @@ inline double grad_to_rad(double grad)
 
 
 gxOrdinaryKrigingCore2D::gxOrdinaryKrigingCore2D(gxKrigingParams2D &krigingParams)
-    : params(krigingParams),
-    coreFunction(exponentialFunc)
+    : coreFunction(exponentialFunc)
+    , params(krigingParams)
 {
     createTransformation2D();
 

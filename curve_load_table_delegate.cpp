@@ -1,6 +1,7 @@
 #include "curve_load_table_delegate.h"
 
-#include <QtGui>
+#include <QtWidgets/QComboBox>
+#include <QtCore/QFileInfo>
 
 #include "curve_load_table_model.h"
 

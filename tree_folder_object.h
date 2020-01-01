@@ -23,7 +23,7 @@
 #ifndef TREE_FOLDER_OBJECT_H
 #define TREE_FOLDER_OBJECT_H
 
-#include <QVector>
+#include <QtCore/QVector>
 
 #include "tree_abstract_object.h"
 

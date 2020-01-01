@@ -1,13 +1,14 @@
 #ifndef CUSTOM_TREE_MODEL_H
 #define CUSTOM_TREE_MODEL_H
 
-#include <QtGui>
+#include <QtCore/QAbstractItemModel>
+#include <QtCore/QMimeData>
 
 #include "tree_folder_object.h"
 
 class gxCustomTreeModel : public QAbstractItemModel
 {
-    Q_OBJECT
+    //Q_OBJECT
 public:
     gxCustomTreeModel();
     virtual ~gxCustomTreeModel() {}

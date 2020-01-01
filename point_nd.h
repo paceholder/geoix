@@ -23,7 +23,8 @@
 #ifndef POINT3D_H
 #define POINT3D_H
 
-#include <QVector>
+#include <QtCore/QList>
+#include <QtCore/QVector>
 
 /// Template n-dimensional Point class
 /*!
@@ -86,7 +87,7 @@ typedef QVector<gxPoint4D> gxPoint4DVector;
 
 
 
-#include "point_nd.cpp"
+#include "point_nd.tcc"
 
 
 #endif // POINT3D_H

@@ -59,7 +59,7 @@ void gxPoints::recalcSize()
         QListIterator<gxPoint3D> it (data);
         while (it.hasNext())
         {
-            gxPoint3D p = it.next();
+            gxPoint3D const & p = it.next();
 
             if (p.x() < size.getMinX()) size.setMinX(p.x());
             if (p.x() > size.getMaxX()) size.setMaxX(p.x());
@@ -98,7 +98,7 @@ void gxPoints::draw2D()
 
             while(it.hasNext())
             {
-                gxPoint3D p = it.next();
+                gxPoint3D const & p = it.next();
                 glPushMatrix();
                     glTranslatef(p.x(), p.y(), 0);
                     gluDisk(quadObj, 0, d, 10, 3);
@@ -135,7 +135,7 @@ void gxPoints::draw3D()
 
             while(it.hasNext())
             {
-                gxPoint3D p = it.next();
+                gxPoint3D const & p = it.next();
                 glPushMatrix();
                     glTranslatef(p.x(), p.y(), p.z());
 

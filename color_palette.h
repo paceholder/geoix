@@ -22,13 +22,11 @@
 #ifndef COLOR_PALETTE_H
 #define COLOR_PALETTE_H
 
-#include <QObject>
-#include <QColor>
-#include <QVector>
-#include <QPair>
+#include <QtCore/QObject>
+#include <QtCore/QVector>
+#include <QtCore/QPair>
 
-#include <QtAlgorithms>
-
+#include <QtGui/QColor>
 
 
 /// Functions which is used in sorting
@@ -77,7 +75,7 @@ protected:
     QVector<QPair<double, QColor> > colors;
 
     /// Method sorts colors in set by their double tag
-    void sortColors() { qSort(colors.begin(), colors.end(), colorPairLessThan); }
+    void sortColors() { std::sort(colors.begin(), colors.end(), colorPairLessThan); }
 };
 
 
